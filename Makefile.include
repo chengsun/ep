@@ -1,0 +1,75 @@
+# some defaults
+OPT ?= 0
+PLATFORM ?= LINUX
+SRCDIR ?= .
+
+undefine CC
+undefine CXX
+undefine LD
+undefine STRIP
+undefine PKG_CONFIG
+undefine SDL_CONFIG
+
+# platform specific wizardry
+ifeq ($(PLATFORM),WINDOWS)
+    usr_prefix = /usr/i486-mingw32
+    tool_prefix = i486-mingw32-
+    is_windows = 1
+else ifeq ($(PLATFORM),WIN32)
+    usr_prefix = /usr/i686-w64-mingw32
+    tool_prefix = i686-w64-mingw32-
+    is_windows = 1
+else ifeq ($(PLATFORM),WIN64)
+    usr_prefix = /usr/x86_64-w64-mingw32
+    tool_prefix = x86_64-w64-mingw32-
+    is_windows = 1
+else ifeq ($(PLATFORM),LINUX)
+    usr_prefix = /usr
+    tool_prefix =
+    STRIP = sstrip
+    CPPFLAGS += -DLINUX
+
+    # the output names
+    binary_patsubst = %
+    shared_patsubst = lib%.so
+else
+    $(error Unknown platform)
+endif
+
+ifeq ($(is_windows),1)
+    CPPFLAGS += -DWINDOWS
+
+    binary_patsubst = %.exe
+    shared_patsubst = %.dll
+endif
+
+# our toolchain
+CC ?= $(tool_prefix)gcc
+CXX ?= $(tool_prefix)g++
+LD ?= $(tool_prefix)ld
+STRIP ?= $(tool_prefix)strip
+PKG_CONFIG ?= $(tool_prefix)pkg-config
+SDL_CONFIG ?= $(usr_prefix)/bin/sdl-config
+
+# figure out the right flags
+CPPFLAGS += -Wall -std=c++11 -ffunction-sections -fdata-sections
+LDFLAGS += -Wl,--gc-sections -Wl,-rpath,.
+
+# add everything we need
+CPPFLAGS += -I$(ROOTDIR)/include
+CPPFLAGS += `$(PKG_CONFIG) --cflags glew`
+LDFLAGS += `$(PKG_CONFIG) --libs glew`
+ifeq ($(is_windows),1)
+    LDFLAGS += -lopengl32 -lglu32
+else
+    LDFLAGS += -lGL -lGLU
+endif
+
+ifeq ($(OPT),1)
+    CPPFLAGS += -DNDEBUG -Os -march=native -fno-exceptions -fomit-frame-pointer -ffast-math
+    LDFLAGS += -Os -march=native -s
+else
+    CPPFLAGS += -DDEBUG -O0 -ggdb -fno-exceptions
+    LDFLAGS += -O0 -ggdb
+endif
+

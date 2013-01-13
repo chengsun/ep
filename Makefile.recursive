@@ -1,0 +1,11 @@
+DIRS ?= $(wildcard */)
+
+all install clean: force_look
+	for x in $(DIRS); do \
+		$(MAKE) -C $$x $@ || break; \
+	done
+
+force_look:
+	true
+
+.PHONY: all install clean force_look

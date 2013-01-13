@@ -1,0 +1,11 @@
+*.d
+*.o
+*.swp
+
+player
+!player/
+player.exe
+*.so
+*.dll
+
+build/

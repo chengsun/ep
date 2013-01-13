@@ -1,0 +1,52 @@
+# distinguish between shared and binary outputs
+OUTPUT_SHARED ?= 0
+ifeq ($(OUTPUT_SHARED),1)
+    ifeq ($(PLATFORM),LINUX)
+		CPPFLAGS += -fPIC
+    endif
+    LDFLAGS += -shared
+    output_patsubst = $(shared_patsubst)
+else
+    output_patsubst = $(binary_patsubst)
+endif
+output = $(patsubst %,$(output_patsubst),$(OUTPUT_NAME))
+
+# find the stuff we want to compile
+SOURCES = $(wildcard $(SRCDIR)/*.cpp)
+SOURCENAMES = $(subst $(SRCDIR)/,,$(SOURCES))
+
+# figure out what to put in build/
+install_files ?= $(output) $(INSTALL_EXTRA)
+
+
+# define our rules
+
+all: $(install_files)
+
+install: $(install_files)
+	mkdir -p $(ROOTDIR)/build/
+	for x in $(install_files); do \
+		mkdir -p `dirname $(ROOTDIR)/build/$$x` && \
+		cp $$x $(ROOTDIR)/build/$$x; \
+	done
+
+$(output): $(subst .cpp,.o,$(SOURCENAMES))
+	$(CXX) -o $@ $^ $(LDFLAGS)
+ifeq ($(OPT),1)
+	$(STRIP) $@
+endif
+
+%.o: $(SRCDIR)/%.cpp
+	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) -o $@ $<
+
+-include $(subst .cpp,.d,$(SOURCENAMES))
+
+%.d: $(SRCDIR)/%.cpp
+	$(CXX) -M $(CPPFLAGS) $< > $@.$$$$;                  \
+	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+	rm -f $@.$$$$
+
+clean:
+	rm -f *.d *.o $(output) *.dll *.so *.exe $(subst .cpp,.d,$(SOURCENAMES)) $(subst .cpp,.o,$(SOURCENAMES))
+
+
