@@ -11,11 +11,11 @@ GLuint CreateShader(GLenum eShaderType, const char *strShaderFile)
         case GL_FRAGMENT_SHADER: strShaderType = "fragment"; break;
     }
 
-    log("Opening %s shader program \"%s\"", strShaderType, strShaderFile);
+    LOG("Opening %s shader program \"%s\"", strShaderType, strShaderFile);
 
     FILE *shaderFile = fopen(strShaderFile, "rb");
     if (!shaderFile) {
-        log("WARNING: Failed to open %s shader program \"%s\"", strShaderType, strShaderFile);
+        LOG("WARNING: Failed to open %s shader program \"%s\"", strShaderType, strShaderFile);
         return 0;
     }
     fseek(shaderFile, 0, SEEK_END);
@@ -26,7 +26,7 @@ GLuint CreateShader(GLenum eShaderType, const char *strShaderFile)
     int shaderReadLength = fread(shaderCode, 1, shaderFileLength, shaderFile);
     fclose(shaderFile);
 
-    log("Compiling %s shader program \"%s\"", strShaderType, strShaderFile);
+    LOG("Compiling %s shader program \"%s\"", strShaderType, strShaderFile);
 
     GLuint shader = glCreateShader(eShaderType);
     glShaderSource(shader, 1, const_cast<const GLchar **>(&shaderCode), &shaderReadLength);
@@ -45,7 +45,7 @@ GLuint CreateShader(GLenum eShaderType, const char *strShaderFile)
         GLchar *strInfoLog = new GLchar[infoLogLength + 1];
         glGetShaderInfoLog(shader, infoLogLength, NULL, strInfoLog);
 
-        log("WARNING: Shader compile failure in %s shader \"%s\": %s",
+        LOG("WARNING: Shader compile failure in %s shader \"%s\": %s",
             strShaderType, strShaderFile, strInfoLog);
         delete[] strInfoLog;
     }
@@ -55,7 +55,7 @@ GLuint CreateShader(GLenum eShaderType, const char *strShaderFile)
 
 GLuint CreateProgram(GLuint *shaderList, unsigned nShaders)
 {
-    log("Linking shader program");
+    LOG("Linking shader program");
 
     GLuint program = glCreateProgram();
 
@@ -73,7 +73,7 @@ GLuint CreateProgram(GLuint *shaderList, unsigned nShaders)
 
         GLchar *strInfoLog = new GLchar[infoLogLength + 1];
         glGetProgramInfoLog(program, infoLogLength, NULL, strInfoLog);
-        log("WARNING: Shader linker failure: %s\n", strInfoLog);
+        LOG("WARNING: Shader linker failure: %s\n", strInfoLog);
         delete[] strInfoLog;
     }
 

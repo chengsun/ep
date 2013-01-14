@@ -12,18 +12,26 @@ undefine SDL_CONFIG
 
 # platform specific wizardry
 ifeq ($(PLATFORM),WINDOWS)
+    arch = i486
+
     usr_prefix = /usr/i486-mingw32
     tool_prefix = i486-mingw32-
     is_windows = 1
 else ifeq ($(PLATFORM),WIN32)
+    arch = i686
+
     usr_prefix = /usr/i686-w64-mingw32
     tool_prefix = i686-w64-mingw32-
     is_windows = 1
 else ifeq ($(PLATFORM),WIN64)
+    arch = corei7-avx
+
     usr_prefix = /usr/x86_64-w64-mingw32
     tool_prefix = x86_64-w64-mingw32-
     is_windows = 1
 else ifeq ($(PLATFORM),LINUX)
+    arch = native
+
     usr_prefix = /usr
     tool_prefix =
     STRIP = sstrip
@@ -66,8 +74,8 @@ else
 endif
 
 ifeq ($(OPT),1)
-    CPPFLAGS += -DNDEBUG -Os -march=native -fno-exceptions -fomit-frame-pointer -ffast-math
-    LDFLAGS += -Os -march=native -s
+    CPPFLAGS += -DNDEBUG -Os -march=$(arch) -fno-exceptions -fomit-frame-pointer -ffast-math
+    LDFLAGS += -Os -march=$(arch) -s
 else
     CPPFLAGS += -DDEBUG -O0 -ggdb -fno-exceptions
     LDFLAGS += -O0 -ggdb

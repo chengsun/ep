@@ -44,7 +44,7 @@ static std::unique_ptr<char, LocalFree_deleter> formattedError(DWORD err)
 #define loadsym(symname, ...) \
     symname = reinterpret_cast<void (*)(__VA_ARGS__)>(GetProcAddress(demoLib, #symname)); \
     if (!symname) { \
-        log("ERROR: Symbol \"%s\" undefined in demo library \"%s\"", #symname, libName); \
+        LOG("ERROR: Symbol \"%s\" undefined in demo library \"%s\"", #symname, libName); \
         missingSymbol = true; \
     }
 
@@ -52,7 +52,7 @@ static void pl_loadDemoLib(const char *libName)
 {
     HMODULE demoLib = LoadLibrary(libName);
     if (!demoLib) {
-        log("ERROR: Couldn't load demo library \"%s\": %s", libName, formattedError(GetLastError()).get());
+        LOG("ERROR: Couldn't load demo library \"%s\": %s", libName, formattedError(GetLastError()).get());
         exit(1);
     }
     bool missingSymbol = false;
@@ -72,7 +72,7 @@ static void pl_loadDemoLib(const char *libName)
 #define loadsym(symname, ...) \
     symname = reinterpret_cast<void (*)(__VA_ARGS__)>(dlsym(demoLib, #symname)); \
     if (!symname) { \
-        log("ERROR: Symbol \"%s\" undefined in demo library \"%s\"", #symname, libName); \
+        LOG("ERROR: Symbol \"%s\" undefined in demo library \"%s\"", #symname, libName); \
         missingSymbol = true; \
     }
 
@@ -80,7 +80,7 @@ static void pl_loadDemoLib(const char *libName)
 {
     void *demoLib = dlopen(libName, RTLD_NOW);
     if (!demoLib) {
-        log("ERROR: Couldn't load demo library \"%s\": %s", libName, dlerror());
+        LOG("ERROR: Couldn't load demo library \"%s\": %s", libName, dlerror());
         exit(1);
     }
     bool missingSymbol = false;
@@ -102,12 +102,12 @@ static SDL_Surface *screen;
 
 static void pl_setVideoMode(int w, int h)
 {
-    log("Setting %dx%d GL video mode", w, h);
+    LOG("Setting %dx%d GL video mode", w, h);
     screen = SDL_SetVideoMode(w, h, 32, SDL_OPENGL);
     if (screen) {
-        log("Set %dx%d GL video mode", screen->w, screen->h);
+        LOG("Set %dx%d GL video mode", screen->w, screen->h);
     } else {
-        log("ERROR: Couldn't set %dx%d GL video mode: %s", w, h, SDL_GetError());
+        LOG("ERROR: Couldn't set %dx%d GL video mode: %s", w, h, SDL_GetError());
         exit(1);
     }
 }
@@ -116,9 +116,9 @@ static const char *demoLibrary = "demo.so";
 
 int main(int argc, char *argv[])
 {
-    log("Player starting");
+    LOG("Player starting");
 
-    log("Parsing switches");
+    LOG("Parsing switches");
     int c, opt_idx;
     static const struct option long_opts[] = {
         {"help", no_argument, 0, 'h'},
@@ -133,44 +133,44 @@ int main(int argc, char *argv[])
             if (long_opts[opt_idx].flag != 0) break;
         case 'h':
         default:
-            log("-d/--demo-library [lib.so]  Demo library location");
-            log("-h/--help                   Help");
+            LOG("-d/--demo-library [lib.so]  Demo library location");
+            LOG("-h/--help                   Help");
             exit(c == 'h' ? 0 : 1);
         }
     }
 
-    log("Initialising SDL video");
+    LOG("Initialising SDL video");
     SDL_Init(SDL_INIT_VIDEO);
     atexit(SDL_Quit);
     SDL_WM_SetCaption("Demo player", "player");
 
-    log("Initialising GL");
+    LOG("Initialising GL");
     pl_setVideoMode(600, 480);
 
     GLenum err = glewInit();
     if (err != GLEW_OK) {
-        log("ERROR: GLEW initialisation failed: %s", glewGetErrorString(err));
+        LOG("ERROR: GLEW initialisation failed: %s", glewGetErrorString(err));
         exit(1);
     }
-    log("GLEW version: %s", glewGetString(GLEW_VERSION));
+    LOG("GLEW version: %s", glewGetString(GLEW_VERSION));
 
-    log("OpenGL vendor: %s", glGetString(GL_VENDOR));
-    log("OpenGL renderer: %s", glGetString(GL_RENDERER));
-    log("OpenGL version: %s", glGetString(GL_VERSION));
+    LOG("OpenGL vendor: %s", glGetString(GL_VENDOR));
+    LOG("OpenGL renderer: %s", glGetString(GL_RENDERER));
+    LOG("OpenGL version: %s", glGetString(GL_VERSION));
 
 #ifndef GLEW_NO_GLU
-    log("GLU version: %s", gluGetString(GLU_VERSION));
+    LOG("GLU version: %s", gluGetString(GLU_VERSION));
 #else
-    log("GLU not present");
+    LOG("GLU not present");
 #endif
 
-    log("Loading demo library \"%s\"", demoLibrary);
+    LOG("Loading demo library \"%s\"", demoLibrary);
     pl_loadDemoLib(demoLibrary);
 
-    log("Initialising demo");
+    LOG("Initialising demo");
     demo_init(screen->w, screen->h);
 
-    log("Beginning render loop");
+    LOG("Beginning render loop");
     bool done = false;
     unsigned nFrames = 0, oldTicks = 0;
     while (!done) {
@@ -196,7 +196,7 @@ int main(int argc, char *argv[])
         nFrames++;
         unsigned newTicks = SDL_GetTicks();
         if (newTicks - oldTicks > 2000) {
-            log("%.1f fps (%d frames in %d ms)",
+            LOG("%.1f fps (%d frames in %d ms)",
                 nFrames * 1000.f / (newTicks - oldTicks),
                 nFrames, newTicks - oldTicks);
             oldTicks = newTicks;

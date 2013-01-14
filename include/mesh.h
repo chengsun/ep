@@ -2,11 +2,12 @@
 #define MESH_H
 
 #include "types.h"
+#include <vector>
 
 extern "C" {
 
 
-static const int MAXVERT = 8;   // max vertices per face
+static const unsigned MAXVERT = 8;   // max vertices per face
 
 struct MeshVert
 {
@@ -29,8 +30,8 @@ struct Mesh
     std::vector<MeshFace> faces;
 };
 
-Mesh *createRingMesh(unsigned sides, float radius);
-void meshExtrude(Mesh *mesh, float length);
+Mesh *createRingMesh(unsigned sides);
+void meshExtrude(Mesh *mesh, unsigned faceIdx, float length);
 
 
 }
