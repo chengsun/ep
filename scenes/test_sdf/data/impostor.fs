@@ -6,13 +6,6 @@ float rand(vec2 co){
 }
 void main()
 {
-/*
-    float ball1 = length(positionFrag - vec4(sin(0.02f*time), sin(0.07f*time), 0.f, 1.f)) - 0.1;
-    float ball2 = length(positionFrag - vec4(sin(0.08f*time), sin(0.03f*time), 0.f, 1.f)) - 0.1;
-    float mergeball = smoothstep(0, 1, ball1 - ball2);
-    //float result = mix(ball1, ball2, mergeball);
-    float result = min(ball1, ball2);
-    */
     float result = 1.f;
     int i;
     mat4 mod2cam = mat4( cos(time*0.01f), -sin(time*0.01f), 0.0, 0.0,

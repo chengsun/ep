@@ -6,6 +6,8 @@
 typedef uint8_t U8;
 typedef uint16_t U16;
 typedef uint32_t U32;
+static const U32 U32_MIN = static_cast<U32>(0);
+static const U32 U32_MAX = ~static_cast<U32>(0);
 typedef int8_t S8;
 typedef int16_t S16;
 typedef int32_t S32;
