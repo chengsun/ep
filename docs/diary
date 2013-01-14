@@ -1,0 +1,17 @@
+24/12/12
+    learning about and experimenting with 3D modelling in Blender
+25/12/12
+    learning about OpenGL
+1/1/13
+    starting to implement a player program
+    starting to implement a basic OpenGL example
+8/1/13
+    learning about mesh representations and operations
+    http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
+    learning about fluid dynamics and simulation techniques
+12/1/13
+    made basic signed distance field test (test_sdf)
+    set up Makefile system
+13/1/13
+    cross-compiled and tested on Windows
+    initial git commit
