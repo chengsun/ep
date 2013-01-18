@@ -40,9 +40,18 @@ Progress Log
 * I wrote my rationale, and expanded my progress log with references.
 * I started my timeline plan.
 
+15/1/13
+-------
+Found detailed explanation of Navier-Stokes in [a PDF][fluid rest of us].
+
+18/1/13
+-------
+Reformatted Rationale, Diary and Timeline as Markdown documents. This makes version control of these documents much easier.
+
 
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
 [upenn raymarch]: http://www.seas.upenn.edu/~pjia/raymarch/report.pdf
 [smash gdc]: http://directtovideo.files.wordpress.com/2012/03/gdc_2012_released.pdf
 [smash numbres]: http://directtovideo.wordpress.com/2011/05/03/numb-res/
 [iq rwwtt]: http://www.iquilezles.org/www/material/nvscene2008/rwwtt.pdf
+[fluid rest of us]: http://people.sc.fsu.edu/~jburkardt/pdf/fluid_flow_for_the_rest_of_us.pdf
