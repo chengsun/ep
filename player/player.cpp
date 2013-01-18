@@ -180,6 +180,7 @@ int main(int argc, char *argv[])
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
                 case SDL_QUIT:
+                    LOG("Window closed");
                     done = true;
                     break;
             }
@@ -187,6 +188,7 @@ int main(int argc, char *argv[])
 
         Uint8 *keys = SDL_GetKeyState(NULL);
         if (keys[SDLK_ESCAPE]) {
+            LOG("Escape pressed");
             done = true;
         }
 
@@ -204,5 +206,6 @@ int main(int argc, char *argv[])
         }
     }
 
+    LOG("Exiting gracefully");
     return 0;
 }
