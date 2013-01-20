@@ -1,2 +1,2 @@
 #!/bin/sh
-cd build && ./player "$@"
+make install && cd build && ./player "$@"
