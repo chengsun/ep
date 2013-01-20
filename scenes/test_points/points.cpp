@@ -43,8 +43,9 @@ void demo_init(unsigned w, unsigned h)
     timeUniform = glGetUniformLocation(triangleProgram, "time");
 }
 
-void demo_prepareFrame()
+bool demo_prepareFrame()
 {
+    return true;
 }
 
 void demo_drawFrame()

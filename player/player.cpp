@@ -7,9 +7,10 @@
 #include <getopt.h>
 
 
-static void (*demo_init)(unsigned w, unsigned h) = 0;
-static void (*demo_prepareFrame)() = 0;
-static void (*demo_drawFrame)() = 0;
+#define defsym(symname, ret, ...) \
+    static ret (*symname)(__VA_ARGS__) = 0;
+#include "defsym.h"
+#undef defsym
 
 
 #if defined(WINDOWS)
@@ -41,8 +42,8 @@ static std::unique_ptr<char, LocalFree_deleter> formattedError(DWORD err)
     return std::unique_ptr<char, LocalFree_deleter>(lpMsgBuf);
 }
 
-#define loadsym(symname, ...) \
-    symname = reinterpret_cast<void (*)(__VA_ARGS__)>(GetProcAddress(demoLib, #symname)); \
+#define defsym(symname, ret, ...) \
+    symname = reinterpret_cast<ret (*)(__VA_ARGS__)>(GetProcAddress(demoLib, #symname)); \
     if (!symname) { \
         LOG("ERROR: Symbol \"%s\" undefined in demo library \"%s\"", #symname, libName); \
         missingSymbol = true; \
@@ -57,20 +58,20 @@ static void pl_loadDemoLib(const char *libName)
     }
     bool missingSymbol = false;
 
-    loadsym(demo_init, unsigned, unsigned);
-    loadsym(demo_prepareFrame);
-    loadsym(demo_drawFrame);
+#   include "defsym.h"
 
     if (missingSymbol) exit(1);
 }
+
+#undef defsym
 
 
 #elif defined(LINUX)
 
 #include <dlfcn.h>
 
-#define loadsym(symname, ...) \
-    symname = reinterpret_cast<void (*)(__VA_ARGS__)>(dlsym(demoLib, #symname)); \
+#define defsym(symname, ret, ...) \
+    symname = reinterpret_cast<ret (*)(__VA_ARGS__)>(dlsym(demoLib, #symname)); \
     if (!symname) { \
         LOG("ERROR: Symbol \"%s\" undefined in demo library \"%s\"", #symname, libName); \
         missingSymbol = true; \
@@ -85,13 +86,12 @@ static void pl_loadDemoLib(const char *libName)
     }
     bool missingSymbol = false;
 
-    loadsym(demo_init, unsigned, unsigned);
-    loadsym(demo_prepareFrame);
-    loadsym(demo_drawFrame);
+#   include "defsym.h"
 
     if (missingSymbol) exit(1);
 }
-#undef loadsym
+
+#undef defsym
 
 #else
 #   error "Compiling for unknown platform"
@@ -171,11 +171,13 @@ int main(int argc, char *argv[])
     demo_init(screen->w, screen->h);
 
     LOG("Beginning render loop");
-    bool done = false;
     unsigned nFrames = 0, oldTicks = 0;
-    while (!done) {
-        demo_prepareFrame();
+    while (1) {
+        if (!demo_prepareFrame()) {
+            break;
+        }
 
+        bool done = false;
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
@@ -185,11 +187,12 @@ int main(int argc, char *argv[])
                     break;
             }
         }
+        if (done) break;
 
         Uint8 *keys = SDL_GetKeyState(NULL);
         if (keys[SDLK_ESCAPE]) {
             LOG("Escape pressed");
-            done = true;
+            break;
         }
 
         demo_drawFrame();
