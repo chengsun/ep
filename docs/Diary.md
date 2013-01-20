@@ -32,7 +32,7 @@ Progress Log
 -------
 * I successfully compiled and tested my program on Windows.
 * I started using git to keep track of older versions of my code and my documents.
-* I started implementing a mesh representation.
+* I started implementing a mesh representation based on [this blog post][ryg halfedge-redux].
 
 14/1/13
 -------
@@ -42,14 +42,24 @@ Progress Log
 
 15/1/13
 -------
-Found detailed explanation of Navier-Stokes in [a PDF][fluid rest of us].
+* Found detailed explanation of Navier-Stokes in [a PDF][fluid rest of us].
 
 18/1/13
 -------
-Reformatted Rationale, Diary and Timeline as Markdown documents. This makes version control of these documents much easier.
+* Reformatted Rationale, Diary and Timeline as Markdown documents. This makes version control of these documents much easier.
 
+19/1/13
+-------
+* Continued work on mesh representation. ([Vertex split operation][ryg halfedge-practice])
+
+20/1/13
+-------
+* Continued work on vertex split. Added `test_mesh` to test mesh operations.  
+  I am finding it quite tricky to code the operations correctly from descriptions of them. I have a poor visual memory so I cannot visualise what each operation does to a mesh, especially in 3D. To work around this, I am having to draw out a lot of small diagrams to help me think about all of the special cases.
 
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
+[ryg halfedge-practice]: http://fgiesen.wordpress.com/2012/03/24/half-edge-based-mesh-representations-practice/
+[ryg halfedge-redux]: http://fgiesen.wordpress.com/2012/04/03/half-edges-redux/
 [upenn raymarch]: http://www.seas.upenn.edu/~pjia/raymarch/report.pdf
 [smash gdc]: http://directtovideo.files.wordpress.com/2012/03/gdc_2012_released.pdf
 [smash numbres]: http://directtovideo.wordpress.com/2011/05/03/numb-res/
