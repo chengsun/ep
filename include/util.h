@@ -25,7 +25,8 @@ extern "C"
 #   define ASSERTX(x, ...) \
     do { \
         if (!(x)) { \
-            LOG("\n* ASSERTION '" #x "' FAILED! *\n " __VA_ARGS__); \
+            LOG("* ASSERTION '%s' FAILED! *", #x); \
+            LOG("" __VA_ARGS__); \
             abort(); \
         } \
     } while (0)
