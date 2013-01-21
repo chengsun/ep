@@ -58,6 +58,16 @@ bool meshCheckFlags(const Mesh *mesh)
     return true;
 }
 
+void meshDebugOut(const Mesh *mesh)
+{
+    for (unsigned f = 0; f < mesh->faces.size(); f++) {
+        for (unsigned s = 0; s < mesh->faces[f].count; s++) {
+            U32 opp = mesh->eOpposite(f,s);
+            LOG("(%u,%u) is v%u. Opposite: (%u,%u)", f,s, mesh->vertIdx(f,s), opp/8,opp%8);
+        }
+    }
+}
+
 Mesh *createRingMesh(unsigned sides)
 {
     ASSERTX(sides > 0, "createRingMesh with 0 verts");
@@ -149,42 +159,59 @@ U32 meshSplitVert(Mesh *mesh, U32 beginEdge, U32 endEdge)
 
     U32 oldVertIdx = mesh->vertIdx(beginEdge);
 
+    LOG("old vertex is %u", oldVertIdx);
+
     // create new vertex (as a copy of old vertex)
     U32 newVertIdx = mesh->verts.size();
     mesh->verts.push_back(mesh->verts[oldVertIdx]);
 
-    // helper function that adds newVertIdx before baseEdge
+    LOG("new vertex is %u", newVertIdx);
+
+    // helper function that duplicates the vertex before baseEdge
+    // v0 --e0--> v1
+    // addNewVertex(e0)
+    // v0 --e0--> v0 --e1--> v1
     static const auto addNewVertex = [&, mesh, newVertIdx](U32 baseEdge) {
         U32 nextEdge = mesh->eNext(baseEdge);
         U32 *verts = &mesh->vertIdx(nextEdge);
-        memmove(verts, verts+1, mesh->faces[nextEdge/8].count - nextEdge%8);
-        *verts = newVertIdx;
+        LOG("adding new vertex before (%u,%u)", nextEdge/8, nextEdge%8);
+        memmove(verts+1, verts, (mesh->faces[nextEdge/8].count - nextEdge%8) * sizeof(*verts));
         mesh->faces[nextEdge/8].count++;
+        *verts = oldVertIdx;
     };
 
+    LOG("begin %u end %u", beginEdge, endEdge);
     // add new vertex to two affected faces
     addNewVertex(mesh->eOpposite(beginEdge));
     if (endEdge != beginEdge) {
         addNewVertex(mesh->eOpposite(endEdge));
     }
 
-    // update the vertex on affected faces
-    U32 curEdge = beginEdge;
-    while (curEdge != endEdge) {
-        ASSERTX(mesh->vertIdx(curEdge) == oldVertIdx,
-                "meshSplitVert on inconsistent mesh (not all half-edges "
-                "originating from same vertex) for (face %u, slot %u) has %u but need %u",
-                curEdge/8, curEdge%8, mesh->vertIdx(curEdge), oldVertIdx);
-        mesh->vertIdx(curEdge) = newVertIdx;
-        curEdge = mesh->eVertNext(curEdge);
-    }
+    meshDebugOut(mesh);
+    // beginEdge and endEdge now refer to the newly created edge
 
     // set opposite correctly on two affected faces
     mesh->eOpposite(beginEdge) = endEdge;
     mesh->eOpposite(endEdge) = beginEdge;
 
+    // update the vertex on affected faces
+    LOG("beginEdge is %u,%u", beginEdge/8, beginEdge%8);
+    LOG("endEdge is %u,%u", endEdge/8, endEdge%8);
+    U32 curEdge = beginEdge;
+    while (curEdge != endEdge) {
+        LOG("curEdge is %u,%u", curEdge/8, curEdge%8);
+        ASSERTX(mesh->vertIdx(curEdge) == oldVertIdx,
+                "meshSplitVert on inconsistent mesh (not all half-edges "
+                "originating from same vertex) for (face %u, slot %u) has %u but need %u",
+                curEdge/8, curEdge%8, mesh->vertIdx(curEdge), oldVertIdx);
+        LOG("setting new vertex at %u,%u", curEdge/8, curEdge%8);
+        mesh->vertIdx(curEdge) = newVertIdx;
+        curEdge = mesh->eVertNext(curEdge);
+    }
+
     // return the new half-edge
-    return oppBeginEdge;
+    LOG("returning %u,%u", beginEdge/8, beginEdge%8);
+    return beginEdge;
 }
 
 MeshBuf *meshGenBuf(Mesh *mesh)

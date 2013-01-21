@@ -137,6 +137,8 @@ struct MeshBuf
 bool meshCheck(const Mesh *mesh);
 bool meshCheckFlags(const Mesh *mesh);
 
+void meshDebugOut(const Mesh *mesh);
+
 Mesh *createRingMesh(unsigned sides);
 
 void meshExtrudeFace(Mesh *mesh, U32 faceIdx, float length);
