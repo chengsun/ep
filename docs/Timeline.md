@@ -7,7 +7,8 @@ Timeline plan
   Exams and coursework may leave me short of time.
 
   *Targets*:
-  Decide on, and have an overall knowledge on, the method of fluid dynamics simulation to use.
+  * Decide on, and have an overall knowledge on, the method of fluid dynamics simulation to use.
+  * Start work on the mesh code.
 
 
 * **End of February**:
@@ -20,25 +21,33 @@ Timeline plan
 * **End of March**:
 
   *Targets*:
-  Improve on fluid simulation
+  * Create landscape meshes
+  * Improve on fluid simulation
 
 
 * **End of April**:
 
   *Targets*:
-  Finish a prototype of fluid simulation
+  * Finish a prototype of fluid simulation
+  * Assess the result (with initial feedback from others)
 
 
 * **End of May**:
 
+  *Considerations*:
+  Exams will leave me short of time
+
   *Targets*:
-  Improve on fluid simulation
+  * Improve on fluid simulation (change tack if prototype not successful)
 
 
 * **End of June**:
 
   *Targets*:
-  Finish fluid simulation
+  * Improve on fluid simulation
+  * Add fluid effects
+  * Add mesh scenery
+  * Assess the result (with feedback from others)
 
 
 * **End of July**:
@@ -47,7 +56,9 @@ Timeline plan
   Summer holidays
 
   *Targets*:
-  Polish demo
+  * Finish fluid simulation
+  * Polish demo: add effects and decorations
+  * Look for / try to make some accompanying music?
 
 
 * **End of August**:
@@ -56,10 +67,20 @@ Timeline plan
   Summer holidays
 
   *Targets*:
-  Polish demo
+  * Polish demo: add effects
 
 
 * **End of September**:
 
+  *Considerations*:
+  UCAS applications may leave me short of time
+
   *Targets*:
-  Final submission
+  * Polish demo
+
+
+* **End of October**:
+
+  *Targets*:
+  * Polish demo
+  * Final submission
