@@ -14,8 +14,9 @@
 bool meshCheck(const Mesh *mesh)
 {
     for (U32 faceIdx = 0, faceSize = mesh->faces.size(); faceIdx < faceSize; faceIdx++) {
-        ASSERTX(mesh->faces[faceIdx].count <= 8,
-                "meshCheck failed: too many vertices (%u) on face %u",
+        ASSERTX(mesh->faces[faceIdx].count >= 2 &&
+                mesh->faces[faceIdx].count <= 8,
+                "meshCheck failed: invalid number of slots (%u) on face %u",
                 mesh->faces[faceIdx].count, faceIdx);
         for (U32 slot = 0; slot < mesh->faces[faceIdx].count; slot++) {
             U32 edge = mesh->edge(faceIdx, slot);
@@ -70,8 +71,8 @@ void meshDebugOut(const Mesh *mesh)
 
 Mesh *createRingMesh(unsigned sides)
 {
-    ASSERTX(sides > 0, "createRingMesh with 0 verts");
-    ASSERTX(sides <= MAXVERT, "createRingMesh with more than MAXVERT verts");
+    ASSERTX(sides >= 1 && sides <= MAXVERT,
+            "createRingMesh with invalid number of vertices (%u)", sides);
 
     Mesh *mesh = new Mesh;
     mesh->verts.resize(sides);
@@ -172,10 +173,9 @@ static U32 _meshDupVertex(Mesh *mesh, U32 baseEdge)
 
 U32 meshSplitVert(Mesh *mesh, U32 beginEdge, U32 endEdge)
 {
-    U32 oldVertIdx = mesh->vertIdx(beginEdge);
-
-    ASSERTX(oldVertIdx == mesh->vertIdx(endEdge),
+    ASSERTX(mesh->vertIdx(beginEdge) == mesh->vertIdx(endEdge),
             "meshSplitVert on two different vertices");
+    U32 oldVertIdx = mesh->vertIdx(beginEdge);
 
     // create new vertex (as a copy of old vertex)
     U32 newVertIdx = mesh->verts.size();

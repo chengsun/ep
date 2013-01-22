@@ -142,10 +142,12 @@ void meshDebugOut(const Mesh *mesh);
 Mesh *createRingMesh(unsigned sides);
 
 void meshExtrudeFace(Mesh *mesh, U32 faceIdx, float length);
+
 /* meshSplitVert performs a vertex split
  * beginEdge - specifies the begin half-edge (inclusive)
  * endEdge - specifies the end half-edge (exclusive)
  * note that the order of edge traversal is CLOCKWISE (i.e. eVertPrev)!
+ * returns the half-edge representing the new vertex
  */
 U32 meshSplitVert(Mesh *mesh, U32 beginEdge, U32 endEdge);
 
