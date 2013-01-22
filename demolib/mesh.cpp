@@ -184,21 +184,19 @@ U32 meshSplitVert(Mesh *mesh, U32 beginEdge, U32 endEdge)
     mesh->verts.push_back(mesh->verts[oldVertIdx]);
 
     // add new vertex to two affected faces
-    U32 newBeginEdge = mesh->eVertPrev(beginEdge),
-        newEndEdge = mesh->eVertPrev(endEdge);
-    _meshDupVertex(mesh, newBeginEdge);
-    _meshDupVertex(mesh, newEndEdge);
+    _meshDupVertex(mesh, beginEdge);
+    _meshDupVertex(mesh, endEdge);
 
     // fix opposites
-    mesh->eOpposite(newBeginEdge) = newEndEdge;
-    mesh->eOpposite(newEndEdge) = newBeginEdge;
+    mesh->eOpposite(beginEdge) = endEdge;
+    mesh->eOpposite(endEdge) = beginEdge;
 
     meshDebugOut(mesh);
     meshCheck(mesh);
 
     // update the vertex on affected faces
-    U32 curEdge = newBeginEdge;
-    U32 finEdge = mesh->eNext(newEndEdge);
+    U32 curEdge = mesh->eNext(beginEdge);
+    U32 finEdge = endEdge;
     LOG("finEdge is %u,%u", finEdge/8, finEdge%8);
     while (true) {
         LOG("curEdge is %u,%u", curEdge/8, curEdge%8);
@@ -209,11 +207,11 @@ U32 meshSplitVert(Mesh *mesh, U32 beginEdge, U32 endEdge)
         LOG("setting new vertex at %u,%u", curEdge/8, curEdge%8);
         mesh->vertIdx(curEdge) = newVertIdx;
         if (curEdge == finEdge) break;
-        curEdge = mesh->eVertNext(curEdge);
+        curEdge = mesh->eVertPrev(curEdge);
     }
 
     // return the new half-edge
-    return newBeginEdge;
+    return endEdge;
 }
 
 MeshBuf *meshGenBuf(Mesh *mesh)
