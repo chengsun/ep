@@ -159,14 +159,12 @@ static U32 _meshDupVertex(Mesh *mesh, U32 baseEdge)
     ASSERTX(mesh->faces[baseEdge/8].count+1u <= MAXVERT,
             "meshDupVertex on face which will have too many vertices");
 
-    LOG("adding new slot before (%u,%u)", baseEdge/8, baseEdge%8);
     MeshFace &face = mesh->faces[baseEdge/8];
     for (unsigned slot = mesh->faces[baseEdge/8].count++; slot-- > baseEdge%8;) {
         const unsigned newSlot = slot+1;
         face.verts[newSlot] = face.verts[slot];
         face.opposite[newSlot] = face.opposite[slot];
         // fix up opposite on adjacent face
-        LOG("fixing oppsite to %u,%u to become %u,%u", face.opposite[newSlot]/8,face.opposite[newSlot]%8, baseEdge/8, newSlot);
         mesh->eOpposite(face.opposite[newSlot]) = mesh->edge(baseEdge/8, newSlot);
     }
     return mesh->eNext(baseEdge);
@@ -190,20 +188,16 @@ U32 meshSplitVert(Mesh *mesh, U32 beginEdge, U32 endEdge)
     // there is a special case when the edges are the same
     mesh->eOpposite(endEdge) = beginEdge + (beginEdge == endEdge ? 1 : 0);
 
-    meshDebugOut(mesh);
     ASSERTX(meshCheck(mesh));
 
     // update the vertex on affected faces
     U32 curEdge = mesh->eNext(beginEdge);
     U32 finEdge = mesh->eOpposite(beginEdge);
-    LOG("finEdge is %u,%u", finEdge/8, finEdge%8);
     while (true) {
-        LOG("curEdge is %u,%u", curEdge/8, curEdge%8);
         ASSERTX(mesh->vertIdx(curEdge) == oldVertIdx,
                 "meshSplitVert on inconsistent mesh (not all half-edges "
                 "originating from same vertex) for (face %u, slot %u) has %u but need %u",
                 curEdge/8, curEdge%8, mesh->vertIdx(curEdge), oldVertIdx);
-        LOG("setting new vertex at %u,%u", curEdge/8, curEdge%8);
         mesh->vertIdx(curEdge) = newVertIdx;
         if (curEdge == finEdge) break;
         curEdge = mesh->eVertPrev(curEdge);
