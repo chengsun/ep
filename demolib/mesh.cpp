@@ -159,7 +159,7 @@ static U32 _meshDupVertex(Mesh *mesh, U32 baseEdge)
     ASSERTX(mesh->faces[baseEdge/8].count+1u <= MAXVERT,
             "meshDupVertex on face which will have too many vertices");
 
-    LOG("adding new vertex before (%u,%u)", baseEdge/8, baseEdge%8);
+    LOG("adding new slot before (%u,%u)", baseEdge/8, baseEdge%8);
     MeshFace &face = mesh->faces[baseEdge/8];
     for (unsigned slot = mesh->faces[baseEdge/8].count++; slot-- > baseEdge%8;) {
         const unsigned newSlot = slot+1;
@@ -185,18 +185,17 @@ U32 meshSplitVert(Mesh *mesh, U32 beginEdge, U32 endEdge)
 
     // add new vertex to two affected faces
     _meshDupVertex(mesh, beginEdge);
-    _meshDupVertex(mesh, endEdge);
-
-    // fix opposites
     mesh->eOpposite(beginEdge) = endEdge;
-    mesh->eOpposite(endEdge) = beginEdge;
+    _meshDupVertex(mesh, endEdge);
+    // there is a special case when the edges are the same
+    mesh->eOpposite(endEdge) = beginEdge + (beginEdge == endEdge ? 1 : 0);
 
     meshDebugOut(mesh);
-    meshCheck(mesh);
+    ASSERTX(meshCheck(mesh));
 
     // update the vertex on affected faces
     U32 curEdge = mesh->eNext(beginEdge);
-    U32 finEdge = endEdge;
+    U32 finEdge = mesh->eOpposite(beginEdge);
     LOG("finEdge is %u,%u", finEdge/8, finEdge%8);
     while (true) {
         LOG("curEdge is %u,%u", curEdge/8, curEdge%8);
