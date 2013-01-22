@@ -208,6 +208,71 @@ U32 Mesh::splitVert(U32 beginEdge, U32 endEdge)
     return eOpposite(beginEdge);
 }
 
+U32 Mesh::splitFace(U32 beginEdge, U32 endEdge)
+{
+    ASSERTX(check());
+
+    ASSERTX(beginEdge/8 == endEdge/8, "meshSplitFace on two different faces");
+    U32 oldFaceIdx = beginEdge/8;
+
+    ASSERTX(beginEdge != endEdge, "meshSplitFace on same slots");
+
+    // create new face (as a copy of old face)
+    U32 newFaceIdx = faces.size();
+    faces.push_back(faces[oldFaceIdx]);
+
+    MeshFace &oldFace = faces[oldFaceIdx];
+
+    U32 begin = beginEdge%8, end = endEdge%8;
+
+    unsigned contFaceIdx = newFaceIdx,
+             splitFaceIdx = oldFaceIdx;
+    if (begin > end) {
+        std::swap(begin, end);
+        std::swap(contFaceIdx, splitFaceIdx);
+    }
+    MeshFace &contFace = faces[contFaceIdx],
+             &splitFace = faces[splitFaceIdx];
+
+    unsigned faceCount = oldFace.count,
+             contFaceCount = end - begin + 1,
+             splitFaceCount = begin + faceCount - end + 1;
+
+    contFace.count = 0;
+    splitFace.count = 0;
+
+    for (unsigned slot = 0; slot < faceCount; slot++) {
+        /* as oldFace.count <= slot, it is always safe to read
+         * oldFace.verts[slot] */
+        if (begin <= slot && slot <= end) {
+            unsigned thisSlot = contFace.count++;
+            contFace.verts[thisSlot] = oldFace.verts[slot];
+            contFace.opposite[thisSlot] = oldFace.opposite[slot];
+            if (thisSlot != contFaceCount-1) {
+                eOpposite(contFace.opposite[thisSlot]) = eEdge(contFaceIdx, thisSlot);
+            }
+        }
+        if (slot <= begin || end <= slot) {
+            unsigned thisSlot = splitFace.count++;
+            splitFace.verts[thisSlot] = oldFace.verts[slot];
+            splitFace.opposite[thisSlot] = oldFace.opposite[slot];
+            if (thisSlot != begin) {
+                eOpposite(splitFace.opposite[thisSlot]) = eEdge(splitFaceIdx, thisSlot);
+            }
+        }
+    }
+    ASSERTX(contFace.count == contFaceCount);
+    ASSERTX(splitFace.count == splitFaceCount);
+
+    eOpposite(eEdge(contFaceIdx, contFace.count-1)) = eEdge(splitFaceIdx, begin);
+    eOpposite(eEdge(splitFaceIdx, begin)) = eEdge(contFaceIdx, contFace.count-1);
+
+    ASSERTX(check());
+
+    return eEdge(newFaceIdx,
+                 newFaceIdx == contFaceIdx ? contFace.count-1 : begin);
+}
+
 MeshBuf *meshGenBuf(Mesh *mesh)
 {
     MeshBuf *buf = new MeshBuf;

@@ -65,6 +65,14 @@ struct Mesh
      */
     U32 splitVert(U32 beginEdge, U32 endEdge);
 
+    /* splitFace performs a face split
+     * beginEdge - specifies the begin half-edge
+     * endEdge - specifies the end half-edge
+     * returns the half-edge representing the new face which has all vertices
+     * between beginEdge and endEdge
+     */
+    U32 splitFace(U32 beginEdge, U32 endEdge);
+
 
     // traversal functions
 
