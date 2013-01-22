@@ -50,17 +50,24 @@ Progress Log
 
 19/1/13
 -------
-* Continued work on mesh representation. ([Vertex split operation][ryg halfedge-practice])
+* Continued work on mesh representation. I am trying to implement the [vertex split operation][ryg halfedge-practice].
 
 20/1/13
 -------
-* Continued work on vertex split. Added `test_mesh` to test mesh operations.  
+* Continued work on mesh vertex split. Added `test_mesh` to test mesh operations.  
   I am finding it quite tricky to code the operations correctly from descriptions of them. I have a poor visual memory so I cannot visualise what each operation does to a mesh, especially in 3D. To work around this, I am having to draw out a lot of small diagrams to help me think about all of the special cases.
 
 21/1/13
 -------
 * Expanded on my Rationale and Timeline.
-* Continued work on vertex split.
+* Continued work on mesh vertex split operation.
+
+22/1/13
+-------
+* After more work, the mesh vertex splitting operation seems to work now.  
+  I still need to test the corner cases.
+* I am now trying to implement the [face split operation][ryg halfedge-practice].
+
 
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
 [ryg halfedge-practice]: http://fgiesen.wordpress.com/2012/03/24/half-edge-based-mesh-representations-practice/
