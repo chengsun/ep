@@ -204,7 +204,7 @@ U32 meshSplitVert(Mesh *mesh, U32 beginEdge, U32 endEdge)
     }
 
     // return the new half-edge
-    return endEdge;
+    return mesh->eOpposite(beginEdge);
 }
 
 MeshBuf *meshGenBuf(Mesh *mesh)
