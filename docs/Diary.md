@@ -40,11 +40,11 @@ Progress Log
 * I wrote my rationale, and expanded my progress log with references.
 * I started my timeline plan.
 
-15/1/13 *(~0.5 hours)*
+15/1/13 *(~30 minutes)*
 -------
 * Found detailed explanation of Navier-Stokes in [a PDF][fluid rest of us].
 
-18/1/13 *(~0.5 hour)*
+18/1/13 *(~30 minutes)*
 -------
 * Reformatted Rationale, Diary and Timeline as Markdown documents. This makes version control of these documents much easier.
 
@@ -68,7 +68,7 @@ Progress Log
   I still need to test the corner cases.
 * I am now trying to implement the [face split operation][ryg halfedge-practice].
 
-23/1/13 *(0.5 hour)*
+23/1/13 *(30 minutes)*
 -------
 * Added some information to my Rationale.
 * Updated my Diary with the amount of time I spent working on my Extended Project each day.  
