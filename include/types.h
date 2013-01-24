@@ -69,4 +69,16 @@ inline static void operator*=(Vec3 &a, float f) {
     a = a * f;
 }
 
+struct Vec4
+{
+    float x, y, z, w;
+    // TODO
+};
+
+struct Quat
+{
+    float x, y, z, w;
+    // TODO
+};
+
 #endif

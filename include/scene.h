@@ -1,0 +1,28 @@
+#ifndef DEMOLIB_SCENE_H
+#define DEMOLIB_SCENE_H
+
+#include "types.h"
+#include "mesh.h"
+#include "program.h"
+#include "texture.h"
+
+struct SceneNode
+{
+    Mesh *mesh;
+    Program *program;
+
+    Vec3 *pos;
+    Quat *orientation;
+    float scale;
+
+    Texture *texture;
+};
+
+struct Scene
+{
+};
+
+Scene *createScene();
+void sceneRender(const Scene *scene);
+
+#endif
