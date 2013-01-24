@@ -35,7 +35,40 @@ struct Mesh
     std::vector<MeshVert> verts;
     std::vector<MeshFace> faces;
 
-    inline U32 edge(U32 face, U32 slot) const {
+    // basic operations
+
+    static Mesh *createRing(unsigned sides);
+
+    bool check() const;
+    /* meshCheckFlags checks a mesh to ensure that the selected flags are all
+     * reset
+     */
+    bool checkFlags() const;
+
+    void debugOut() const;
+
+    void extrudeFace(U32 faceIdx, float length);
+
+    /* dupVert (internally used) duplicates the slot before baseEdge
+     * v0 ---e--> v1
+     * dupVertex(e) creates a new edge e0 and a duplicate slot.
+     * v0 --e0--> v0 ---e--> v1
+     * the new value of e is returned. e0 is equal to baseEdge after the operation.
+     */
+    U32 dupVert(U32 baseEdge);
+
+    /* splitVert performs a vertex split
+     * beginEdge - specifies the begin half-edge (inclusive)
+     * endEdge - specifies the end half-edge (exclusive)
+     * note that the order of edge traversal is CLOCKWISE (i.e. eVertPrev)!
+     * returns the half-edge representing the new vertex
+     */
+    U32 splitVert(U32 beginEdge, U32 endEdge);
+
+
+    // traversal functions
+
+    inline U32 eEdge(U32 face, U32 slot) const {
         ASSERTX(face < faces.size());
         ASSERTX(slot < faces[face].count);
 
@@ -132,24 +165,6 @@ struct MeshBuf
 {
     std::vector<U32> idxBuf;
 };
-
-
-bool meshCheck(const Mesh *mesh);
-bool meshCheckFlags(const Mesh *mesh);
-
-void meshDebugOut(const Mesh *mesh);
-
-Mesh *createRingMesh(unsigned sides);
-
-void meshExtrudeFace(Mesh *mesh, U32 faceIdx, float length);
-
-/* meshSplitVert performs a vertex split
- * beginEdge - specifies the begin half-edge (inclusive)
- * endEdge - specifies the end half-edge (exclusive)
- * note that the order of edge traversal is CLOCKWISE (i.e. eVertPrev)!
- * returns the half-edge representing the new vertex
- */
-U32 meshSplitVert(Mesh *mesh, U32 beginEdge, U32 endEdge);
 
 
 }

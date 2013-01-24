@@ -3,13 +3,13 @@
 
 void demo_init(unsigned w, unsigned h)
 {
-    Mesh *mesh = createRingMesh(4);
-    meshDebugOut(mesh);
-    ASSERTX(meshCheck(mesh));
+    Mesh *mesh = Mesh::createRing(4);
+    mesh->debugOut();
+    ASSERTX(mesh->check());
     LOG("\n");
-    meshSplitVert(mesh, mesh->edge(0,0), mesh->edge(1,0));
-    meshDebugOut(mesh);
-    ASSERTX(meshCheck(mesh));
+    mesh->splitVert(mesh->eEdge(0,0), mesh->eEdge(1,0));
+    mesh->debugOut();
+    ASSERTX(mesh->check());
 }
 
 bool demo_prepareFrame()

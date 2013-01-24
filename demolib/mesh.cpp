@@ -3,7 +3,7 @@
 #include <cmath>
 #include <cstring>      // memmove
 
-/* meshCheck checks a mesh for contradictions and constraint violations:
+/* Mesh::check checks a mesh for contradictions and constraint violations:
  *
  * for every half-edge e:
  *     e = opposite(opposite(e)) != opposite(e)
@@ -11,32 +11,32 @@
  * all vertices are at distinct positions
  * all faces are planar and convex with vertices anticlockwise
  */
-bool meshCheck(const Mesh *mesh)
+bool Mesh::check() const
 {
-    for (U32 faceIdx = 0, faceSize = mesh->faces.size(); faceIdx < faceSize; faceIdx++) {
-        ASSERTX(mesh->faces[faceIdx].count >= 2 &&
-                mesh->faces[faceIdx].count <= 8,
-                "meshCheck failed: invalid number of slots (%u) on face %u",
-                mesh->faces[faceIdx].count, faceIdx);
-        for (U32 slot = 0; slot < mesh->faces[faceIdx].count; slot++) {
-            U32 edge = mesh->edge(faceIdx, slot);
-            U32 oppEdge = mesh->eOpposite(edge);
-            ASSERTX(mesh->eCheck(oppEdge),
-                    "meshCheck failed: invalid eOpposite(e) for "
+    for (U32 faceIdx = 0, faceSize = faces.size(); faceIdx < faceSize; faceIdx++) {
+        ASSERTX(faces[faceIdx].count >= 2 &&
+                faces[faceIdx].count <= 8,
+                "Mesh::check failed: invalid number of slots (%u) on face %u",
+                faces[faceIdx].count, faceIdx);
+        for (U32 slot = 0; slot < faces[faceIdx].count; slot++) {
+            U32 edge = eEdge(faceIdx, slot);
+            U32 oppEdge = eOpposite(edge);
+            ASSERTX(eCheck(oppEdge),
+                    "Mesh::check failed: invalid eOpposite(e) for "
                     "(face %u, slot %u)", faceIdx, slot);
-            U32 opp2Edge = mesh->eOpposite(oppEdge);
+            U32 opp2Edge = eOpposite(oppEdge);
             if (edge != opp2Edge) {
-                LOG("meshCheck failed: e != eOpposite(eOpposite(e)) for "
+                LOG("Mesh::check failed: e != eOpposite(eOpposite(e)) for "
                     "(face %u, slot %u)", faceIdx, slot);
                 return false;
             }
             if (edge == oppEdge) {
-                LOG("meshCheck failed: e == eOpposite(e) for "
+                LOG("Mesh::check failed: e == eOpposite(e) for "
                     "(face %u, slot %u)", faceIdx, slot);
                 return false;
             }
-            if (mesh->vertIdx(edge) != mesh->vertIdx(mesh->eNext(oppEdge))) {
-                LOG("meshCheck failed: vertIdx(e) != vertIdx(eNext(eOpposite(e))) for "
+            if (vertIdx(edge) != vertIdx(eNext(oppEdge))) {
+                LOG("Mesh::check failed: vertIdx(e) != vertIdx(eNext(eOpposite(e))) for "
                     "(face %u, slot %u)", faceIdx, slot);
                 return false;
             }
@@ -46,33 +46,31 @@ bool meshCheck(const Mesh *mesh)
     return true;
 }
 
-/* meshCheckFlags checks a mesh to ensure that the selected flags are all reset
- */
-bool meshCheckFlags(const Mesh *mesh)
+bool Mesh::checkFlags() const
 {
-    for (unsigned i = 0, vertSize = mesh->verts.size(); i < vertSize; i++) {
-        if (mesh->verts[i].selected) return false;
+    for (unsigned i = 0, vertSize = verts.size(); i < vertSize; i++) {
+        if (verts[i].selected) return false;
     }
-    for (unsigned i = 0, faceSize = mesh->faces.size(); i < faceSize; i++) {
-        if (mesh->faces[i].selected) return false;
+    for (unsigned i = 0, faceSize = faces.size(); i < faceSize; i++) {
+        if (faces[i].selected) return false;
     }
     return true;
 }
 
-void meshDebugOut(const Mesh *mesh)
+void Mesh::debugOut() const
 {
-    for (unsigned f = 0; f < mesh->faces.size(); f++) {
-        for (unsigned s = 0; s < mesh->faces[f].count; s++) {
-            U32 opp = mesh->eOpposite(f,s);
-            LOG("(%u,%u) is v%u. Opposite: (%u,%u)", f,s, mesh->vertIdx(f,s), opp/8,opp%8);
+    for (unsigned f = 0; f < faces.size(); f++) {
+        for (unsigned s = 0; s < faces[f].count; s++) {
+            U32 opp = eOpposite(f,s);
+            LOG("(%u,%u) is v%u. Opposite: (%u,%u)", f,s, vertIdx(f,s), opp/8,opp%8);
         }
     }
 }
 
-Mesh *createRingMesh(unsigned sides)
+Mesh *Mesh::createRing(unsigned sides)
 {
     ASSERTX(sides >= 1 && sides <= MAXVERT,
-            "createRingMesh with invalid number of vertices (%u)", sides);
+            "Mesh::createRing with invalid number of vertices (%u)", sides);
 
     Mesh *mesh = new Mesh;
     mesh->verts.resize(sides);
@@ -93,36 +91,37 @@ Mesh *createRingMesh(unsigned sides)
 
         mesh->faces[0].verts[slot] = slot;
         mesh->faces[1].verts[slot] = (sides-slot)%sides;
-        mesh->faces[0].opposite[slot] = mesh->edge(1, sides-slot-1);
-        mesh->faces[1].opposite[sides-slot-1] = mesh->edge(0, slot);
+        mesh->faces[0].opposite[slot] = mesh->eEdge(1, sides-slot-1);
+        mesh->faces[1].opposite[sides-slot-1] = mesh->eEdge(0, slot);
     }
     return mesh;
 }
 
-void meshExtrudeFace(Mesh *mesh, U32 faceIdx, float length)
+/*
+void Mesh::extrudeFace(U32 faceIdx, float length)
 {
-    unsigned oldSize = mesh->faces.size();
-    ASSERTX(faceIdx < oldSize, "meshExtrude invalid faceIdx");
+    unsigned oldSize = faces.size();
+    ASSERTX(faceIdx < oldSize, "Mesh::extrude invalid faceIdx");
 
-    MeshFace &face = mesh->faces[faceIdx];
-    mesh->faces.resize(oldSize + face.count);
+    MeshFace &face = faces[faceIdx];
+    faces.resize(oldSize + face.count);
     for (U32 slot = 0; slot < face.count; slot++) {
-        mesh->verts[face.verts[slot]].pos += length * face.normal;
+        verts[face.verts[slot]].pos += length * face.normal;
         if (slot+1 == face.count) continue;
-        MeshFace &newFace = mesh->faces[oldSize + slot];
+        MeshFace &newFace = faces[oldSize + slot];
         newFace.count = 4;
         newFace.material = face.material;
         // XXX: is this the right way of calculating the new face normals?
         newFace.normal = Vec3::cross(face.normal,
-                                     mesh->verts[face.verts[slot+1]].pos -
-                                     mesh->verts[face.verts[slot]].pos);
+                                     verts[face.verts[slot+1]].pos -
+                                     verts[face.verts[slot]].pos);
     }
 }
 
-void meshExtrude(Mesh *mesh, U32 startFaceIdx, float length)
+void Mesh::extrude(U32 startFaceIdx, float length)
 {
-    unsigned oldSize = mesh->faces.size();
-    ASSERTX(startFaceIdx < oldSize, "meshExtrude invalid faceIdx");
+    unsigned oldSize = faces.size();
+    ASSERTX(startFaceIdx < oldSize, "Mesh::extrude invalid faceIdx");
 
     std::vector<U32> edgeList;      // list of boundary edges
     std::vector<U32> faceStack;     // stack for dfs
@@ -130,14 +129,14 @@ void meshExtrude(Mesh *mesh, U32 startFaceIdx, float length)
     while (!faceStack.empty()) {
         U32 faceIdx = faceStack.back();
         faceStack.pop_back();
-        for (U32 slot = 0; slot < mesh->faces[faceIdx].count; slot++) {
-            U32 nextFaceIdx = mesh->faces[faceIdx].opposite[slot] / 8;
-            if (mesh->faces[nextFaceIdx].selected == 1) {
+        for (U32 slot = 0; slot < faces[faceIdx].count; slot++) {
+            U32 nextFaceIdx = faces[faceIdx].opposite[slot] / 8;
+            if (faces[nextFaceIdx].selected == 1) {
                 // visit this face only if selected and not visited before
-                mesh->faces[nextFaceIdx].selected = 2;  // selected but visited before
+                faces[nextFaceIdx].selected = 2;  // selected but visited before
                 faceStack.push_back(nextFaceIdx);
             }
-            if (mesh->faces[nextFaceIdx].selected == 0) {
+            if (faces[nextFaceIdx].selected == 0) {
                 // this is a boundary edge only if other face not selected
                 edgeList.push_back(faceIdx*8 + slot);
             }
@@ -148,63 +147,58 @@ void meshExtrude(Mesh *mesh, U32 startFaceIdx, float length)
         // set the parameters of the new face
     }
 }
+*/
 
-/* helper function that duplicates the slot before baseEdge
- * v0 ---e--> v1
- * dupVertex(e) creates a new edge e0 and a duplicate slot.
- * v0 --e0--> v0 ---e--> v1
- * the new value of e is returned. e0 is equal to baseEdge after the operation.
- */
-static U32 _meshDupVertex(Mesh *mesh, U32 baseEdge)
+U32 Mesh::dupVert(U32 baseEdge)
 {
-    ASSERTX(mesh->faces[baseEdge/8].count+1u <= MAXVERT,
-            "meshDupVertex on face which will have too many vertices");
+    ASSERTX(faces[baseEdge/8].count+1u <= MAXVERT,
+            "Mesh::dupVertex on face which will have too many vertices");
 
-    MeshFace &face = mesh->faces[baseEdge/8];
-    for (unsigned slot = mesh->faces[baseEdge/8].count++; slot-- > baseEdge%8;) {
+    MeshFace &face = faces[baseEdge/8];
+    for (unsigned slot = faces[baseEdge/8].count++; slot-- > baseEdge%8;) {
         const unsigned newSlot = slot+1;
         face.verts[newSlot] = face.verts[slot];
         face.opposite[newSlot] = face.opposite[slot];
         // fix up opposite on adjacent face
-        mesh->eOpposite(face.opposite[newSlot]) = mesh->edge(baseEdge/8, newSlot);
+        eOpposite(face.opposite[newSlot]) = eEdge(baseEdge/8, newSlot);
     }
-    return mesh->eNext(baseEdge);
+    return eNext(baseEdge);
 }
 
-U32 meshSplitVert(Mesh *mesh, U32 beginEdge, U32 endEdge)
+U32 Mesh::splitVert(U32 beginEdge, U32 endEdge)
 {
-    ASSERTX(mesh->vertIdx(beginEdge) == mesh->vertIdx(endEdge),
-            "meshSplitVert on two different vertices");
-    U32 oldVertIdx = mesh->vertIdx(beginEdge);
+    ASSERTX(vertIdx(beginEdge) == vertIdx(endEdge),
+            "Mesh::splitVert on two different vertices");
+    U32 oldVertIdx = vertIdx(beginEdge);
 
     // create new vertex (as a copy of old vertex)
-    U32 newVertIdx = mesh->verts.size();
-    mesh->verts.push_back(mesh->verts[oldVertIdx]);
+    U32 newVertIdx = verts.size();
+    verts.push_back(verts[oldVertIdx]);
 
     // add new vertex to two affected faces
-    _meshDupVertex(mesh, beginEdge);
-    mesh->eOpposite(beginEdge) = endEdge;
-    _meshDupVertex(mesh, endEdge);
+    dupVert(beginEdge);
+    eOpposite(beginEdge) = endEdge;
+    dupVert(endEdge);
     // there is a special case when the edges are the same
-    mesh->eOpposite(endEdge) = beginEdge + (beginEdge == endEdge ? 1 : 0);
+    eOpposite(endEdge) = beginEdge + (beginEdge == endEdge ? 1 : 0);
 
-    ASSERTX(meshCheck(mesh));
+    ASSERTX(check());
 
     // update the vertex on affected faces
-    U32 curEdge = mesh->eNext(beginEdge);
-    U32 finEdge = mesh->eOpposite(beginEdge);
+    U32 curEdge = eNext(beginEdge);
+    U32 finEdge = eOpposite(beginEdge);
     while (true) {
-        ASSERTX(mesh->vertIdx(curEdge) == oldVertIdx,
-                "meshSplitVert on inconsistent mesh (not all half-edges "
+        ASSERTX(vertIdx(curEdge) == oldVertIdx,
+                "Mesh::splitVert on inconsistent mesh (not all half-edges "
                 "originating from same vertex) for (face %u, slot %u) has %u but need %u",
-                curEdge/8, curEdge%8, mesh->vertIdx(curEdge), oldVertIdx);
-        mesh->vertIdx(curEdge) = newVertIdx;
+                curEdge/8, curEdge%8, vertIdx(curEdge), oldVertIdx);
+        vertIdx(curEdge) = newVertIdx;
         if (curEdge == finEdge) break;
-        curEdge = mesh->eVertPrev(curEdge);
+        curEdge = eVertPrev(curEdge);
     }
 
     // return the new half-edge
-    return mesh->eOpposite(beginEdge);
+    return eOpposite(beginEdge);
 }
 
 MeshBuf *meshGenBuf(Mesh *mesh)
