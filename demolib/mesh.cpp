@@ -94,6 +94,9 @@ Mesh *Mesh::createRing(unsigned sides)
         mesh->faces[0].opposite[slot] = mesh->eEdge(1, sides-slot-1);
         mesh->faces[1].opposite[sides-slot-1] = mesh->eEdge(0, slot);
     }
+
+    ASSERTX(mesh->check());
+
     return mesh;
 }
 
@@ -167,6 +170,8 @@ U32 Mesh::dupVert(U32 baseEdge)
 
 U32 Mesh::splitVert(U32 beginEdge, U32 endEdge)
 {
+    ASSERTX(check());
+
     ASSERTX(vertIdx(beginEdge) == vertIdx(endEdge),
             "Mesh::splitVert on two different vertices");
     U32 oldVertIdx = vertIdx(beginEdge);
@@ -196,6 +201,8 @@ U32 Mesh::splitVert(U32 beginEdge, U32 endEdge)
         if (curEdge == finEdge) break;
         curEdge = eVertPrev(curEdge);
     }
+
+    ASSERTX(check());
 
     // return the new half-edge
     return eOpposite(beginEdge);
