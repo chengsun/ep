@@ -75,6 +75,11 @@ Progress Log
   I gave approximate times to the days before today, from memory, as best I can. From today onwards I will track the time I spend more closely.
 * I started looking at how to go about implementing a scene graph. I am using information from [this OpenGL tutorial][arcsynthesis 17-scenegraph].
 
+24/1/13 *(2 hours)*
+-------
+* I changed the style of the code slightly, to allow the use of cleaner OO syntax.
+* The face split operation seems to work now.
+
 
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
 [ryg halfedge-practice]: http://fgiesen.wordpress.com/2012/03/24/half-edge-based-mesh-representations-practice/
