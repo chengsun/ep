@@ -24,7 +24,7 @@ programming skills, making up for the fact that I do not get to do so in any of
 the subjects that I am taking this year. Although this project supports my
 interests and career choice, there are also many other skills required to
 successfully complete it, and working on the project will push me out of my
-comfort zone and in the process broaden my horizons and.
+comfort zone and in the process broaden my horizons.
 
 There is plenty of information related to the project that I have chosen, and
 my primary source of information will be the internet. The "demoscene"
