@@ -5,7 +5,7 @@
 
 #include "types.h"
 #include "util.h"
-#include "shader.h"
+#include "program.h"
 #include "mesh.h"
 
 #endif
