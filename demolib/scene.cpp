@@ -1,12 +1,11 @@
 #include "scene.h"
 
-Scene *createScene()
+Scene::Scene()
 {
     // TODO
-    return NULL;
 }
 
-void sceneRender(const Scene *scene)
+void Scene::Render() const
 {
     // TODO
     glEnable(GL_DEPTH_TEST);
@@ -15,5 +14,4 @@ void sceneRender(const Scene *scene)
     glDepthRange(0.0f, 1.0f);
 
     //meshBuf.draw();
-    //glDrawElements(GL_TRIANGLE_FAN, );
 }

@@ -20,9 +20,9 @@ struct SceneNode
 
 struct Scene
 {
-};
+    Scene();
 
-Scene *createScene();
-void sceneRender(const Scene *scene);
+    void Render() const;
+};
 
 #endif

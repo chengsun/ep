@@ -2,6 +2,7 @@
 #define TYPES_H
 
 #include <cstdint>
+#include <GL/glew.h>
 
 typedef uint8_t U8;
 typedef uint16_t U16;
