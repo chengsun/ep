@@ -78,7 +78,14 @@ Progress Log
 24/1/13 *(2 hours)*
 -------
 * I changed the style of the code slightly, to allow the use of cleaner OO syntax.
-* The face split operation seems to work now.
+  This means that future code will be easier to write and understand.
+* I have finished implementing the face split operation; it seems to work now.
+
+25/1/13 *(2 hours)*
+-------
+* I started implementing mesh rendering, which actually draws the mesh to screen.
+  This way I can visually evaluate the results of my code. Up until now I have had to use textual logging when checking of the state of the mesh, which is time-consuming and prone to error.
+  I have needed to brush up on the OpenGL API, which I have to use to render. Most of this information comes from [this tutorial][arcsynthesis] and [the OpenGL wiki][opengl core-api].
 
 
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
@@ -89,4 +96,6 @@ Progress Log
 [smash numbres]: http://directtovideo.wordpress.com/2011/05/03/numb-res/
 [iq rwwtt]: http://www.iquilezles.org/www/material/nvscene2008/rwwtt.pdf
 [fluid rest of us]: http://people.sc.fsu.edu/~jburkardt/pdf/fluid_flow_for_the_rest_of_us.pdf
+[arcsynthesis]: http://www.arcsynthesis.org/gltut/
 [arcsynthesis 17-scenegraph]: http://www.arcsynthesis.org/gltut/Texturing/Tutorial%2017.html#d0e15853
+[opengl core-api]: http://www.opengl.org/wiki/Category:Core_API_Reference
