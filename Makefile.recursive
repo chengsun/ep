@@ -2,7 +2,7 @@ DIRS ?= $(wildcard */)
 
 all install clean: force_look
 	for x in $(DIRS); do \
-		$(MAKE) -C $$x $@ || break; \
+		$(MAKE) -C $$x $@ || exit 1; \
 	done
 
 force_look:
