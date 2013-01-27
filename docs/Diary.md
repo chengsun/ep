@@ -87,7 +87,12 @@ Progress Log
 -------
 * I started implementing mesh rendering, which actually draws the mesh to screen.
   This way I can visually evaluate the results of my code. Up until now I have had to use textual logging when checking of the state of the mesh, which is time-consuming and prone to error.
-  I have needed to refer to the documentation on the OpenGL API a lot, which is used for rendering. Most of this information comes from [this tutorial][arcsynthesis] and [the OpenGL wiki][opengl core-api].
+  I have needed to refer to the documentation on the OpenGL API a lot, which is used for rendering. Most of the information I needed was found in [this tutorial][arcsynthesis] and [the OpenGL wiki][opengl core-api].
+  I managed to successfully draw the mesh primitives that I have so far, a 2D n-sided polygon, with `test_mesh`.
+
+27/1/13 *(30 minutes)*
+-------
+* I am moving all the code which prepared the mesh for rendering, to be associated with a Program (GPU shader) object rather than a Mesh object, as this makes more sense.
 
 
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
