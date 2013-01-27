@@ -169,24 +169,6 @@ struct Mesh
     }
 };
 
-struct VertBuf
-{
-    Vec3 pos;
-};
-
-struct MeshBuf
-{
-    MeshBuf(const Mesh &mesh);
-    void draw() const;
-
-    static constexpr U32 PrimitiveRestartIndex = 0xFFFFFFFF;
-
-private:
-    GLuint vaoId, vertBufId, idxBufId;
-    std::vector<VertBuf> vertBuf;
-    std::vector<U32> idxBuf;
-};
-
 }
 
 #endif

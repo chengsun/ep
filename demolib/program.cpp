@@ -53,6 +53,9 @@ Shader::~Shader()
     glDeleteShader(id);
 }
 
+
+constexpr U32 Program::PrimitiveRestartIndex;
+
 Program::Program(std::initializer_list<Shader> &&_shaders) :
     shaders(_shaders)
 {
@@ -79,4 +82,68 @@ Program::Program(std::initializer_list<Shader> &&_shaders) :
 
     for (unsigned shaderIdx = 0; shaderIdx < shaders.size(); shaderIdx++)
         glDetachShader(id, shaders[shaderIdx].id);
+}
+
+ProgramTest::ProgramTest() :
+    Program({
+        Shader(GL_VERTEX_SHADER, "data/test.vs"),
+        Shader(GL_FRAGMENT_SHADER, "data/test.fs")
+    })
+{
+}
+
+void ProgramTest::updateMeshBuf(const Mesh &mesh)
+{
+    vertBuf.resize(mesh.verts.size());
+    for (U32 vertIdx = 0; vertIdx < mesh.verts.size(); vertIdx++) {
+        vertBuf[vertIdx].pos = mesh.verts[vertIdx].pos;
+    }
+
+    idxBuf.clear();
+    for (U32 faceIdx = 0; faceIdx < mesh.faces.size(); faceIdx++) {
+        if (faceIdx > 0) {
+            idxBuf.push_back(PrimitiveRestartIndex);
+        }
+        const MeshFace &face = mesh.faces[faceIdx];
+        for (U32 slotIdx = 0; slotIdx < face.count; slotIdx++) {
+            idxBuf.push_back(face.verts[slotIdx]);
+        }
+    }
+
+	glGenBuffers(1, &vertBufId);
+	glGenBuffers(1, &idxBufId);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vertBufId);
+	glBufferData(GL_ARRAY_BUFFER, vertBuf.size() * sizeof(vertBuf[0]),
+                 &vertBuf[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idxBufId);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, idxBuf.size() * sizeof(idxBuf[0]),
+                 &idxBuf[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	glGenVertexArrays(1, &vaoId);
+	glBindVertexArray(vaoId);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vertBufId);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idxBufId);
+
+	glBindVertexArray(0);
+}
+
+void ProgramTest::draw() const
+{
+    glUseProgram(id);
+
+    glEnableClientState(GL_PRIMITIVE_RESTART_NV);
+    glPrimitiveRestartIndexNV(PrimitiveRestartIndex);
+
+    glBindVertexArray(vaoId);
+    glDrawElements(GL_TRIANGLE_FAN, idxBuf.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+
+    glDisableClientState(GL_PRIMITIVE_RESTART_NV);
 }

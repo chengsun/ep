@@ -6,10 +6,7 @@ Program *program;
 
 void demo_init(unsigned w, unsigned h)
 {
-    program = new Program({
-        Shader(GL_VERTEX_SHADER, "data/mesh.vs"),
-        Shader(GL_FRAGMENT_SHADER, "data/mesh.fs")
-    });
+    program = new ProgramTest;
 
     mesh = Mesh::createRing(4);
     mesh->splitVert(mesh->eEdge(0,0), mesh->eVertPrev(0,0));
@@ -24,6 +21,7 @@ void demo_init(unsigned w, unsigned h)
 
 bool demo_prepareFrame()
 {
+    program->updateMeshBuf(*mesh);
     return true;
 }
 
@@ -31,9 +29,5 @@ void demo_drawFrame()
 {
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-
-    glUseProgram(program->id);
-
-    MeshBuf buf(*mesh);
-    buf.draw();
+    program->draw();
 }
