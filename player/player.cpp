@@ -202,7 +202,7 @@ int main(int argc, char *argv[])
         unsigned newTicks = SDL_GetTicks();
         if (newTicks - oldTicks > 2000) {
             LOG("%.1f fps (%d frames in %d ms)",
-                nFrames * 1000.f / (newTicks - oldTicks),
+                nFrames * 1000. / (newTicks - oldTicks),
                 nFrames, newTicks - oldTicks);
             oldTicks = newTicks;
             nFrames = 0;
