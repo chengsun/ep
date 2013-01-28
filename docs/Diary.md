@@ -3,14 +3,15 @@ Progress Log
 
 24/12/12 *(~3 hours)*
 --------
+* I have decided that I want to do some sort of 3D animation for my Extended Project. The reasons for this are outlined in my rationale.
 * I spent today learning about and experimenting with 3D modelling in Blender.  
   Although I made some interesting models and effects, I decided that making 3D models in an art package such as Blender was not the way I wanted to approach this project.
 
 1/1/13 *(~3 hours)*
 ------
-* I was learning about what OpenGL was, and how to use it.
+* I have been learning about what OpenGL was, and how to use it.
 * I implemented a “player” program. This would be a program that sets everything up ready for the actual 3D demo to use, and provides a window for the 3D demo to draw into.
-* I made two basic OpenGL examples to get to grips with it.  
+* I made two basic OpenGL examples to get to grips with using it.  
   My first test, called `test_triangle`, simply draws a white triangle.  
   The second test, called `test_points`, draws some random white points on the screen.  
   I got both tests working on Linux.
@@ -32,7 +33,7 @@ Progress Log
 -------
 * I successfully compiled and tested my program on Windows.
 * I started using git to keep track of older versions of my code and my documents.
-* I started implementing a mesh representation based on [this blog post][ryg halfedge-redux].
+* I started implementing a mesh representation based on [this blog post][ryg halfedge-redux]. This will be used for "solid" (i.e. non-fluid) stuff, such as the landscape.
 
 14/1/13 *(~1 hour)*
 -------
@@ -85,7 +86,7 @@ Progress Log
 -------
 * I started implementing mesh rendering, which actually draws the mesh to screen.
   This way I can visually evaluate the results of my code. Up until now I have had to use textual logging when checking of the state of the mesh, which is time-consuming and prone to error.
-  I have needed to brush up on the OpenGL API, which I have to use to render. Most of this information comes from [this tutorial][arcsynthesis] and [the OpenGL wiki][opengl core-api].
+  I have needed to refer to the documentation on the OpenGL API a lot, which is used for rendering. Most of this information comes from [this tutorial][arcsynthesis] and [the OpenGL wiki][opengl core-api].
 
 
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
