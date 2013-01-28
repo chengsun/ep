@@ -1,7 +1,7 @@
 Timeline plan
 =============
 
-* **End of January**:
+**End of January**:
 
   *Considerations*:
   Exams and coursework may leave me short of time.
@@ -11,28 +11,28 @@ Timeline plan
   * Start work on the mesh code.
 
 
-* **End of February**:
+**End of February**:
 
   *Targets*:
   * Make a working demo of the mesh renderer.
   * Start a prototype of fluid simulation
 
 
-* **End of March**:
+**End of March**:
 
   *Targets*:
   * Create landscape meshes
   * Improve on fluid simulation
 
 
-* **End of April**:
+**End of April**:
 
   *Targets*:
   * Finish a prototype of fluid simulation
   * Assess the result (with initial feedback from others)
 
 
-* **End of May**:
+**End of May**:
 
   *Considerations*:
   Exams will leave me short of time
@@ -41,7 +41,7 @@ Timeline plan
   * Improve on fluid simulation (change tack if prototype not successful)
 
 
-* **End of June**:
+**End of June**:
 
   *Targets*:
   * Improve on fluid simulation
@@ -50,7 +50,7 @@ Timeline plan
   * Assess the result (with feedback from others)
 
 
-* **End of July**:
+**End of July**:
 
   *Considerations*:
   Summer holidays
@@ -61,7 +61,7 @@ Timeline plan
   * Look for / try to make some accompanying music?
 
 
-* **End of August**:
+**End of August**:
 
   *Considerations*:
   Summer holidays
@@ -70,7 +70,7 @@ Timeline plan
   * Polish demo: add effects
 
 
-* **End of September**:
+**End of September**:
 
   *Considerations*:
   UCAS applications may leave me short of time
@@ -79,8 +79,9 @@ Timeline plan
   * Polish demo
 
 
-* **End of October**:
+**October**:
 
   *Targets*:
   * Polish demo
-  * Final submission
+ 
+**Final submission by the second week of October**
