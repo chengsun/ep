@@ -3,13 +3,13 @@ Progress Log
 
 24/12/12 *(~3 hours)*
 --------
-* I have decided that I want to do some sort of 3D animation for my Extended Project. The reasons for this are outlined in my rationale.
+* Over the Christmas break, I have decided that I want to do some sort of 3D animation for my Extended Project. The reasons for this are outlined in my rationale.
 * I spent today learning about and experimenting with 3D modelling in Blender.  
   Although I made some interesting models and effects, I decided that making 3D models in an art package such as Blender was not the way I wanted to approach this project.
 
 1/1/13 *(~3 hours)*
 ------
-* I have been learning about what OpenGL was, and how to use it.
+* I have been researching the way I can get 3D things to display on the screen. I learnt about what OpenGL was, and how to use it. Mostly I used [this tutorial][arcsynthesis], which I found to be very useful and thorough.
 * I implemented a “player” program. This would be a program that sets everything up ready for the actual 3D demo to use, and provides a window for the 3D demo to draw into.
 * I made two basic OpenGL examples to get to grips with using it.  
   My first test, called `test_triangle`, simply draws a white triangle.  
@@ -18,6 +18,7 @@ Progress Log
 
 8/1/13 *(~1 hour)*
 ------
+* Now that the Christmas break is over, I wanted to start researching the techniques that I will use.
 * I was learning about mesh representations and operations, from [this blog post][ryg halfedge-theory].
 * I started my research on fluid dynamics and simulation techniques.  
   I found out that there are three approaches I can take: solving Navier-Stokes (NS) equations directly, using Smoothed Particle Hydrodynamics (SPH), or Lattice Boltzmann (LBM).  
