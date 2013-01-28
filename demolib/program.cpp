@@ -1,35 +1,57 @@
 #include "demolib.h"
 #include <cstdio>
 
-Shader::Shader(GLenum _type, const char *_filename) :
+Shader::Shader(GLenum _type, const char *_name) :
+    id(-1u),
     type(_type),
-    filename(_filename)
+    name(_name)
 {
-    const char *strType = "unknown";
     switch (type) {
-        case GL_VERTEX_SHADER: strType = "vertex"; break;
+        case GL_VERTEX_SHADER:   strType = "vertex"; break;
         case GL_GEOMETRY_SHADER: strType = "geometry"; break;
         case GL_FRAGMENT_SHADER: strType = "fragment"; break;
+        default:                 strType = "unknown";
     }
+}
 
-    LOG("Opening %s shader program \"%s\"", strType, filename);
+Shader Shader::FromFile(GLenum type, const char *filename)
+{
+    Shader shader(type, filename);
+
+    LOG("Opening %s shader program \"%s\"", shader.strType, filename);
 
     FILE *file = fopen(filename, "rb");
-    ASSERTX(file, "Failed to open %s shader program \"%s\"", strType, filename);
+    ASSERTX(file, "Failed to open %s shader program \"%s\"", shader.strType,
+            filename);
     fseek(file, 0, SEEK_END);
     unsigned long fileLength = ftell(file);
     rewind(file);
 
-    GLchar *shaderCode = new GLchar[fileLength];
+    char *shaderCode = new char[fileLength];
     int shaderReadLength = fread(shaderCode, 1, fileLength, file);
     fclose(file);
 
-    LOG("Compiling %s shader program \"%s\"", strType, filename);
-
-    id= glCreateShader(type);
-    glShaderSource(id, 1, const_cast<const GLchar **>(&shaderCode), &shaderReadLength);
-
+    shader.compile(std::string(shaderCode, shaderReadLength));
     delete[] shaderCode;
+
+    return shader;
+}
+
+Shader Shader::Inline(GLenum type, std::string shaderCode, const char *name)
+{
+    Shader shader(type, name);
+    shader.compile(shaderCode);
+    return shader;
+}
+
+bool Shader::compile(std::string shaderCode)
+{
+    LOG("Compiling %s shader program \"%s\"", strType, name);
+
+    id = glCreateShader(type);
+    const char *codeStr = shaderCode.data();
+    int codeLen = shaderCode.size();
+    glShaderSource(id, 1, &codeStr, &codeLen);
 
     glCompileShader(id);
 
@@ -42,10 +64,13 @@ Shader::Shader(GLenum _type, const char *_filename) :
         GLchar *strInfoLog = new GLchar[infoLogLength + 1];
         glGetShaderInfoLog(id, infoLogLength, NULL, strInfoLog);
 
-        LOG("WARNING: Shader compile failure in %s shader \"%s\": %s",
-            strType, filename, strInfoLog);
+        ASSERTX(false, "Shader compile failure in %s shader \"%s\": %s",
+            strType, name, strInfoLog);
         delete[] strInfoLog;
+        return false;
     }
+
+    return true;
 }
 
 Shader::~Shader()
@@ -76,7 +101,7 @@ Program::Program(std::initializer_list<Shader> &&_shaders) :
 
         GLchar *strInfoLog = new GLchar[infoLogLength + 1];
         glGetProgramInfoLog(id, infoLogLength, NULL, strInfoLog);
-        LOG("WARNING: Shader linker failure: %s\n", strInfoLog);
+        ASSERTX(false, "Shader linker failure: %s\n", strInfoLog);
         delete[] strInfoLog;
     }
 
@@ -86,8 +111,8 @@ Program::Program(std::initializer_list<Shader> &&_shaders) :
 
 ProgramTest::ProgramTest() :
     Program({
-        Shader(GL_VERTEX_SHADER, "data/test.vs"),
-        Shader(GL_FRAGMENT_SHADER, "data/test.fs")
+        Shader::FromFile(GL_VERTEX_SHADER, "data/test.vs"),
+        Shader::FromFile(GL_FRAGMENT_SHADER, "data/test.fs")
     })
 {
 }
@@ -137,7 +162,6 @@ void ProgramTest::updateMeshBuf(const Mesh &mesh)
 void ProgramTest::draw() const
 {
     glUseProgram(id);
-
     glEnableClientState(GL_PRIMITIVE_RESTART_NV);
     glPrimitiveRestartIndexNV(PrimitiveRestartIndex);
 
@@ -146,4 +170,5 @@ void ProgramTest::draw() const
     glBindVertexArray(0);
 
     glDisableClientState(GL_PRIMITIVE_RESTART_NV);
+    glUseProgram(0);
 }

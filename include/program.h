@@ -4,15 +4,23 @@
 #include "mesh.h"
 #include <GL/gl.h>
 #include <vector>
+#include <string>
 
 struct Shader
 {
-    Shader(GLenum _type, const char *_filename);
+protected:
+    Shader(GLenum _type, const char *_name);
+public:
     ~Shader();
+
+    bool compile(std::string shaderCode);
 
     GLuint id;
     GLenum type;
-    const char *filename;
+    const char *name, *strType;
+
+    static Shader FromFile(GLenum type, const char *filename);
+    static Shader Inline(GLenum type, std::string shaderCode, const char *name = "<inline>");
 };
 
 struct Program
@@ -30,6 +38,16 @@ public:
 
 private:
     std::vector<Shader> shaders;
+};
+
+struct ProgramRaw : public Program
+{
+    ProgramRaw(std::initializer_list<Shader> &&_shaders) :
+        Program(std::move(_shaders)) {}
+
+private:
+    void updateMeshBuf(const Mesh &) {};
+    void draw() const {};
 };
 
 struct ProgramTest : public Program

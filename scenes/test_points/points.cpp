@@ -11,9 +11,9 @@ Program *triangleProgram;
 void demo_init(unsigned w, unsigned h)
 {
     // create shader program
-    triangleProgram = new Program({
-        Shader(GL_VERTEX_SHADER, "data/points.vs"),
-        Shader(GL_FRAGMENT_SHADER, "data/points.fs")
+    triangleProgram = new ProgramRaw({
+        Shader::FromFile(GL_VERTEX_SHADER, "data/points.vs"),
+        Shader::FromFile(GL_FRAGMENT_SHADER, "data/points.fs")
     });
 
     // initialise vertex buffer

@@ -4,7 +4,7 @@
 Mesh *mesh;
 Program *program;
 
-void demo_init(unsigned w, unsigned h)
+void demo_init(unsigned, unsigned)
 {
     program = new ProgramTest;
 
@@ -17,11 +17,12 @@ void demo_init(unsigned w, unsigned h)
     ASSERTX(edge/8 == 2 && mesh->eOpposite(edge)/8 == 0);
     mesh->debugOut();
     ASSERTX(mesh->check());
+
+    program->updateMeshBuf(*mesh);
 }
 
 bool demo_prepareFrame()
 {
-    program->updateMeshBuf(*mesh);
     return true;
 }
 

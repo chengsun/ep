@@ -15,9 +15,9 @@ GLuint timeUniform, frame = 0;
 void demo_init(unsigned w, unsigned h)
 {
     // create shader program
-    triangleProgram = new Program({
-        Shader(GL_VERTEX_SHADER, "data/impostor.vs"),
-        Shader(GL_FRAGMENT_SHADER, "data/impostor.fs")
+    triangleProgram = new ProgramRaw({
+        Shader::FromFile(GL_VERTEX_SHADER, "data/impostor.vs"),
+        Shader::FromFile(GL_FRAGMENT_SHADER, "data/impostor.fs")
     });
 
     // initialise vertex buffer
