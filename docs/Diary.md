@@ -94,6 +94,12 @@ Progress Log
 -------
 * I am moving all the code which prepared the mesh for rendering, to be associated with a Program (GPU shader) object rather than a Mesh object, as this makes more sense.
 
+28/1/13 *(1 hour)*
+-------
+* I continued refactoring code.
+* I started looking at implementing vector and matrix operations, for transformations such as rotation and scaling.
+
+
 
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
 [ryg halfedge-practice]: http://fgiesen.wordpress.com/2012/03/24/half-edge-based-mesh-representations-practice/
