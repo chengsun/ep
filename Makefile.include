@@ -59,10 +59,6 @@ STRIP ?= $(tool_prefix)strip
 PKG_CONFIG ?= $(tool_prefix)pkg-config
 SDL_CONFIG ?= $(usr_prefix)/bin/sdl-config
 
-# figure out the right flags
-CPPFLAGS += -Wall -std=c++11 -ffunction-sections -fdata-sections
-LDFLAGS += -Wl,--gc-sections -Wl,-rpath,.
-
 # add everything we need
 CPPFLAGS += -I$(ROOTDIR)/include
 CPPFLAGS += `$(PKG_CONFIG) --cflags glew`
@@ -72,6 +68,10 @@ ifeq ($(is_windows),1)
 else
     LDFLAGS += -lGL -lGLU
 endif
+
+# figure out the right flags
+CPPFLAGS += -Wall -Wextra -std=c++11 -ffunction-sections -fdata-sections -fno-exceptions -fabi-version=0 -fno-rtti 
+LDFLAGS += -Wl,--gc-sections -Wl,-rpath,.
 
 ifeq ($(OPT),1)
     CPPFLAGS += -DNDEBUG -Os -march=$(arch) -fno-exceptions -fomit-frame-pointer -ffast-math
