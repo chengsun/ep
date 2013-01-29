@@ -176,6 +176,7 @@ int main(int argc, char *argv[])
         if (!demo_prepareFrame()) {
             break;
         }
+        ASSERTX(!glGetError(), "GL error after frame preparation");
 
         bool done = false;
         SDL_Event event;
@@ -196,6 +197,7 @@ int main(int argc, char *argv[])
         }
 
         demo_drawFrame();
+        ASSERTX(!glGetError(), "GL error after frame rendering");
         SDL_GL_SwapBuffers();
 
         nFrames++;
