@@ -43,6 +43,9 @@ Timeline plan
 
 **End of June**:
 
+  *Considerations*:
+  Exams will leave me short of time
+
   *Targets*:
   * Improve on fluid simulation
   * Add fluid effects

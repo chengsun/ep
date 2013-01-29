@@ -99,6 +99,10 @@ Progress Log
 * I continued refactoring code.
 * I started looking at implementing vector and matrix operations, for transformations such as rotation and scaling.
 
+29/1/13 *(20 minutes)*
+-------
+* I read about using quaternions to represent 3D rotations through [this tutorial][cprogramming quat].
+
 
 
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
@@ -112,3 +116,4 @@ Progress Log
 [arcsynthesis]: http://www.arcsynthesis.org/gltut/
 [arcsynthesis 17-scenegraph]: http://www.arcsynthesis.org/gltut/Texturing/Tutorial%2017.html#d0e15853
 [opengl core-api]: http://www.opengl.org/wiki/Category:Core_API_Reference
+[cprogramming quat]: http://www.cprogramming.com/tutorial/3d/quaternions.html
