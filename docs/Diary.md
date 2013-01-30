@@ -103,6 +103,14 @@ Progress Log
 -------
 * I read about using quaternions to represent 3D rotations through [this tutorial][cprogramming quat].
 
+30/1/13 *(3 hours)*
+-------
+* I started writing the vector and matrix code.
+  I am referring to my FP4 maths class notes, and also for implementation details I am gaining inspiration by reading the code from an existing vector/matrix library called [glm][glm github].
+* Whilst writing the code, I encountered some problems...  
+  `../include/types.h:244:48: error: could not convert ‘{{((((float)(&(& a)->Mat2::operator[](0ul))->Vec2::operator[](0ul)) * ((float)(&(& b)->Mat2::operator[](0ul))->Vec2::operator[](0ul))) + (((float)(&(& a)->Mat2::operator[](1ul))->Vec2::operator[](0ul)) * ((float)(&(& b)->Mat2::operator[](0ul))->Vec2::operator[](1ul)))), ((((float)(&(& a)->Mat2::operator[](0ul))->Vec2::operator[](1ul)) * ((float)(&(& b)->Mat2::operator[](0ul))->Vec2::operator[](0ul))) + (((float)(&(& a)->Mat2::operator[](1ul))->Vec2::operator[](1ul)) * ((float)(&(& b)->Mat2::operator[](0ul))->Vec2::operator[](1ul))))}, {((((float)(&(& a)->Mat2::operator[](0ul))->Vec2::operator[](0ul)) * ((float)(&(& b)->Mat2::operator[](1ul))->Vec2::operator[](0ul))) + (((float)(&(& a)->Mat2::operator[](1ul))->Vec2::operator[](0ul)) * ((float)(&(& b)->Mat2::operator[](1ul))->Vec2::operator[](1ul)))), ((((float)(&(& a)->Mat2::operator[](0ul))->Vec2::operator[](1ul)) * ((float)(&(& b)->Mat2::operator[](1ul))->Vec2::operator[](0ul))) + (((float)(&(& a)->Mat2::operator[](1ul))->Vec2::operator[](1ul)) * ((float)(&(& b)->Mat2::operator[](1ul))->Vec2::operator[](1ul))))}}’ from ‘<brace-enclosed initializer list>’ to ‘Mat2’`  
+  Fixing the error was rather trivial, once I realised that the best thing to do was not to bother figuring out the error message!
+
 
 
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
@@ -117,3 +125,4 @@ Progress Log
 [arcsynthesis 17-scenegraph]: http://www.arcsynthesis.org/gltut/Texturing/Tutorial%2017.html#d0e15853
 [opengl core-api]: http://www.opengl.org/wiki/Category:Core_API_Reference
 [cprogramming quat]: http://www.cprogramming.com/tutorial/3d/quaternions.html
+[glm github]: https://github.com/g-truc/glm/tree/0.9.4/glm/core
