@@ -1,8 +1,6 @@
 #ifndef DEMOLIB_UTIL_H
 #define DEMOLIB_UTIL_H
 
-#include "types.h"
-
 #define ARRAYLEN(x) (sizeof(x)/sizeof((x)[0]))
 #define PI 3.14159265359f
 
@@ -34,18 +32,5 @@ extern "C"
 #   define LOG(...)    ((void)0)
 #   define ASSERTX(x, ...) ((void)0)
 #endif
-
-
-struct LCGRand
-{
-    U32 state;
-    U32 get() {
-        state = state * 1664525 + 1013904223;
-        return state;
-    }
-    float getf() {
-        return static_cast<float>(get())/U32_MAX;
-    }
-};
 
 #endif
