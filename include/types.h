@@ -19,58 +19,68 @@ typedef int32_t S32;
  * Vector common ops
  *****************************************************************************/
 
-#define VECTOR_DECL(VecType) \
+#define VECTOR_DEFS(VecType) \
     static constexpr VecType sub(const VecType &a, const VecType &b) { \
-        return VecType::add(a, VecType::neg(b)); \
+        return add(a, neg(b)); \
     } \
     static constexpr float hypot2(const VecType &a) { \
-        return VecType::dot(a, a); \
+        return dot(a, a); \
     } \
     static constexpr float hypot2(const VecType &a, const VecType &b) { \
-        return VecType::hypot2(a - b); \
+        return hypot2(a - b); \
     } \
     static constexpr float hypot(const VecType &a) { \
-        return sqrtf(VecType::hypot2(a)); \
+        return sqrtf(hypot2(a)); \
     } \
     static constexpr float hypot(const VecType &a, const VecType &b) { \
-        return sqrtf(VecType::hypot2(a, b)); \
+        return sqrtf(hypot2(a, b)); \
     } \
     static constexpr VecType normalize(const VecType &a) { \
-        return VecType::scalediv(a, VecType::hypot(a)); \
+        return scalediv(a, hypot(a)); \
     } \
-    \
-    float &operator[](const unsigned i) { \
+    inline float &VecType::operator[](const unsigned i) { \
         ASSERTX(i < VecType::length()); \
         return (reinterpret_cast<float *>(this))[i]; \
     } \
-    float const &operator[](const unsigned i) const { \
+    inline float const &VecType::operator[](const unsigned i) const { \
         ASSERTX(i < VecType::length()); \
         return (reinterpret_cast<const float *>(this))[i]; \
     } \
-    constexpr VecType operator+(const VecType &b) const { \
-        return VecType::add(*this, b); \
+    inline constexpr VecType VecType::operator+(const VecType &b) const { \
+        return add(*this, b); \
     } \
-    constexpr VecType operator-(const VecType &b) const { \
-        return VecType::sub(*this, b); \
+    inline constexpr VecType VecType::operator-(const VecType &b) const { \
+        return sub(*this, b); \
     } \
-    constexpr VecType operator*(float f) const { \
-        return VecType::scale(*this, f); \
+    inline constexpr VecType VecType::operator*(float f) const { \
+        return scale(*this, f); \
     } \
-    constexpr VecType operator/(float f) const { \
-        return VecType::scalediv(*this, f); \
+    inline constexpr VecType VecType::operator/(float f) const { \
+        return scalediv(*this, f); \
     } \
-    VecType &operator+=(const VecType &b) { \
+    inline VecType &VecType::operator+=(const VecType &b) { \
         *this = *this + b; \
         return *this; \
     } \
-    VecType &operator-=(const VecType &b) { \
+    inline VecType &VecType::operator-=(const VecType &b) { \
         *this = *this - b; \
         return *this; \
     } \
-    VecType &operator*=(float f) { \
+    inline VecType &VecType::operator*=(float f) { \
         *this = *this * f; \
         return *this; \
     }
+
+#define VECTOR_DECL(VecType) \
+    float &operator[](const unsigned i); \
+    float const &operator[](const unsigned i) const; \
+    constexpr VecType operator+(const VecType &b) const; \
+    constexpr VecType operator-(const VecType &b) const; \
+    constexpr VecType operator*(float f) const; \
+    constexpr VecType operator/(float f) const; \
+    VecType &operator+=(const VecType &b); \
+    VecType &operator-=(const VecType &b); \
+    VecType &operator*=(float f);
 
 
 /******************************************************************************
@@ -84,24 +94,28 @@ struct Vec2
     static constexpr unsigned length() {
         return 2;
     }
-    static constexpr Vec2 add(const Vec2 &a, const Vec2 &b) {
-        return {a.x+b.x, a.y+b.y};
-    }
-    static constexpr Vec2 neg(const Vec2 &a) {
-        return {-a.x, -a.y};
-    }
-    static constexpr Vec2 scale(const Vec2 &a, float f) {
-        return {a.x*f, a.y*f};
-    }
-    static constexpr Vec2 scalediv(const Vec2 &a, float f) {
-        return {a.x/f, a.y/f};
-    }
-    static constexpr float dot(const Vec2 &a, const Vec2 &b) {
-        return a.x*b.x + a.y*b.y;
-    }
 
     VECTOR_DECL(Vec2)
 };
+
+static constexpr Vec2 add(const Vec2 &a, const Vec2 &b) {
+    return {a.x+b.x, a.y+b.y};
+}
+static constexpr Vec2 neg(const Vec2 &a) {
+    return {-a.x, -a.y};
+}
+static constexpr Vec2 scale(const Vec2 &a, float f) {
+    return {a.x*f, a.y*f};
+}
+static constexpr Vec2 scalediv(const Vec2 &a, float f) {
+    return {a.x/f, a.y/f};
+}
+static constexpr float dot(const Vec2 &a, const Vec2 &b) {
+    return a.x*b.x + a.y*b.y;
+}
+
+VECTOR_DEFS(Vec2)
+
 
 /******************************************************************************
  * Vec3
@@ -114,29 +128,32 @@ struct Vec3
     static constexpr unsigned length() {
         return 3;
     }
-    static constexpr Vec3 add(const Vec3 &a, const Vec3 &b) {
-        return {a.x+b.x, a.y+b.y, a.z+b.z};
-    }
-    static constexpr Vec3 neg(const Vec3 &a) {
-        return {-a.x, -a.y, -a.z};
-    }
-    static constexpr Vec3 scale(const Vec3 &a, float f) {
-        return {a.x*f, a.y*f, a.z*f};
-    }
-    static constexpr Vec3 scalediv(const Vec3 &a, float f) {
-        return {a.x/f, a.y/f, a.z/f};
-    }
-    static constexpr float dot(const Vec3 &a, const Vec3 &b) {
-        return a.x*b.x + a.y*b.y + a.z*b.z;
-    }
-    static constexpr Vec3 cross(const Vec3 &a, const Vec3 &b) {
-        return {a.y*b.z - a.z*b.y,
-                a.z*b.x - a.x*b.z,
-                a.x*b.y - a.y*b.x};
-    }
 
     VECTOR_DECL(Vec3)
 };
+
+static constexpr Vec3 add(const Vec3 &a, const Vec3 &b) {
+    return {a.x+b.x, a.y+b.y, a.z+b.z};
+}
+static constexpr Vec3 neg(const Vec3 &a) {
+    return {-a.x, -a.y, -a.z};
+}
+static constexpr Vec3 scale(const Vec3 &a, float f) {
+    return {a.x*f, a.y*f, a.z*f};
+}
+static constexpr Vec3 scalediv(const Vec3 &a, float f) {
+    return {a.x/f, a.y/f, a.z/f};
+}
+static constexpr float dot(const Vec3 &a, const Vec3 &b) {
+    return a.x*b.x + a.y*b.y + a.z*b.z;
+}
+static constexpr Vec3 cross(const Vec3 &a, const Vec3 &b) {
+    return {a.y*b.z - a.z*b.y,
+            a.z*b.x - a.x*b.z,
+            a.x*b.y - a.y*b.x};
+}
+
+VECTOR_DEFS(Vec3)
 
 /******************************************************************************
  * Vec4
@@ -149,25 +166,27 @@ struct Vec4
     static constexpr unsigned length() {
         return 4;
     }
-    static constexpr Vec4 add(const Vec4 &a, const Vec4 &b) {
-        return {a.x+b.x, a.y+b.y, a.z+b.z, a.w+b.w};
-    }
-    static constexpr Vec4 neg(const Vec4 &a) {
-        return {-a.x, -a.y, -a.z, -a.w};
-    }
-    static constexpr Vec4 scale(const Vec4 &a, float f) {
-        return {a.x*f, a.y*f, a.z*f, a.w*f};
-    }
-    static constexpr Vec4 scalediv(const Vec4 &a, float f) {
-        return {a.x/f, a.y/f, a.z/f, a.w/f};
-    }
-    static constexpr float dot(const Vec4 &a, const Vec4 &b) {
-        return a.x*b.x + a.y*b.y + a.z*b.z + a.w*b.w;
-    }
 
     VECTOR_DECL(Vec4)
 };
 
+static constexpr Vec4 add(const Vec4 &a, const Vec4 &b) {
+    return {a.x+b.x, a.y+b.y, a.z+b.z, a.w+b.w};
+}
+static constexpr Vec4 neg(const Vec4 &a) {
+    return {-a.x, -a.y, -a.z, -a.w};
+}
+static constexpr Vec4 scale(const Vec4 &a, float f) {
+    return {a.x*f, a.y*f, a.z*f, a.w*f};
+}
+static constexpr Vec4 scalediv(const Vec4 &a, float f) {
+    return {a.x/f, a.y/f, a.z/f, a.w/f};
+}
+static constexpr float dot(const Vec4 &a, const Vec4 &b) {
+    return a.x*b.x + a.y*b.y + a.z*b.z + a.w*b.w;
+}
+
+VECTOR_DEFS(Vec4)
 
 /******************************************************************************
  * Mat2
