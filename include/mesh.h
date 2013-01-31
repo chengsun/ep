@@ -37,7 +37,7 @@ struct Mesh
 
     // basic operations
 
-    static Mesh *createRing(unsigned sides);
+    static Mesh *createRing(unsigned sides, float phase = 0.f, float radius = 1.f);
 
     bool check() const;
     /* meshCheckFlags checks a mesh to ensure that the selected flags are all

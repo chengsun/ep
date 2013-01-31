@@ -8,7 +8,7 @@ void demo_init(unsigned, unsigned)
 {
     program = new ProgramTest;
 
-    mesh = Mesh::createRing(4);
+    mesh = Mesh::createRing(4, PI/4.f);
     mesh->splitVert(mesh->eEdge(0,0), mesh->eVertPrev(0,0));
     mesh->splitVert(mesh->eEdge(0,2), mesh->eVertPrev(0,2));
     mesh->splitVert(mesh->eEdge(0,4), mesh->eVertPrev(0,4));

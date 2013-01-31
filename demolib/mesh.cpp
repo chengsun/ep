@@ -67,7 +67,7 @@ void Mesh::debugOut() const
     }
 }
 
-Mesh *Mesh::createRing(unsigned sides)
+Mesh *Mesh::createRing(unsigned sides, float phase, float radius)
 {
     ASSERTX(sides >= 1 && sides <= MAXVERT,
             "Mesh::createRing with invalid number of vertices (%u)", sides);
@@ -86,7 +86,9 @@ Mesh *Mesh::createRing(unsigned sides)
     float curRot = 0.f, incRot = 2*PI / sides;
     for (unsigned slot = 0; slot < sides; slot++, curRot += incRot) {
         MeshVert &thisVert = mesh->verts[slot];
-        thisVert.pos = {cosf(curRot), sinf(curRot), 0.f};
+        thisVert.pos = {cosf(phase+curRot)*radius,
+                        sinf(phase+curRot)*radius,
+                        0.f};
         thisVert.normal = thisVert.pos;
 
         mesh->faces[0].verts[slot] = slot;
