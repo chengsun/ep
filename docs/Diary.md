@@ -89,6 +89,7 @@ Progress Log
   This way I can visually evaluate the results of my code. Up until now I have had to use textual logging when checking of the state of the mesh, which is time-consuming and prone to error.
   I have needed to refer to the documentation on the OpenGL API a lot, which is used for rendering. Most of the information I needed was found in [this tutorial][arcsynthesis] and [the OpenGL wiki][opengl core-api].
   I managed to successfully draw the mesh primitives that I have so far, a 2D n-sided polygon, with `test_mesh`.
+* I sent out an email to ryg, the author of the half-edge mesh representation blog series that I have been using, to ask whether he could give me some information about extrusion. This topic was on his list of blog posts to write, but it seems that he hasn't gotten round to it yet. Hopefully I'll get a response, but if not I will look elsewhere for information.
 
 27/1/13 *(30 minutes)*
 -------
@@ -111,6 +112,17 @@ Progress Log
   `../include/types.h:244:48: error: could not convert ‘{{((((float)(&(& a)->Mat2::operator[](0ul))->Vec2::operator[](0ul)) * ((float)(&(& b)->Mat2::operator[](0ul))->Vec2::operator[](0ul))) + (((float)(&(& a)->Mat2::operator[](1ul))->Vec2::operator[](0ul)) * ((float)(&(& b)->Mat2::operator[](0ul))->Vec2::operator[](1ul)))), ((((float)(&(& a)->Mat2::operator[](0ul))->Vec2::operator[](1ul)) * ((float)(&(& b)->Mat2::operator[](0ul))->Vec2::operator[](0ul))) + (((float)(&(& a)->Mat2::operator[](1ul))->Vec2::operator[](1ul)) * ((float)(&(& b)->Mat2::operator[](0ul))->Vec2::operator[](1ul))))}, {((((float)(&(& a)->Mat2::operator[](0ul))->Vec2::operator[](0ul)) * ((float)(&(& b)->Mat2::operator[](1ul))->Vec2::operator[](0ul))) + (((float)(&(& a)->Mat2::operator[](1ul))->Vec2::operator[](0ul)) * ((float)(&(& b)->Mat2::operator[](1ul))->Vec2::operator[](1ul)))), ((((float)(&(& a)->Mat2::operator[](0ul))->Vec2::operator[](1ul)) * ((float)(&(& b)->Mat2::operator[](1ul))->Vec2::operator[](0ul))) + (((float)(&(& a)->Mat2::operator[](1ul))->Vec2::operator[](1ul)) * ((float)(&(& b)->Mat2::operator[](1ul))->Vec2::operator[](1ul))))}}’ from ‘<brace-enclosed initializer list>’ to ‘Mat2’`  
   Fixing the error was rather trivial, once I realised that the best thing to do was not to bother figuring out the error message!
 
+31/1/13 *(~30 minutes)*
+-------
+* Some minor tweaks to the mesh ring generator, and split a header file to speed up compilation.
+
+3/2/13 *(30 minutes)*
+------
+* No work done this weekend, because of a mock test tomorrow.
+* Previously I have been concerned that I did not have powerful enough hardware on which to develop my demo. That has been somewhat alleviated by some comments by [navis][navis 2007] on the fact that he developed Lifeforce (a very impressive and large-scale demo) on weaker hardware than mine, by reducing the rendering resolution. However, hopefully I will be able to find (borrow?) some hardware to present the finished demo in higher quality.
+* On the other hand, I am also becoming concerned about simulating my waterfall. If I were to use a full particle simulation of the fluid, I would need to simulate each of very many particles. However, particle simulation in realtime is very hard especially with the amount of particles I would need, [according to smash][smash numbres], who made an entire demo revolving around fluid simulation on high-end machines.  Furthermore, unlike smash, I do not have the hardware to do anything extremely sophisticated.  
+  Even if I do get a particle simulation working, rendering the particles and making it look like a fluid would be a challenge all in itself. Looking at the ["state of the art" in actually rendering these particles][hoetzlein surface-reconstruction], the techniques either look unrealistic or don't run in real time.  
+  The only way that I can envision the waterfall simulation succeeding is by cheating a lot. This means not strictly obeying physics and using "common sense physics" and graphical effects to trick the viewer. This is something I will have to seriously consider this month. If it does not show signs of plausibility soon, I may have to replace the water simulation idea.
 
 
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
@@ -126,3 +138,5 @@ Progress Log
 [opengl core-api]: http://www.opengl.org/wiki/Category:Core_API_Reference
 [cprogramming quat]: http://www.cprogramming.com/tutorial/3d/quaternions.html
 [glm github]: https://github.com/g-truc/glm/tree/0.9.4/glm/core
+[navis 2007]: http://navis-asd.blogspot.co.uk/2010/04/2007-and-now.html
+[hoetzlein surface-reconstruction]: http://www.rchoetzlein.com/theory/2010/surface-reconstruction-of-sph-fluids/
