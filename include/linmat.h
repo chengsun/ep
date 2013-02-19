@@ -1,19 +1,9 @@
-#ifndef TYPES_H
-#define TYPES_H
+#ifndef LINMAT_H
+#define LINMAT_H
 
 #include "util.h"
 #include <GL/glew.h>
-#include <cstdint>
 #include <cmath>
-
-typedef uint8_t U8;
-typedef uint16_t U16;
-typedef uint32_t U32;
-static constexpr U32 U32_MIN = static_cast<U32>(0);
-static constexpr U32 U32_MAX = ~static_cast<U32>(0);
-typedef int8_t S8;
-typedef int16_t S16;
-typedef int32_t S32;
 
 /******************************************************************************
  * Vector common ops
@@ -195,10 +185,24 @@ VECTOR_DEFS(Vec4)
     static constexpr unsigned size() { \
         return nCols() * nRows(); \
     } \
+    bool operator==(MatType const &m) const; \
     MatType::ColType &operator[](size_t i); \
-    constexpr MatType::ColType const &operator[](size_t i);
+    constexpr MatType::ColType const &operator[](size_t i); \
+    constexpr MatType operator*(float f) const; \
+    constexpr MatType operator*(MatType const &m) const;
 
 #define MATRIX_DEFS(MatType) \
+    inline bool eq(const MatType &a, const MatType &b) { \
+        for (unsigned c = 0; c < MatType::nCols(); ++c) { \
+            for (unsigned r = 0; r < MatType::nRows(); ++r) { \
+                if (a[c][r] != b[c][r]) return false; \
+            } \
+        } \
+        return true; \
+    } \
+    inline bool MatType::operator==(MatType const &m) const { \
+        return eq(*this, m); \
+    } \
     inline MatType::ColType &MatType::operator[](size_t i) { \
         ASSERTX(i < MatType::nCols()); \
         return v[i]; \
@@ -206,6 +210,12 @@ VECTOR_DEFS(Vec4)
     inline constexpr MatType::ColType const &MatType::operator[](size_t i) { \
         return v[i]; \
     } \
+    inline constexpr MatType MatType::operator*(float f) const { \
+        return scale(*this, f); \
+    } \
+    inline constexpr MatType MatType::operator*(MatType const &m) const { \
+        return mul(*this, m); \
+    }
 
 /******************************************************************************
  * Mat2
@@ -217,31 +227,44 @@ struct Mat2
     ColType v[2];
 
     static constexpr unsigned nCols() { return 2; }
+    static constexpr Mat2 identity() {
+        return {{{1.f, 0.f},
+                 {0.f, 1.f}}};
+    }
+
+    constexpr float det() {
+        return v[0][0]*v[1][1]
+             - v[0][1]*v[1][0];
+    }
 
     MATRIX_DECL(Mat2)
 };
 
 inline constexpr Mat2 add(const Mat2 &a, const Mat2 &b) {
-    return {{add(a.v[0], b.v[0]),
-             add(a.v[1], b.v[1])}};
+    return {{add(a[0], b[0]),
+             add(a[1], b[1])}};
 }
 inline constexpr Mat2 neg(const Mat2 &a) {
-    return {{neg(a.v[0]),
-             neg(a.v[1])}};
+    return {{neg(a[0]),
+             neg(a[1])}};
 }
 inline constexpr Mat2 scale(const Mat2 &a, float f) {
-    return {{scale(a.v[0], f),
-             scale(a.v[1], f)}};
+    return {{scale(a[0], f),
+             scale(a[1], f)}};
 }
 inline constexpr Mat2 scalediv(const Mat2 &a, float f) {
-    return {{scalediv(a.v[0], f),
-             scalediv(a.v[1], f)}};
+    return {{scalediv(a[0], f),
+             scalediv(a[1], f)}};
 }
 inline constexpr Mat2 mul(const Mat2 &a, const Mat2 &b) {
-    return {{{a.v[0][0]*b.v[0][0] + a.v[1][0]*b.v[0][1],
-              a.v[0][1]*b.v[0][0] + a.v[1][1]*b.v[0][1]},
-             {a.v[0][0]*b.v[1][0] + a.v[1][0]*b.v[1][1],
-              a.v[0][1]*b.v[1][0] + a.v[1][1]*b.v[1][1]}}};
+    return {{{a[0][0]*b[0][0] + a[1][0]*b[0][1],
+              a[0][1]*b[0][0] + a[1][1]*b[0][1]},
+             {a[0][0]*b[1][0] + a[1][0]*b[1][1],
+              a[0][1]*b[1][0] + a[1][1]*b[1][1]}}};
+}
+inline constexpr Mat2::ColType mul(const Mat2 &m, const Mat2::ColType &v) {
+    return {m[0][0]*v[0] + m[1][0]*v[1],
+            m[0][1]*v[0] + m[1][1]*v[1]};
 }
 
 MATRIX_DEFS(Mat2)
@@ -255,11 +278,65 @@ struct Mat3
 {
     typedef Vec3 ColType;
     ColType v[3];
+
+    static constexpr unsigned nCols() { return 3; }
+    static constexpr Mat3 identity() {
+        return {{{1.f, 0.f, 0.f},
+                 {0.f, 1.f, 0.f},
+                 {0.f, 0.f, 1.f}}};
+    }
+
+    constexpr float det() {
+        return v[0][0] * (v[1][1]*v[2][2] - v[2][1]*v[1][2])
+             - v[1][0] * (v[2][1]*v[0][2] - v[0][1]*v[2][2])
+             + v[2][0] * (v[0][1]*v[1][2] - v[1][1]*v[0][2]);
+    }
+
+    MATRIX_DECL(Mat3)
 };
+
+inline constexpr Mat3 add(const Mat3 &a, const Mat3 &b) {
+    return {{add(a[0], b[0]),
+             add(a[1], b[1]),
+             add(a[2], b[2])}};
+}
+inline constexpr Mat3 neg(const Mat3 &a) {
+    return {{neg(a[0]),
+             neg(a[1]),
+             neg(a[2])}};
+}
+inline constexpr Mat3 scale(const Mat3 &a, float f) {
+    return {{scale(a[0], f),
+             scale(a[1], f),
+             scale(a[2], f)}};
+}
+inline constexpr Mat3 scalediv(const Mat3 &a, float f) {
+    return {{scalediv(a[0], f),
+             scalediv(a[1], f),
+             scalediv(a[2], f)}};
+}
+inline constexpr Mat3 mul(const Mat3 &a, const Mat3 &b) {
+    return {{{a[0][0]*b[0][0] + a[1][0]*b[0][1] + a[2][0]*b[0][2],
+              a[0][1]*b[0][0] + a[1][1]*b[0][1] + a[2][1]*b[0][2],
+              a[0][2]*b[0][0] + a[1][2]*b[0][1] + a[2][2]*b[0][2]},
+             {a[0][0]*b[1][0] + a[1][0]*b[1][1] + a[2][0]*b[1][2],
+              a[0][1]*b[1][0] + a[1][1]*b[1][1] + a[2][1]*b[1][2],
+              a[0][2]*b[1][0] + a[1][2]*b[1][1] + a[2][2]*b[1][2]},
+             {a[0][0]*b[2][0] + a[1][0]*b[2][1] + a[2][0]*b[2][2],
+              a[0][1]*b[2][0] + a[1][1]*b[2][1] + a[2][1]*b[2][2],
+              a[0][2]*b[2][0] + a[1][2]*b[2][1] + a[2][2]*b[2][2]}}};
+}
+inline constexpr Mat3::ColType mul(const Mat3 &m, const Mat3::ColType &v) {
+    return {m[0][0]*v[0] + m[1][0]*v[1] + m[2][0]*v[2],
+            m[0][1]*v[0] + m[1][1]*v[1] + m[2][1]*v[2],
+            m[0][2]*v[0] + m[1][2]*v[1] + m[2][2]*v[2]};
+}
+
+MATRIX_DEFS(Mat3)
 
 
 /******************************************************************************
- * Mat4
+ * Mat4: TODO
  *****************************************************************************/
 
 struct Mat4

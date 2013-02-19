@@ -3,7 +3,6 @@
 
 #include <GL/glew.h>
 
-#include "types.h"
 #include "util.h"
 #include "program.h"
 #include "mesh.h"

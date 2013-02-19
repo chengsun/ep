@@ -2,7 +2,7 @@
 #define MESH_H
 
 #include "util.h"
-#include "types.h"
+#include "linmat.h"
 #include <vector>
 
 extern "C" {

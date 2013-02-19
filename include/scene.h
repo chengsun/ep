@@ -1,7 +1,7 @@
 #ifndef DEMOLIB_SCENE_H
 #define DEMOLIB_SCENE_H
 
-#include "types.h"
+#include "util.h"
 #include "mesh.h"
 #include "program.h"
 #include "texture.h"
