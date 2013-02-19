@@ -124,6 +124,20 @@ Progress Log
   Even if I do get a particle simulation working, rendering the particles and making it look like a fluid would be a challenge all in itself. Looking at the ["state of the art" in actually rendering these particles][hoetzlein surface-reconstruction], the techniques either look unrealistic or don't run in real time.  
   The only way that I can envision the waterfall simulation succeeding is by cheating a lot. This means not strictly obeying physics and using "common sense physics" and graphical effects to trick the viewer. This is something I will have to seriously consider this month. If it does not show signs of plausibility soon, I may have to replace the water simulation idea.
 
+19/2/13 *(30 minutes)*
+-------
+* I am very concerned about the lack of progress over the past two weeks.  
+  The past week (the half-term break) was spent mostly in bed, as I have been rather ill. This has annoyingly meant that I have not been able to make use of the plenty of time that the break provided me with.  
+  I hope that this break will reinstill enthusiasm in my extended project over the next few weeks, as I have a lot to do in order to reach my target this month.
+* I have decided that I am going to write an end-of-month review every month, to summarise the work that I have done in that month, evaluate whether my targets have been reached, and look forwards into the future to see what I am aiming to achieve next month.  
+  I am starting to write the January report today. (I think this is OK, seeing as I haven't done much in February so far...)
+* From the advice that we've been getting in the weekly extended project periods, it is becoming clear that I need to take more careful note of which sources I am using, and what I am gathering from each of them. In order to achieve this I am going to aim to write a document about each technique that I find from my sources, whether I use it or not in the final project.
+* On a more positive note, I have started to decide how fluid simulation is going to work in my demo.  
+  I would like to simulate two things: a waterfall in the side of a cliff, and a vast ocean below, stretching as far as the eye (or camera) can see.
+  Originally I was thinking of simulating everything with millions of "particles," which represent small units of water that interact with each other to create the effects that we expect such as ripples and waves. However, this is obviously not feasible for the ocean, which would require billions of particles.
+  Now I am thinking of separating the waterfall and the ocean. The waterfall will still be particle-based, however the ocean will instead be a big 2D plane, and I will keep track of the water level at lots of points on that plane. In this way I can simulate wave behaviour using the concepts that we are learning in physics, such as Huygen's principle, and I will not have to deal with billions of particles. This way, the ocean will be easier to render as well.  
+  I will explain my thoughts in a more detailed write-up separately.
+
 
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
 [ryg halfedge-practice]: http://fgiesen.wordpress.com/2012/03/24/half-edge-based-mesh-representations-practice/
