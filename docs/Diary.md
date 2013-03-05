@@ -3,38 +3,59 @@ Progress Log
 
 24/12/12 *(~3 hours)*
 --------
-* Over the Christmas break, I have decided that I want to do some sort of 3D animation for my Extended Project. The reasons for this are outlined in my rationale.
+* Over the Christmas break, I have decided that I want to do some sort of 3D
+  animation for my Extended Project. The reasons for this are outlined in my
+  rationale.
 * I spent today learning about and experimenting with 3D modelling in Blender.  
-  Although I made some interesting models and effects, I decided that making 3D models in an art package such as Blender was not the way I wanted to approach this project.
+  Although I made some interesting models and effects, I decided that making 3D
+  models in an art package such as Blender was not the way I wanted to approach
+  this project.
 
 1/1/13 *(~3 hours)*
 ------
-* I have been researching the way I can get 3D things to display on the screen. I learnt about what OpenGL was, and how to use it. Mostly I used [this tutorial][arcsynthesis], which I found to be very useful and thorough.
-* I implemented a “player” program. This would be a program that sets everything up ready for the actual 3D demo to use, and provides a window for the 3D demo to draw into.
+* I have been researching the way I can get 3D things to display on the screen.
+  I learnt about what OpenGL was, and how to use it. Mostly I used [this
+  tutorial][arcsynthesis], which I found to be very useful and thorough.
+* I implemented a “player” program. This would be a program that sets
+  everything up ready for the actual 3D demo to use, and provides a window for
+  the 3D demo to draw into.
 * I made two basic OpenGL examples to get to grips with using it.  
   My first test, called `test_triangle`, simply draws a white triangle.  
-  The second test, called `test_points`, draws some random white points on the screen.  
-  I got both tests working on Linux.
+  The second test, called `test_points`, draws some random white points on the
+  screen. I got both tests working on Linux.
 
 8/1/13 *(~1 hour)*
 ------
-* Now that the Christmas break is over, I wanted to start researching the techniques that I will use.
-* I was learning about mesh representations and operations, from [this blog post][ryg halfedge-theory].
+* Now that the Christmas break is over, I wanted to start researching the
+  techniques that I will use.
+* I was learning about mesh representations and operations, from [this blog
+  post][ryg halfedge-theory].
 * I started my research on fluid dynamics and simulation techniques.  
-  I found out that there are three approaches I can take: solving Navier-Stokes (NS) equations directly, using Smoothed Particle Hydrodynamics (SPH), or Lattice Boltzmann (LBM).  
-  [This demo][smash numbres] uses SPH. (However, this demo was made to run on machines far powerful than I have access to)  
-  Blender uses LBM. (However, Blender's fluid simulation is intended for non-realtime rendering)
+  I found out that there are three approaches I can take: solving Navier-Stokes
+  (NS) equations directly, using Smoothed Particle Hydrodynamics (SPH), or
+  Lattice Boltzmann (LBM).  
+  [This demo][smash numbres] uses SPH. (However, this demo was made to run on
+  machines far powerful than I have access to)  
+  Blender uses LBM. (However, Blender's fluid simulation is intended for
+  non-realtime rendering)
 
 12/1/13 *(~1 hour)*
 -------
-* I read about using signed distance fields in [a presentation at GDC 2012][smash gdc], [a presentation at NVScene by iq][iq rwwtt] and [a PDF][upenn raymarch].
-* I made a very basic signed distance field test, `test_sdf`. However, this doesn't display the distance field in 3D, but instead a slice through a 2D plane.
+* I read about using signed distance fields in [a presentation at GDC
+  2012][smash gdc], [a presentation at NVScene by iq][iq rwwtt] and [a
+  PDF][upenn raymarch].
+* I made a very basic signed distance field test, `test_sdf`. However, this
+  doesn't display the distance field in 3D, but instead a slice through a 2D
+  plane.
 
 13/1/13 *(~2 hours)*
 -------
 * I successfully compiled and tested my program on Windows.
-* I started using git to keep track of older versions of my code and my documents.
-* I started implementing a mesh representation based on [this blog post][ryg halfedge-redux]. This will be used for "solid" (i.e. non-fluid) stuff, such as the landscape.
+* I started using git to keep track of older versions of my code and my
+  documents.
+* I started implementing a mesh representation based on [this blog post][ryg
+  halfedge-redux]. This will be used for "solid" (i.e. non-fluid) stuff, such
+  as the landscape.
 
 14/1/13 *(~1 hour)*
 -------
@@ -48,16 +69,23 @@ Progress Log
 
 18/1/13 *(~30 minutes)*
 -------
-* Reformatted Rationale, Diary and Timeline as Markdown documents. This makes version control of these documents much easier.
+* Reformatted Rationale, Diary and Timeline as Markdown documents. This makes
+  version control of these documents much easier.
 
 19/1/13 *(~3 hours)*
 -------
-* Continued work on mesh representation. I am trying to implement the [vertex split operation][ryg halfedge-practice].
+* Continued work on mesh representation. I am trying to implement the [vertex
+  split operation][ryg halfedge-practice].
 
 20/1/13 *(~2 hours)*
 -------
-* Continued work on mesh vertex split. Added `test_mesh` to test mesh operations.  
-  I am finding it quite tricky to code the operations correctly from descriptions of them. I have a poor visual memory so I cannot visualise what each operation does to a mesh, especially in 3D. To work around this, I am having to draw out a lot of small diagrams to help me think about all of the special cases.
+* Continued work on mesh vertex split. Added `test_mesh` to test mesh
+  operations.  
+  I am finding it quite tricky to code the operations correctly from
+  descriptions of them. I have a poor visual memory so I cannot visualise what
+  each operation does to a mesh, especially in 3D. To work around this, I am
+  having to draw out a lot of small diagrams to help me think about all of the
+  special cases.
 
 21/1/13 *(~4 hours)*
 -------
@@ -68,74 +96,158 @@ Progress Log
 -------
 * After more work, the mesh vertex splitting operation seems to work now.  
   I still need to test the corner cases.
-* I am now trying to implement the [face split operation][ryg halfedge-practice].
+* I am now trying to implement the [face split operation][ryg
+  halfedge-practice].
 
 23/1/13 *(30 minutes)*
 -------
 * Added some information to my Rationale.
-* Updated my Diary with the amount of time I spent working on my Extended Project each day.  
-  I gave approximate times to the days before today, from memory, as best I can. From today onwards I will track the time I spend more closely.
-* I started looking at how to go about implementing a scene graph. I am using information from [this OpenGL tutorial][arcsynthesis 17-scenegraph].
+* Updated my Diary with the amount of time I spent working on my Extended
+  Project each day.  
+  I gave approximate times to the days before today, from
+  memory, as best I can. From today onwards I will track the time I spend more
+  closely.
+* I started looking at how to go about implementing a scene graph. I am using
+  information from [this OpenGL tutorial][arcsynthesis 17-scenegraph].
 
 24/1/13 *(2 hours)*
 -------
-* I changed the style of the code slightly, to allow the use of cleaner OO syntax.
+* I changed the style of the code slightly, to allow the use of cleaner OO
+  syntax.
   This means that future code will be easier to write and understand.
 * I have finished implementing the face split operation; it seems to work now.
 
 25/1/13 *(2 hours)*
 -------
-* I started implementing mesh rendering, which actually draws the mesh to screen.
-  This way I can visually evaluate the results of my code. Up until now I have had to use textual logging when checking of the state of the mesh, which is time-consuming and prone to error.
-  I have needed to refer to the documentation on the OpenGL API a lot, which is used for rendering. Most of the information I needed was found in [this tutorial][arcsynthesis] and [the OpenGL wiki][opengl core-api].
-  I managed to successfully draw the mesh primitives that I have so far, a 2D n-sided polygon, with `test_mesh`.
-* I sent out an email to ryg, the author of the half-edge mesh representation blog series that I have been using, to ask whether he could give me some information about extrusion. This topic was on his list of blog posts to write, but it seems that he hasn't gotten round to it yet. Hopefully I'll get a response, but if not I will look elsewhere for information.
+* I started implementing mesh rendering, which actually draws the mesh to
+  screen. This way I can visually evaluate the results of my code. Up until
+  now I have had to use textual logging when checking of the state of the mesh,
+  which is time-consuming and prone to error.  
+  I have needed to refer to the
+  documentation on the OpenGL API a lot, which is used for rendering. Most of
+  the information I needed was found in [this tutorial][arcsynthesis] and [the
+  OpenGL wiki][opengl core-api].  
+  I managed to successfully draw the mesh
+  primitives that I have so far, a 2D n-sided polygon, with `test_mesh`.
+* I sent out an email to ryg, the author of the half-edge mesh representation
+  blog series that I have been using, to ask whether he could give me some
+  information about extrusion. This topic was on his list of blog posts to
+  write, but it seems that he hasn't gotten round to it yet. Hopefully I'll get
+  a response, but if not I will look elsewhere for information.
 
 27/1/13 *(30 minutes)*
 -------
-* I am moving all the code which prepared the mesh for rendering, to be associated with a Program (GPU shader) object rather than a Mesh object, as this makes more sense.
+* I am moving all the code which prepared the mesh for rendering, to be
+  associated with a Program (GPU shader) object rather than a Mesh object, as
+  this makes more sense.
 
 28/1/13 *(1 hour)*
 -------
 * I continued refactoring code.
-* I started looking at implementing vector and matrix operations, for transformations such as rotation and scaling.
+* I started looking at implementing vector and matrix operations, for
+  transformations such as rotation and scaling.
 
 29/1/13 *(20 minutes)*
 -------
-* I read about using quaternions to represent 3D rotations through [this tutorial][cprogramming quat].
+* I read about using quaternions to represent 3D rotations through [this
+  tutorial][cprogramming quat].
 
 30/1/13 *(3 hours)*
 -------
 * I started writing the vector and matrix code.
-  I am referring to my FP4 maths class notes, and also for implementation details I am gaining inspiration by reading the code from an existing vector/matrix library called [glm][glm github].
+  I am referring to my FP4 maths class notes, and also for implementation
+  details I am gaining inspiration by reading the code from an existing
+  vector/matrix library called [glm][glm github].
 * Whilst writing the code, I encountered some problems...  
-  `../include/types.h:244:48: error: could not convert ‘{{((((float)(&(& a)->Mat2::operator[](0ul))->Vec2::operator[](0ul)) * ((float)(&(& b)->Mat2::operator[](0ul))->Vec2::operator[](0ul))) + (((float)(&(& a)->Mat2::operator[](1ul))->Vec2::operator[](0ul)) * ((float)(&(& b)->Mat2::operator[](0ul))->Vec2::operator[](1ul)))), ((((float)(&(& a)->Mat2::operator[](0ul))->Vec2::operator[](1ul)) * ((float)(&(& b)->Mat2::operator[](0ul))->Vec2::operator[](0ul))) + (((float)(&(& a)->Mat2::operator[](1ul))->Vec2::operator[](1ul)) * ((float)(&(& b)->Mat2::operator[](0ul))->Vec2::operator[](1ul))))}, {((((float)(&(& a)->Mat2::operator[](0ul))->Vec2::operator[](0ul)) * ((float)(&(& b)->Mat2::operator[](1ul))->Vec2::operator[](0ul))) + (((float)(&(& a)->Mat2::operator[](1ul))->Vec2::operator[](0ul)) * ((float)(&(& b)->Mat2::operator[](1ul))->Vec2::operator[](1ul)))), ((((float)(&(& a)->Mat2::operator[](0ul))->Vec2::operator[](1ul)) * ((float)(&(& b)->Mat2::operator[](1ul))->Vec2::operator[](0ul))) + (((float)(&(& a)->Mat2::operator[](1ul))->Vec2::operator[](1ul)) * ((float)(&(& b)->Mat2::operator[](1ul))->Vec2::operator[](1ul))))}}’ from ‘<brace-enclosed initializer list>’ to ‘Mat2’`  
-  Fixing the error was rather trivial, once I realised that the best thing to do was not to bother figuring out the error message!
+  `../include/types.h:244:48: error: could not convert ‘{{((((float)(&(&
+  a)->Mat2::operator[](0ul))->Vec2::operator[](0ul)) * ((float)(&(&
+  b)->Mat2::operator[](0ul))->Vec2::operator[](0ul))) + (((float)(&(&
+  a)->Mat2::operator[](1ul))->Vec2::operator[](0ul)) * ((float)(&(&
+  b)->Mat2::operator[](0ul))->Vec2::operator[](1ul)))), ((((float)(&(&
+  a)->Mat2::operator[](0ul))->Vec2::operator[](1ul)) * ((float)(&(&
+  b)->Mat2::operator[](0ul))->Vec2::operator[](0ul))) + (((float)(&(&
+  a)->Mat2::operator[](1ul))->Vec2::operator[](1ul)) * ((float)(&(&
+  b)->Mat2::operator[](0ul))->Vec2::operator[](1ul))))}, {((((float)(&(&
+  a)->Mat2::operator[](0ul))->Vec2::operator[](0ul)) * ((float)(&(&
+  b)->Mat2::operator[](1ul))->Vec2::operator[](0ul))) + (((float)(&(&
+  a)->Mat2::operator[](1ul))->Vec2::operator[](0ul)) * ((float)(&(&
+  b)->Mat2::operator[](1ul))->Vec2::operator[](1ul)))), ((((float)(&(&
+  a)->Mat2::operator[](0ul))->Vec2::operator[](1ul)) * ((float)(&(&
+  b)->Mat2::operator[](1ul))->Vec2::operator[](0ul))) + (((float)(&(&
+  a)->Mat2::operator[](1ul))->Vec2::operator[](1ul)) * ((float)(&(&
+  b)->Mat2::operator[](1ul))->Vec2::operator[](1ul))))}}’ from ‘<brace-enclosed
+  initializer list>’ to ‘Mat2’`  
+  Fixing the error was rather trivial, once I realised that the best thing to
+  do was not to bother figuring out the error message!
 
 31/1/13 *(~30 minutes)*
 -------
-* Some minor tweaks to the mesh ring generator, and split a header file to speed up compilation.
+* Some minor tweaks to the mesh ring generator, and split a header file to
+  speed up compilation.
 
 3/2/13 *(30 minutes)*
 ------
 * No work done this weekend, because of a mock test tomorrow.
-* Previously I have been concerned that I did not have powerful enough hardware on which to develop my demo. That has been somewhat alleviated by some comments by [navis][navis 2007] on the fact that he developed Lifeforce (a very impressive and large-scale demo) on weaker hardware than mine, by reducing the rendering resolution. However, hopefully I will be able to find (borrow?) some hardware to present the finished demo in higher quality.
-* On the other hand, I am also becoming concerned about simulating my waterfall. If I were to use a full particle simulation of the fluid, I would need to simulate each of very many particles. However, particle simulation in realtime is very hard especially with the amount of particles I would need, [according to smash][smash numbres], who made an entire demo revolving around fluid simulation on high-end machines.  Furthermore, unlike smash, I do not have the hardware to do anything extremely sophisticated.  
-  Even if I do get a particle simulation working, rendering the particles and making it look like a fluid would be a challenge all in itself. Looking at the ["state of the art" in actually rendering these particles][hoetzlein surface-reconstruction], the techniques either look unrealistic or don't run in real time.  
-  The only way that I can envision the waterfall simulation succeeding is by cheating a lot. This means not strictly obeying physics and using "common sense physics" and graphical effects to trick the viewer. This is something I will have to seriously consider this month. If it does not show signs of plausibility soon, I may have to replace the water simulation idea.
+* Previously I have been concerned that I did not have powerful enough hardware
+  on which to develop my demo. That has been somewhat alleviated by some
+  comments by [navis][navis 2007] on the fact that he developed Lifeforce (a
+  very impressive and large-scale demo) on weaker hardware than mine, by
+  reducing the rendering resolution. However, hopefully I will be able to find
+  (borrow?) some hardware to present the finished demo in higher quality.
+* On the other hand, I am also becoming concerned about simulating my
+  waterfall. If I were to use a full particle simulation of the fluid, I would
+  need to simulate each of very many particles. However, particle simulation in
+  realtime is very hard especially with the amount of particles I would need,
+  [according to smash][smash numbres], who made an entire demo revolving around
+  fluid simulation on high-end machines. Furthermore, unlike smash, I do not
+  have the hardware to do anything extremely sophisticated.  
+  Even if I do get a particle simulation working, rendering the particles and
+  making it look like a fluid would be a challenge all in itself. Looking at
+  the ["state of the art" in actually rendering these particles][hoetzlein
+  surface-reconstruction], the techniques either look unrealistic or don't run
+  in real time.  
+  The only way that I can envision the waterfall simulation succeeding is by
+  cheating a lot. This means not strictly obeying physics and using "common
+  sense physics" and graphical effects to trick the viewer. This is something I
+  will have to seriously consider this month. If it does not show signs of
+  plausibility soon, I may have to replace the water simulation idea.
 
 19/2/13 *(30 minutes)*
 -------
 * I am very concerned about the lack of progress over the past two weeks.  
-  The past week (the half-term break) was spent mostly in bed, as I have been rather ill. This has annoyingly meant that I have not been able to make use of the plenty of time that the break provided me with.  
-  I hope that this break will reinstill enthusiasm in my extended project over the next few weeks, as I have a lot to do in order to reach my target this month.
-* I have decided that I am going to write an end-of-month review every month, to summarise the work that I have done in that month, evaluate whether my targets have been reached, and look forwards into the future to see what I am aiming to achieve next month.  
-  I am starting to write the January report today. (I think this is OK, seeing as I haven't done much in February so far...)
-* From the advice that we've been getting in the weekly extended project periods, it is becoming clear that I need to take more careful note of which sources I am using, and what I am gathering from each of them. In order to achieve this I am going to aim to write a document about each technique that I find from my sources, whether I use it or not in the final project.
-* On a more positive note, I have started to decide how fluid simulation is going to work in my demo.  
-  I would like to simulate two things: a waterfall in the side of a cliff, and a vast ocean below, stretching as far as the eye (or camera) can see.
-  Originally I was thinking of simulating everything with millions of "particles," which represent small units of water that interact with each other to create the effects that we expect such as ripples and waves. However, this is obviously not feasible for the ocean, which would require billions of particles.
-  Now I am thinking of separating the waterfall and the ocean. The waterfall will still be particle-based, however the ocean will instead be a big 2D plane, and I will keep track of the water level at lots of points on that plane. In this way I can simulate wave behaviour using the concepts that we are learning in physics, such as Huygen's principle, and I will not have to deal with billions of particles. This way, the ocean will be easier to render as well.  
+  The past week (the half-term break) was spent mostly in bed, as I have been
+  rather ill. This has annoyingly meant that I have not been able to make use of
+  the plenty of time that the break provided me with.  
+  I hope that this break will reinstill enthusiasm in my extended project over
+  the next few weeks, as I have a lot to do in order to reach my target this
+  month.
+* I have decided that I am going to write an end-of-month review every month,
+  to summarise the work that I have done in that month, evaluate whether my
+  targets have been reached, and look forwards into the future to see what I am
+  aiming to achieve next month.  
+  I am starting to write the January report today. (I think this is OK, seeing
+  as I haven't done much in February so far...)
+* From the advice that we've been getting in the weekly extended project
+  periods, it is becoming clear that I need to take more careful note of which
+  sources I am using, and what I am gathering from each of them. In order to
+  achieve this I am going to aim to write a document about each technique that
+  I find from my sources, whether I use it or not in the final project.
+* On a more positive note, I have started to decide how fluid simulation is
+  going to work in my demo.  
+  I would like to simulate two things: a waterfall in the side of a cliff, and
+  a vast ocean below, stretching as far as the eye (or camera) can see.  
+  Originally I was thinking of simulating everything with millions of
+  "particles," which represent small units of water that interact with each
+  other to create the effects that we expect such as ripples and waves.
+  However, this is obviously not feasible for the ocean, which would require
+  billions of particles.  
+  Now I am thinking of separating the waterfall and the ocean. The waterfall
+  will still be particle-based, however the ocean will instead be a big 2D
+  plane, and I will keep track of the water level at lots of points on that
+  plane. In this way I can simulate wave behaviour using the concepts that we
+  are learning in physics, such as Huygen's principle, and I will not have to
+  deal with billions of particles. This way, the ocean will be easier to render
+  as well.  
   I will explain my thoughts in a more detailed write-up separately.
 
 
@@ -154,3 +266,5 @@ Progress Log
 [glm github]: https://github.com/g-truc/glm/tree/0.9.4/glm/core
 [navis 2007]: http://navis-asd.blogspot.co.uk/2010/04/2007-and-now.html
 [hoetzlein surface-reconstruction]: http://www.rchoetzlein.com/theory/2010/surface-reconstruction-of-sph-fluids/
+
+<!-- vim: set tw=79: -->
