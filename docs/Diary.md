@@ -258,24 +258,10 @@ Progress Log
   code is kindly provided so I am reading through to figure out how the
   simulation is performed.
 
-04/3/13 *(30 minutes)*
+4/3/13 *(1 hour)*
 -------
-* I continued writing my January review. I also started my February review,
-  although it will likely be very brief.
-  The progress that was sustained in February was disappointing.  
-  Through this I have learnt about myself that if left unchecked, I will
-  experience a cycle of intense periods of dedication and fascination towards a
-  project followed by long periods of time when I become more interested or
-  occupied by other things.  
-  As it stands this is very bad for my project, as it means that I cannot do
-  the sustained work necessary for its completion. However, dedicating a
-  contiguous block of time to the project helps reduce the friction that is
-  experienced when picking a project up again after a while of not having
-  touched it. I can turn this into a positive trait through a compromise, if I
-  reduce the time period of this cycle from months to a week. Under this
-  scheme I would dedicate two or three contiguous days of my week to working on
-  my EP, and the rest of the time I could focus on classwork, amongst other
-  things.  
+* I continued writing my January review. I also finished my February review.
+  (Chronology? What's that?)
 
 
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
