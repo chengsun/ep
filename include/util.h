@@ -29,9 +29,11 @@ extern "C"
 #undef ASSERTX
 #endif
 
+#define INFO(...) dlib_log(__FILE__, __LINE__, __VA_ARGS__)
+
 #ifdef DEBUG
 #   include <cstdlib>
-#   define LOG(...) dlib_log(__FILE__, __LINE__, __VA_ARGS__)
+#   define LOG(...) INFO(__VA_ARGS__)
 #   define ASSERTX(x, ...) \
     do { \
         if (!(x)) { \
