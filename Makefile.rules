@@ -32,7 +32,7 @@ install: $(install_files)
 
 $(output): $(subst .cpp,.o,$(SOURCENAMES))
 	$(CXX) -o $@ $^ $(LDFLAGS)
-ifeq ($(OPT),1)
+ifeq ($(OPT),2)
 	$(STRIP) $@
 endif
 
@@ -49,4 +49,4 @@ endif
 clean:
 	rm -f *.d *.o $(output) *.dll *.so *.exe $(subst .cpp,.d,$(SOURCENAMES)) $(subst .cpp,.o,$(SOURCENAMES))
 
-
+# vim: ft=make

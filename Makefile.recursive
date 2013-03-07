@@ -9,3 +9,5 @@ force_look:
 	true
 
 .PHONY: all install clean force_look
+
+# vim: ft=make
