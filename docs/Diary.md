@@ -259,9 +259,21 @@ Progress Log
   simulation is performed.
 
 4/3/13 *(1 hour)*
--------
+------
 * I continued writing my January review. I also finished my February review.
   (Chronology? What's that?)
+
+6/3/13 *(2 hours)*
+------
+* I worked on the wave simulation.
+
+7/3/13 *(3 hours)*
+------
+* After some fiddling, I have a working wave simulation.
+* I have been reading about using textures in OpenGL, so that I can see the
+  results of my wave simulation. I have successfully written the texture code,
+  and also wrote a scene called `test_wave` that tests all of this.  
+  The texture code will come in very useful later as well.
 
 
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
