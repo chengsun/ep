@@ -4,7 +4,6 @@
 #include "util.h"
 #include "mesh.h"
 #include "program.h"
-#include "texture.h"
 
 struct SceneNode
 {

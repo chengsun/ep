@@ -1,7 +1,7 @@
 #ifndef DEMOLIB_UTIL_H
 #define DEMOLIB_UTIL_H
 
-#include <cstdint>
+#include <cinttypes>
 
 typedef uint8_t U8;
 typedef uint16_t U16;

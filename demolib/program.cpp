@@ -1,6 +1,27 @@
 #include "demolib.h"
 #include <cstdio>
 
+Texture::Texture()
+{
+    glGenTextures(1, &id);
+    LOG("Created texture %d", id);
+}
+
+Texture::~Texture()
+{
+    glDeleteTextures(1, &id);
+}
+
+
+
+template <typename T>
+const GLenum Texture2D<T>::pixelType = -1;
+template <>
+const GLenum Texture2D<uint8_t>::pixelType = GL_UNSIGNED_BYTE;
+template <>
+const GLenum Texture2D<float>::pixelType = GL_FLOAT;
+
+
 Shader::Shader(GLenum _type, const char *_name) :
     id(-1u),
     type(_type),
@@ -109,15 +130,19 @@ Program::Program(std::initializer_list<Shader> &&_shaders) :
         glDetachShader(id, shaders[shaderIdx].id);
 }
 
-ProgramTest::ProgramTest() :
-    Program({
-        Shader::FromFile(GL_VERTEX_SHADER, "data/test.vs"),
-        Shader::FromFile(GL_FRAGMENT_SHADER, "data/test.fs")
-    })
+void ProgramMesh::draw() const
 {
+    glUseProgram(id);
+    glEnableClientState(GL_PRIMITIVE_RESTART_NV);
+    glPrimitiveRestartIndexNV(PrimitiveRestartIndex);
+
+    meshDraw();
+
+    glDisableClientState(GL_PRIMITIVE_RESTART_NV);
+    glUseProgram(0);
 }
 
-void ProgramTest::updateMeshBuf(const Mesh &mesh)
+void ProgramMesh::updateMeshBuf(const Mesh &mesh)
 {
     vertBuf.resize(mesh.verts.size());
     for (U32 vertIdx = 0; vertIdx < mesh.verts.size(); vertIdx++) {
@@ -137,38 +162,96 @@ void ProgramTest::updateMeshBuf(const Mesh &mesh)
 
     glGenBuffers(1, &vertBufId);
     glGenBuffers(1, &idxBufId);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vertBufId);
-    glBufferData(GL_ARRAY_BUFFER, vertBuf.size() * sizeof(vertBuf[0]),
-                 &vertBuf[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idxBufId);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, idxBuf.size() * sizeof(idxBuf[0]),
-                 &idxBuf[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
     glGenVertexArrays(1, &vaoId);
     glBindVertexArray(vaoId);
 
     glBindBuffer(GL_ARRAY_BUFFER, vertBufId);
+    glBufferData(GL_ARRAY_BUFFER, vertBuf.size() * sizeof(vertBuf[0]),
+                 &vertBuf[0], GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idxBufId);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, idxBuf.size() * sizeof(idxBuf[0]),
+                 &idxBuf[0], GL_STATIC_DRAW);
 
     glBindVertexArray(0);
 }
 
-void ProgramTest::draw() const
+void ProgramMesh::meshDraw() const
 {
+    glBindVertexArray(vaoId);
+    glDrawElements(GL_TRIANGLE_FAN, idxBuf.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+}
+
+ProgramTexturedQuad::ProgramTexturedQuad(GLuint _texUnit) :
+    ProgramMesh({
+        Shader::Inline(GL_VERTEX_SHADER, R"(
+            #version 130
+            in vec4 position;
+            void main()
+            {
+                gl_Position = position;
+            }
+        )"),
+        Shader::Inline(GL_FRAGMENT_SHADER, R"(
+            #version 130
+            uniform sampler2D tex;
+            uniform ivec2 viewSize;
+            void main()
+            {
+                gl_FragColor = texture(tex, gl_FragCoord.xy/viewSize).rrra;
+                //gl_FragColor = vec4((gl_FragCoord.x+50.f)/400.f, 0.f, 0.f, 1.f);
+            }
+        )")
+    }),
+    texId(0), texSampler(0), texUnit(_texUnit)
+{
+    Mesh *ring = Mesh::createRing(4, PI/4.f, 2.f);
+    updateMeshBuf(*ring);
+    delete ring;
+
+    GLuint texUnif = glGetUniformLocation(id, "tex");
+    GLuint viewSizeUnif = glGetUniformLocation(id, "viewSize");
     glUseProgram(id);
-    glEnableClientState(GL_PRIMITIVE_RESTART_NV);
-    glPrimitiveRestartIndexNV(PrimitiveRestartIndex);
+    glUniform1i(texUnif, texUnit);
+
+    GLint viewport[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    glUniform2i(viewSizeUnif, viewport[2], viewport[3]);
+
+    glUseProgram(0);
+
+    glGenSamplers(1, &texSampler);
+    glSamplerParameteri(texSampler, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glSamplerParameteri(texSampler, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glSamplerParameteri(texSampler, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+}
+
+void ProgramTexturedQuad::updateTexture(const Texture2DBase &tex)
+{
+    texId = tex.id;
+}
+
+void ProgramTexturedQuad::meshDraw() const
+{
+    glActiveTexture(GL_TEXTURE0 + texUnit);
+    glBindTexture(GL_TEXTURE_2D, texId);
+    glBindSampler(texUnit, texSampler);
 
     glBindVertexArray(vaoId);
     glDrawElements(GL_TRIANGLE_FAN, idxBuf.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 
-    glDisableClientState(GL_PRIMITIVE_RESTART_NV);
-    glUseProgram(0);
+    glBindSampler(texUnit, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+ProgramTest::ProgramTest() :
+    ProgramMesh({
+        Shader::FromFile(GL_VERTEX_SHADER, "data/test.vs"),
+        Shader::FromFile(GL_FRAGMENT_SHADER, "data/test.fs")
+    })
+{
 }

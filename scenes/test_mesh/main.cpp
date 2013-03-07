@@ -2,7 +2,7 @@
 #include "mesh.h"
 
 Mesh *mesh;
-Program *program;
+ProgramTest *program;
 
 void demo_init(unsigned, unsigned)
 {
