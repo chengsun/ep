@@ -47,6 +47,7 @@ Progress Log
 * I made a very basic signed distance field test, `test_sdf`. However, this
   doesn't display the distance field in 3D, but instead a slice through a 2D
   plane.
+  ![SDF test](https://raw.github.com/chengsun/ep/master/docs/images/120113_sdf.png)
 
 13/1/13 *(~2 hours)*
 -------
@@ -273,7 +274,8 @@ Progress Log
 * I have been reading about using textures in OpenGL, so that I can see the
   results of my wave simulation. I have successfully written the texture code,
   and also wrote a scene called `test_wave` that tests all of this.  
-  The texture code will come in very useful later as well.
+  The texture code will come in very useful later as well.  
+  ![Wave simulation and 2D visualisation](https://raw.github.com/chengsun/ep/master/docs/images/070313_wave2D.png)
 
 
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
