@@ -46,7 +46,7 @@ Progress Log
   PDF][upenn raymarch].
 * I made a very basic signed distance field test, `test_sdf`. However, this
   doesn't display the distance field in 3D, but instead a slice through a 2D
-  plane.
+  plane.  
   ![SDF test](https://raw.github.com/chengsun/ep/master/docs/images/120113_sdf.png)
 
 13/1/13 *(~2 hours)*
