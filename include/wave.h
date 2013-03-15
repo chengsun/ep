@@ -20,9 +20,17 @@ struct Wave
         ASSERTX(x < w && y < h);
         return datai.get()[x + y*w];
     }
+    bool &W(unsigned x, unsigned y) {
+        ASSERTX(x < w && y < h);
+        return dataw.get()[x + y*w];
+    }
 
     unsigned w, h;
-    std::shared_ptr<float> data, datai;      // row-major
+
+    // row-major
+    std::shared_ptr<float> data, datai;
+    std::shared_ptr<bool> dataw;
+
     float damp;
     bool moveDown;
 };

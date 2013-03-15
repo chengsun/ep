@@ -5,12 +5,15 @@
 #include <cmath>
 
 Wave::Wave(unsigned _w, unsigned _h, float _damp) :
-    w(_w), h(_h), damp(_damp), moveDown(true)
+    w(_w), h(_h),
+    data(std::shared_ptr<float>(new float[w*h],
+                                std::default_delete<float[]>())),
+    datai(std::shared_ptr<float>(new float[w*h],
+                                 std::default_delete<float[]>())),
+    dataw(std::shared_ptr<bool>(new bool[w*h],
+                                 std::default_delete<bool[]>())),
+    damp(_damp), moveDown(true)
 {
-    data = std::shared_ptr<float>(new float[w*h],
-                                    std::default_delete<float[]>());
-    datai = std::shared_ptr<float>(new float[w*h],
-                                     std::default_delete<float[]>());
     reset();
 }
 
@@ -24,6 +27,7 @@ void Wave::reset()
         for (unsigned x = 0; x < h; ++x) {
             D(x,y) = .5f;
             Di(x,y) = .0f;
+            W(x,y) = false;
         }
     }
 }
@@ -45,16 +49,28 @@ void Wave::update()
             std::swap(x, xend); xinc = -1;
         }
         for (; ; x += xinc) {
-            float n[4];
-            if (x == 0)   n[0] = D(w-1, y);
-            else          n[0] = D(x-1, y);
-            if (x == w-1) n[2] = D(  0, y);
-            else          n[2] = D(x+1, y);
-            if (y == 0)   n[1] = D(  x, h-1);
-            else          n[1] = D(  x, y-1);
-            if (y == h-1) n[3] = D(  x,   0);
-            else          n[3] = D(  x, y+1);
-            float basis = float(n[0] + n[1] + n[2] + n[3]) / 4.f;
+            std::pair<unsigned, unsigned> c[4];
+            if (x == 0)   c[0] = std::make_pair(w-1, y);
+            else          c[0] = std::make_pair(x-1, y);
+            if (x == w-1) c[1] = std::make_pair(  0, y);
+            else          c[1] = std::make_pair(x+1, y);
+            if (y == 0)   c[2] = std::make_pair(  x, h-1);
+            else          c[2] = std::make_pair(  x, y-1);
+            if (y == h-1) c[3] = std::make_pair(  x,   0);
+            else          c[3] = std::make_pair(  x, y+1);
+            float basis = 0.f;
+            for (int i = 0; i < 4; ++i) {
+                if (W(c[i].first, c[i].second)) {
+                    if (/*fixedEnds*/ true) {
+                        basis += 0.f;
+                    } else {
+                        basis += D(x, y);
+                    }
+                } else {
+                    basis += D(c[i].first, c[i].second);
+                }
+            }
+            basis /= 4.f;
             float re = (D(x,y) - basis) * damp,
                   im = Di(x,y) * damp;
             D(x,y) = basis + re*scaleo - im*sinth;
