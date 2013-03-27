@@ -30,6 +30,10 @@ extern "C"
 #undef ASSERTX
 #endif
 
+#ifdef INFO
+#undef INFO
+#endif
+
 #define INFO(...) dlib_log(__FILE__, __LINE__, __VA_ARGS__)
 
 #ifdef DEBUG
@@ -47,5 +51,12 @@ extern "C"
 #   define LOG(...)    ((void)0)
 #   define ASSERTX(x, ...) ((void)0)
 #endif
+
+
+
+
+
+#define unlikely(expr) __builtin_expect(!!(expr), 0)
+#define   likely(expr) __builtin_expect(!!(expr), 1)
 
 #endif

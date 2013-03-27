@@ -5,13 +5,13 @@
 #include <cmath>
 
 Wave::Wave(unsigned _w, unsigned _h, float _damp) :
-    w(_w), h(_h),
-    data(std::shared_ptr<float>(new float[w*h],
+    data(std::shared_ptr<float>(new float[_w*_h],
                                 std::default_delete<float[]>())),
-    datai(std::shared_ptr<float>(new float[w*h],
+    datai(std::shared_ptr<float>(new float[_w*_h],
                                  std::default_delete<float[]>())),
-    dataw(std::shared_ptr<bool>(new bool[w*h],
+    dataw(std::shared_ptr<bool>(new bool[_w*_h],
                                  std::default_delete<bool[]>())),
+    w(_w), h(_h),
     damp(_damp), moveDown(true)
 {
     reset();
@@ -27,58 +27,58 @@ void Wave::reset()
         for (unsigned x = 0; x < h; ++x) {
             D(x,y) = .5f;
             Di(x,y) = .0f;
-            W(x,y) = false;
+            W(x,y) = 0;
         }
     }
 }
 
 void Wave::update()
 {
-    const float tadd = 0.25f;
-    const float sinth = sinf(tadd);
-    const float scaleo = cosf(tadd);
+    static const float tadd = 0.1f;
+    static const float sinth = sinf(tadd);
+    static const float scaleo = cosf(tadd);
 
-    unsigned y = 0, yend = h-1, yinc = 1;
+    unsigned y = 1, yend = h-2, yinc = 1;
     if (!moveDown) {
         std::swap(y, yend); yinc = -1;
     }
     bool moveRight = moveDown;
-    for (; ; y += yinc) {
-        unsigned x = 0, xend = w-1, xinc = 1;
+    for (; y != yend; y += yinc) {
+        unsigned x = 1, xend = w-2, xinc = 1;
         if (!moveRight) {
             std::swap(x, xend); xinc = -1;
         }
-        for (; ; x += xinc) {
-            std::pair<unsigned, unsigned> c[4];
-            if (x == 0)   c[0] = std::make_pair(w-1, y);
-            else          c[0] = std::make_pair(x-1, y);
-            if (x == w-1) c[1] = std::make_pair(  0, y);
-            else          c[1] = std::make_pair(x+1, y);
-            if (y == 0)   c[2] = std::make_pair(  x, h-1);
-            else          c[2] = std::make_pair(  x, y-1);
-            if (y == h-1) c[3] = std::make_pair(  x,   0);
-            else          c[3] = std::make_pair(  x, y+1);
+        for (; x != xend; x += xinc) {
+            if (W(x, y)) continue;
+
             float basis = 0.f;
-            for (int i = 0; i < 4; ++i) {
-                if (W(c[i].first, c[i].second)) {
-                    if (/*fixedEnds*/ true) {
-                        basis += 0.f;
-                    } else {
-                        basis += D(x, y);
-                    }
-                } else {
-                    basis += D(c[i].first, c[i].second);
-                }
-            }
+            int nx, ny;
+            nx = x+1; ny = y;
+            if (W(nx, ny)) basis += 0.5f; else basis += D(nx, ny);
+            nx = x-1; ny = y;
+            if (W(nx, ny)) basis += 0.5f; else basis += D(nx, ny);
+            nx = x; ny = y+1;
+            if (W(nx, ny)) basis += 0.5f; else basis += D(nx, ny);
+            nx = x; ny = y-1;
+            if (W(nx, ny)) basis += 0.5f; else basis += D(nx, ny);
             basis /= 4.f;
-            float re = (D(x,y) - basis) * damp,
-                  im = Di(x,y) * damp;
+
+            static const unsigned edgedamp = 500;
+            static const unsigned edgesize = 30;
+            unsigned coeff = edgesize - std::min(edgesize, std::min(std::min(x, y), std::min(w-x-1, h-y-1)));
+
+            float re = D(x,y) - basis,
+                  im = Di(x,y);
+
+            if (coeff) {
+                re = re * (edgedamp-coeff) / edgedamp;
+                im = im * (edgedamp-coeff) / edgedamp;
+            }
+
             D(x,y) = basis + re*scaleo - im*sinth;
             Di(x,y) = im*scaleo + re*sinth;
-            if (x == xend) break;
         }
         moveRight = !moveRight;
-        if (y == yend) break;
     }
     moveDown = !moveDown;
 }

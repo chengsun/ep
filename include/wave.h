@@ -25,12 +25,11 @@ struct Wave
         return dataw.get()[x + y*w];
     }
 
-    unsigned w, h;
-
     // row-major
     std::shared_ptr<float> data, datai;
     std::shared_ptr<bool> dataw;
 
+    unsigned w, h;
     float damp;
     bool moveDown;
 };
