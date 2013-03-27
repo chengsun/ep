@@ -1,2 +1,2 @@
 #!/bin/sh
-make install && cd build && ./player "$@"
+make OPT=1 -j4 install && cd build && ./player "$@"

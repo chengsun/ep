@@ -32,9 +32,9 @@ install: $(install_files)
 
 $(output): $(subst .cpp,.o,$(SOURCENAMES))
 	$(CXX) -o $@ $^ $(LDFLAGS)
-ifeq ($(OPT),2)
-	$(STRIP) $@
-endif
+#ifeq ($(OPT),2)
+#	$(STRIP) $@
+#endif
 
 %.o: $(SRCDIR)/%.cpp
 	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) -o $@ $<

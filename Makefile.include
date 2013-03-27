@@ -1,5 +1,5 @@
 # some defaults
-OPT ?= 0
+OPT ?= 1
 PLATFORM ?= LINUX
 SRCDIR ?= .
 
@@ -72,21 +72,15 @@ endif
 # figure out the right flags
 CPPFLAGS += -Wall -Wextra -Wdouble-promotion -std=c++11 \
 			-ffunction-sections -fdata-sections -fno-exceptions \
-			-fabi-version=0 -fno-rtti
+			-fno-rtti
 LDFLAGS += -Wl,--gc-sections -Wl,-rpath,.
 
 ifeq ($(OPT),0)
-    CPPFLAGS += -DDEBUG -O0 -g
-    LDFLAGS += -O0 -ggdb
+    CPPFLAGS += -DDEBUG -O1 -g
+    LDFLAGS += -O1 -g
 else
-    CPPFLAGS += -DNDEBUG -Os -march=$(arch)
-    LDFLAGS += -Os -march=$(arch)
-    ifeq ($(OPT),1)
-        CPPFLAGS += -g
-    else
-        CPPFLAGS += -fomit-frame-pointer -ffast-math
-        LDFLAGS += -s
-    endif
+    CPPFLAGS += -DNDEBUG -O2 -g -march=$(arch) -fomit-frame-pointer -ffast-math
+    LDFLAGS += -O2 -g -march=$(arch)
 endif
 
 # vim: ft=make
