@@ -277,6 +277,14 @@ Progress Log
   The texture code will come in very useful later as well.  
   ![Wave simulation and 2D visualisation](https://raw.github.com/chengsun/ep/master/docs/images/070313_wave2D.png)
 
+29/3/13 *(3 hours)*
+-------
+* I have been researching on and off for the past few weeks. Unfortunately I
+  have not noted these times in my diary.
+* I have fixed edges so that they no longer reflect waves, by damping.
+* I am working on improving wave simulation performance. For a 256x256 grid,
+  simulation has improved from 60 to 90 fps.
+
 
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
 [ryg halfedge-practice]: http://fgiesen.wordpress.com/2012/03/24/half-edge-based-mesh-representations-practice/
