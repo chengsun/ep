@@ -1,6 +1,7 @@
 #ifndef DEMOLIB_UTIL_H
 #define DEMOLIB_UTIL_H
 
+#include <memory>
 #include <cinttypes>
 
 typedef uint8_t U8;

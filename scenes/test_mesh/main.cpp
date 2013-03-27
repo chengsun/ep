@@ -1,7 +1,7 @@
 #include "demo.h"
 #include "mesh.h"
 
-Mesh *mesh;
+std::unique_ptr<Mesh> mesh;
 ProgramTest *program;
 
 void demo_init(unsigned, unsigned)

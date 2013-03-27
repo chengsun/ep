@@ -67,12 +67,12 @@ void Mesh::debugOut() const
     }
 }
 
-Mesh *Mesh::createRing(unsigned sides, float phase, float radius)
+std::unique_ptr<Mesh> Mesh::createRing(unsigned sides, float phase, float radius)
 {
     ASSERTX(sides >= 1 && sides <= MAXVERT,
             "Mesh::createRing with invalid number of vertices (%u)", sides);
 
-    Mesh *mesh = new Mesh;
+    std::unique_ptr<Mesh> mesh(new Mesh);
     mesh->verts.resize(sides);
 
     mesh->faces.resize(2);

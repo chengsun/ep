@@ -208,9 +208,7 @@ ProgramTexturedQuad::ProgramTexturedQuad(GLuint _texUnit) :
     }),
     texId(0), texSampler(0), texUnit(_texUnit)
 {
-    Mesh *ring = Mesh::createRing(4, PI/4.f, 2.f);
-    updateMeshBuf(*ring);
-    delete ring;
+    updateMeshBuf(*Mesh::createRing(4, PI/4.f, 2.f));
 
     GLuint texUnif = glGetUniformLocation(id, "tex");
     GLuint viewSizeUnif = glGetUniformLocation(id, "viewSize");

@@ -35,9 +35,17 @@ struct Mesh
     std::vector<MeshVert> verts;
     std::vector<MeshFace> faces;
 
+    Mesh() {
+    }
+
+    Mesh(Mesh &&other) {
+        verts = other.verts;
+        faces = other.faces;
+    }
+
     // basic operations
 
-    static Mesh *createRing(unsigned sides, float phase = 0.f, float radius = 1.f);
+    static std::unique_ptr<Mesh> createRing(unsigned sides, float phase = 0.f, float radius = 1.f);
 
     bool check() const;
     /* meshCheckFlags checks a mesh to ensure that the selected flags are all

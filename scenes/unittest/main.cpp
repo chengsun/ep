@@ -1,9 +1,10 @@
 #include "demo.h"
 #include "mesh.h"
+#include <ctime>
 #include <random>
 #include <functional>
 
-Mesh *mesh;
+std::unique_ptr<Mesh> mesh;
 
 void _FAILTEST()
 {
