@@ -38,27 +38,6 @@ struct Texture2D : public Texture2DBase
     static const GLenum pixelType;
 };
 
-template <typename T>
-Texture2D<T>::Texture2D(unsigned _w, unsigned _h,
-                     const std::shared_ptr<T> _data) :
-    Texture2DBase(_w, _h),
-    data(_data ? _data :
-         std::shared_ptr<T>
-             (new T[w*h], std::default_delete<T[]>()))
-{
-}
-
-template <typename T>
-void Texture2D<T>::update()
-{
-    glBindTexture(GL_TEXTURE_2D, id);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, w, h, 0, GL_RED, pixelType, data.get());
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
-    glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-
 
 struct Shader
 {
