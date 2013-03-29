@@ -285,6 +285,12 @@ Progress Log
 * I am working on improving wave simulation performance. For a 256x256 grid,
   simulation has improved from 60 to 90 fps.
 
+30/3/13 *(1 hour)*
+-------
+* More work on wave simulation (100 fps attained).
+* I sent out an email to Paul Falstad with some queries about the mathematical
+  basis of his simulation code (the concepts of which I am using).
+
 
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
 [ryg halfedge-practice]: http://fgiesen.wordpress.com/2012/03/24/half-edge-based-mesh-representations-practice/
