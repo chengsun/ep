@@ -28,12 +28,11 @@ struct Texture2DBase : public Texture
 template <typename T>
 struct Texture2D : public Texture2DBase
 {
-    Texture2D(unsigned _w, unsigned _h,
-              const std::shared_ptr<T> _data = std::shared_ptr<T>());
+    Texture2D(unsigned _w, unsigned _h, T *_data);
 
     void update();
 
-    const std::shared_ptr<T> data;
+    T *data;
 
     static const GLenum pixelType;
 };

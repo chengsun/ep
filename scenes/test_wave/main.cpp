@@ -55,8 +55,8 @@ bool demo_prepareFrame()
     switch (stepstep) {
     case 0:
         for (int i = 0; i < 10; ++i) {
-            wave->D((tick/50)%256,200) = (cosf(tick * 0.05f)/2.f +0.5f);
-            wave->D(100,(tick/20)%256) = (cosf(tick * 0.05f)/2.f +0.5f);
+            wave->D((tick/50)%256,200) = cosf(tick * 0.05f);
+            wave->D(100,(tick/20)%256) = cosf(tick * 0.05f);
             tick++; wave->update();
         }
         waveTex->update();
@@ -66,7 +66,7 @@ bool demo_prepareFrame()
     case 1:
         for (int t = 0; t < 10; ++t) {
             for (int i = 51; i < 205; ++i) {
-                wave->D(51,i) = (cosf(tick * 0.05f)/2.f +0.5f);
+                wave->D(51,i) = cosf(tick * 0.05f);
             }
             tick++; wave->update();
         }

@@ -5,16 +5,20 @@
 #include <cmath>
 
 Wave::Wave(unsigned _w, unsigned _h, float _damp) :
-    data(std::shared_ptr<float>(new float[_w*_h],
-                                std::default_delete<float[]>())),
-    datai(std::shared_ptr<float>(new float[_w*_h],
-                                 std::default_delete<float[]>())),
-    dataw(std::shared_ptr<bool>(new bool[_w*_h],
-                                 std::default_delete<bool[]>())),
+    data(new float[_w*_h]),
+    datai(new float[_w*_h]),
+    dataw(new bool[_w*_h]),
     w(_w), h(_h),
     damp(_damp), moveDown(true)
 {
     reset();
+}
+
+Wave::~Wave()
+{
+    delete[] data;
+    delete[] datai;
+    delete[] dataw;
 }
 
 void Wave::reset()
@@ -25,7 +29,7 @@ void Wave::reset()
     */
     for (unsigned y = 0; y < h; ++y) {
         for (unsigned x = 0; x < h; ++x) {
-            D(x,y) = .5f;
+            D(x,y) = .0f;
             Di(x,y) = .0f;
             W(x,y) = 0;
         }
@@ -51,7 +55,7 @@ void Wave::update()
         for (; x != xend; x += xinc) {
             if (W(x, y)) continue;
 
-#define ADD_BASIS(nx, ny) (W((nx), (ny)) ? 0.5f : D((nx), (ny)))
+#define ADD_BASIS(nx, ny) (W((nx), (ny)) ? 0.0f : D((nx), (ny)))
             float basis = (
                 ADD_BASIS(x, y-1) +
                 ADD_BASIS(x-1, y) +
@@ -80,12 +84,17 @@ void Wave::update()
 }
 
 TextureWave::TextureWave(const Wave &_wave) :
-    Texture2D(_wave.w, _wave.h, _wave.data),
+    Texture2D(_wave.w, _wave.h, new uint8_t[_wave.w*_wave.h]),
     wave(_wave)
 {
 }
 
 void TextureWave::update()
 {
+    for (unsigned y = 0; y < wave.h; ++y) {
+        for (unsigned x = 0; x < wave.w; ++x) {
+            data[y*h+x] = int(wave.data[y*h+x]*127.f) + 128;
+        }
+    }
     Texture2D::update();
 }
