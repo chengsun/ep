@@ -34,9 +34,9 @@ void Wave::reset()
 
 void Wave::update()
 {
-    static const float tadd = 0.1f;
-    static const float sinth = sinf(tadd);
-    static const float scaleo = cosf(tadd);
+    static const float theta = 0.1f;
+    static const float sintheta = sinf(theta);
+    static const float costheta = cosf(theta);
 
     unsigned y = 1, yend = h-2, yinc = 1;
     if (!moveDown) {
@@ -51,32 +51,28 @@ void Wave::update()
         for (; x != xend; x += xinc) {
             if (W(x, y)) continue;
 
-            float basis = 0.f;
-            int nx, ny;
-            nx = x+1; ny = y;
-            if (W(nx, ny)) basis += 0.5f; else basis += D(nx, ny);
-            nx = x-1; ny = y;
-            if (W(nx, ny)) basis += 0.5f; else basis += D(nx, ny);
-            nx = x; ny = y+1;
-            if (W(nx, ny)) basis += 0.5f; else basis += D(nx, ny);
-            nx = x; ny = y-1;
-            if (W(nx, ny)) basis += 0.5f; else basis += D(nx, ny);
-            basis /= 4.f;
+#define ADD_BASIS(nx, ny) (W((nx), (ny)) ? 0.5f : D((nx), (ny)))
+            float basis = (
+                ADD_BASIS(x, y-1) +
+                ADD_BASIS(x-1, y) +
+                ADD_BASIS(x+1, y) +
+                ADD_BASIS(x, y+1)) / 4.f;
+#undef ADD_BASIS
 
             static const unsigned edgedamp = 500;
             static const unsigned edgesize = 30;
-            unsigned coeff = edgesize - std::min(edgesize, std::min(std::min(x, y), std::min(w-x-1, h-y-1)));
+            unsigned dist = std::min(std::min(x, y), std::min(w-x-1, h-y-1));
 
             float re = D(x,y) - basis,
                   im = Di(x,y);
 
-            if (coeff) {
-                re = re * (edgedamp-coeff) / edgedamp;
-                im = im * (edgedamp-coeff) / edgedamp;
+            if (dist < edgesize) {
+                re = re * (edgedamp-(edgesize-dist)) / edgedamp;
+                im = im * (edgedamp-(edgesize-dist)) / edgedamp;
             }
 
-            D(x,y) = basis + re*scaleo - im*sinth;
-            Di(x,y) = im*scaleo + re*sinth;
+            D(x,y) = basis + re*costheta - im*sintheta;
+            Di(x,y) =        im*costheta + re*sintheta;
         }
         moveRight = !moveRight;
     }
