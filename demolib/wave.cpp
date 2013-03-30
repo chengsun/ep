@@ -4,6 +4,9 @@
 #include <cstring>
 #include <cmath>
 
+// major hack
+const float Wave::WALL_VALUE = 1337.f;
+
 Wave::Wave(unsigned _w, unsigned _h, float _damp) :
     data(new Data[_w*_h]),
     w(_w), h(_h),

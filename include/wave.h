@@ -22,14 +22,14 @@ struct Wave
         ASSERTX(x < w && y < h);
         return data[x + y*w].i;
     }
+    static const float WALL_VALUE;
     bool W(unsigned x, unsigned y) {
         ASSERTX(x < w && y < h);
-        return std::isnan(Di(x, y));
+        return Di(x, y) == WALL_VALUE;
     }
     void Wset(unsigned x, unsigned y, bool v) {
         ASSERTX(x < w && y < h);
-        static_assert(std::numeric_limits<float>::has_signaling_NaN, "No signaling NaN");
-        Di(x, y) = v ? std::numeric_limits<float>::signaling_NaN() : 0.0f;
+        Di(x, y) = v ? WALL_VALUE : 0.0f;
     }
 
     struct Data {
