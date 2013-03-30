@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
     demo_init(screen->w, screen->h);
 
     LOG("Beginning render loop");
-    unsigned nFrames = 0, oldTicks = 0;
+    unsigned nFrames = 0, oldTicks = SDL_GetTicks();
     while (1) {
         if (!demo_prepareFrame()) {
             break;
