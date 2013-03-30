@@ -22,20 +22,20 @@ void nextstepstep()
         break;
     case 1:
         for (int i = 0; i < 128-16; ++i) {
-            wave->W(128, i) = 1;
+            wave->Wset(128, i, true);
         }
         for (int i = 128-12; i < 128+12; ++i) {
-            wave->W(128, i) = 1;
+            wave->Wset(128, i, true);
         }
         for (int i = 128+16; i < 256; ++i) {
-            wave->W(128, i) = 1;
+            wave->Wset(128, i, true);
         }
         /*
         for (int i = 0; i < 256; ++i) {
-            wave->W(  0, i) = 1;
-            wave->W(255, i) = 1;
-            wave->W(i,   0) = 1;
-            wave->W(i, 255) = 1;
+            wave->Wset(  0, i, true);
+            wave->Wset(255, i, true);
+            wave->Wset(i,   0, true);
+            wave->Wset(i, 255, true);
         }
         */
         break;

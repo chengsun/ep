@@ -5,9 +5,7 @@
 #include <cmath>
 
 Wave::Wave(unsigned _w, unsigned _h, float _damp) :
-    data(new float[_w*_h]),
-    datai(new float[_w*_h]),
-    dataw(new bool[_w*_h]),
+    data(new Data[_w*_h]),
     w(_w), h(_h),
     damp(_damp), moveDown(true)
 {
@@ -17,8 +15,6 @@ Wave::Wave(unsigned _w, unsigned _h, float _damp) :
 Wave::~Wave()
 {
     delete[] data;
-    delete[] datai;
-    delete[] dataw;
 }
 
 void Wave::reset()
@@ -29,9 +25,8 @@ void Wave::reset()
     */
     for (unsigned y = 0; y < h; ++y) {
         for (unsigned x = 0; x < h; ++x) {
-            D(x,y) = .0f;
-            Di(x,y) = .0f;
-            W(x,y) = 0;
+            D(x,y) = 0.f;
+            Di(x,y) = 0.f;
         }
     }
 }
@@ -53,7 +48,9 @@ void Wave::update()
             std::swap(x, xend); xinc = -1;
         }
         for (; x != xend; x += xinc) {
-            if (W(x, y)) continue;
+            if (W(x, y)) {
+                continue;
+            }
 
 #define ADD_BASIS(nx, ny) (W((nx), (ny)) ? 0.0f : D((nx), (ny)))
             float basis = (
@@ -91,10 +88,9 @@ TextureWave::TextureWave(const Wave &_wave) :
 
 void TextureWave::update()
 {
-    for (unsigned y = 0; y < wave.h; ++y) {
-        for (unsigned x = 0; x < wave.w; ++x) {
-            data[y*h+x] = int(wave.data[y*h+x]*127.f) + 128;
-        }
+    unsigned end = h*w;
+    for (unsigned i = 0; i < end; ++i) {
+        data[i] = clamp(int(wave.data[i].v*127.f) + 128, 0, 255);
     }
     Texture2D::update();
 }

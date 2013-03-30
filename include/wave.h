@@ -4,6 +4,7 @@
 #include "util.h"
 #include "program.h"
 #include <memory>
+#include <limits>
 
 struct Wave
 {
@@ -15,20 +16,28 @@ struct Wave
 
     float &D(unsigned x, unsigned y) {
         ASSERTX(x < w && y < h);
-        return data[x + y*w];
+        return data[x + y*w].v;
     }
     float &Di(unsigned x, unsigned y) {
         ASSERTX(x < w && y < h);
-        return datai[x + y*w];
+        return data[x + y*w].i;
     }
-    bool &W(unsigned x, unsigned y) {
+    bool W(unsigned x, unsigned y) {
         ASSERTX(x < w && y < h);
-        return dataw[x + y*w];
+        return std::isnan(Di(x, y));
+    }
+    void Wset(unsigned x, unsigned y, bool v) {
+        ASSERTX(x < w && y < h);
+        static_assert(std::numeric_limits<float>::has_signaling_NaN, "No signaling NaN");
+        Di(x, y) = v ? std::numeric_limits<float>::signaling_NaN() : 0.0f;
     }
 
+    struct Data {
+        float v, i;
+    };
+
     // row-major
-    float *data, *datai;
-    bool *dataw;
+    Data *data;
 
     unsigned w, h;
     float damp;

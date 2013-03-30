@@ -17,6 +17,12 @@ typedef int32_t S32;
 #define ARRAYLEN(x) (sizeof(x)/sizeof((x)[0]))
 #define PI 3.14159265359f
 
+template <typename T>
+inline T clamp(const T x, const T min, const T max)
+{
+    return std::max(min, std::min(x, max));
+}
+
 extern "C"
 {
     void dlib_log(const char *file, unsigned line, const char *format, ...);
@@ -54,6 +60,10 @@ extern "C"
 
 
 
+#include <mmintrin.h>
+#include <xmmintrin.h>
+
+#define ENABLE_FTZ() _mm_setcsr(_mm_getcsr() | 0x8040)
 
 
 #define unlikely(expr) __builtin_expect(!!(expr), 0)

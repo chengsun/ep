@@ -139,6 +139,9 @@ int main(int argc, char *argv[])
         }
     }
 
+
+    ENABLE_FTZ();
+
     LOG("Initialising SDL video");
     SDL_Init(SDL_INIT_VIDEO);
     atexit(SDL_Quit);
