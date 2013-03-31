@@ -79,8 +79,8 @@ ifeq ($(OPT),0)
     CPPFLAGS += -DDEBUG -O2 -g -march=$(arch) -ffast-math
     LDFLAGS += -O2 -g -march=$(arch)
 else
-    CPPFLAGS += -DNDEBUG -O2 -g -march=$(arch) -fomit-frame-pointer -ffast-math
-    LDFLAGS += -O2 -g -march=$(arch)
+    CPPFLAGS += -DNDEBUG -O3 -g -march=$(arch) -fomit-frame-pointer -ffast-math
+    LDFLAGS += -O3 -g -march=$(arch)
 endif
 
 # vim: ft=make
