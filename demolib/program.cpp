@@ -171,10 +171,11 @@ void ProgramMesh::updateMeshBuf(const Mesh &mesh)
 
     idxBuf.clear();
     for (U32 faceIdx = 0; faceIdx < mesh.faces.size(); faceIdx++) {
-        if (faceIdx > 0) {
+        const MeshFace &face = mesh.faces[faceIdx];
+        if (face.material == 0xFF) continue;
+        if (!idxBuf.empty()) {
             idxBuf.push_back(PrimitiveRestartIndex);
         }
-        const MeshFace &face = mesh.faces[faceIdx];
         for (U32 slotIdx = 0; slotIdx < face.count; slotIdx++) {
             idxBuf.push_back(face.verts[slotIdx]);
         }
