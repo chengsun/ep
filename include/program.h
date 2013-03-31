@@ -117,9 +117,4 @@ struct ProgramTexturedQuad : public ProgramMesh
     GLuint texId, texSampler, texUnit;
 };
 
-struct ProgramTest : public ProgramMesh
-{
-    ProgramTest();
-};
-
 #endif

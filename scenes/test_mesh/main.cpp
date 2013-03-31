@@ -1,6 +1,32 @@
 #include "demo.h"
 #include "mesh.h"
 
+struct ProgramTest : public ProgramMeshWire
+{
+    ProgramTest();
+};
+
+ProgramTest::ProgramTest() :
+    ProgramMeshWire({
+        Shader::Inline(GL_VERTEX_SHADER, R"(
+            #version 130
+            in vec4 position;
+            void main()
+            {
+                gl_Position = position;
+            }
+        )"),
+        Shader::Inline(GL_FRAGMENT_SHADER, R"(
+            #version 130
+            void main()
+            {
+               gl_FragColor = vec4(1.0f, 1.0f, 1.0f, 0.5f);
+            }
+        )")
+    })
+{
+}
+
 std::unique_ptr<Mesh> mesh;
 ProgramTest *program;
 
