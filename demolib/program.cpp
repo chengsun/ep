@@ -206,6 +206,13 @@ void ProgramMesh::meshDraw() const
     glBindVertexArray(0);
 }
 
+void ProgramMeshWire::meshDraw() const
+{
+    glBindVertexArray(vaoId);
+    glDrawElements(GL_LINE_LOOP, idxBuf.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+}
+
 ProgramTexturedQuad::ProgramTexturedQuad(GLuint _texUnit) :
     ProgramMesh({
         Shader::Inline(GL_VERTEX_SHADER, R"(
@@ -265,12 +272,4 @@ void ProgramTexturedQuad::meshDraw() const
 
     glBindSampler(texUnit, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-ProgramTest::ProgramTest() :
-    ProgramMesh({
-        Shader::FromFile(GL_VERTEX_SHADER, "data/test.vs"),
-        Shader::FromFile(GL_FRAGMENT_SHADER, "data/test.fs")
-    })
-{
 }

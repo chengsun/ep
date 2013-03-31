@@ -90,6 +90,13 @@ struct ProgramMesh : public Program
     std::vector<U32> idxBuf;
 };
 
+struct ProgramMeshWire : public ProgramMesh
+{
+    ProgramMeshWire(std::initializer_list<Shader> &&_shaders) :
+        ProgramMesh(std::move(_shaders)) {}
+    virtual void meshDraw() const;
+};
+
 struct ProgramRaw : public ProgramMesh
 {
     ProgramRaw(std::initializer_list<Shader> &&_shaders) :
