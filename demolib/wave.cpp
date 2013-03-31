@@ -7,31 +7,32 @@
 // major hack
 const float Wave::WALL_VALUE = 1337.f;
 
-Wave::Wave(unsigned _w, unsigned _h, float _damp) :
-    data(new Data[_w*_h]),
+Wave::Wave(unsigned _w, unsigned _h) :
+    //data(new Data[_w*_h]),
+    data((Data *) dlib_malloc(_w*_h*sizeof(Data), 64)),
     w(_w), h(_h),
-    damp(_damp), moveDown(true)
+    moveDown(true)
 {
     reset();
 }
 
 Wave::~Wave()
 {
-    delete[] data;
+    //delete[] data;
+    free(data);
 }
 
 void Wave::reset()
 {
     /*
-    memset(data.get(), 0, sizeof(float)*w*h);
-    memset(datai.get(), 0, sizeof(float)*w*h);
-    */
     for (unsigned y = 0; y < h; ++y) {
         for (unsigned x = 0; x < h; ++x) {
             D(x,y) = 0.f;
             Di(x,y) = 0.f;
         }
     }
+    */
+    memset(data, 0, sizeof(Data)*w*h);
 }
 
 void Wave::update()
@@ -39,6 +40,8 @@ void Wave::update()
     static const float theta = 0.1f;
     static const float sintheta = sinf(theta);
     static const float costheta = cosf(theta);
+    static const unsigned edgedamp = 500;
+    static const unsigned edgesize = 30;
 
     unsigned y = 1, yend = h-2, yinc = 1;
     if (!moveDown) {
@@ -52,19 +55,15 @@ void Wave::update()
         }
         for (; x != xend; x += xinc) {
             if (W(x, y)) {
+                ASSERTX(D(x, y) == 0.f);
                 continue;
             }
 
-#define ADD_BASIS(nx, ny) (W((nx), (ny)) ? 0.0f : D((nx), (ny)))
-            float basis = (
-                ADD_BASIS(x, y-1) +
-                ADD_BASIS(x-1, y) +
-                ADD_BASIS(x+1, y) +
-                ADD_BASIS(x, y+1)) / 4.f;
-#undef ADD_BASIS
+            float basis = (D(x, y-1) +
+                           D(x-1, y) +
+                           D(x+1, y) +
+                           D(x, y+1)) / 4;
 
-            static const unsigned edgedamp = 500;
-            static const unsigned edgesize = 30;
             unsigned dist = std::min(std::min(x, y), std::min(w-x-1, h-y-1));
 
             float re = D(x,y) - basis,

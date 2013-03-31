@@ -44,7 +44,7 @@ void nextstepstep()
 
 void demo_init(unsigned, unsigned)
 {
-    wave = new Wave(256, 256, 0.999f);
+    wave = new Wave(256, 256);
     nextstepstep();
     waveTex = new TextureWave(*wave);
     program = new ProgramTexturedQuad;

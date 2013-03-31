@@ -8,7 +8,7 @@
 
 struct Wave
 {
-    Wave(unsigned w, unsigned h, float damp);
+    Wave(unsigned w, unsigned h);
     ~Wave();
 
     void reset();
@@ -40,7 +40,6 @@ struct Wave
     Data *data;
 
     unsigned w, h;
-    float damp;
     bool moveDown;
 };
 
