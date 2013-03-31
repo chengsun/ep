@@ -59,6 +59,19 @@ extern "C"
 #endif
 
 
+#include <cerrno>
+#include <cstdlib>
+inline void *dlib_malloc(size_t size, size_t alignment)
+{
+    void *ptr;
+    int ret = posix_memalign(&ptr, alignment, size);
+    ASSERTX(ret != EINVAL, "alignment invalid");
+    ASSERTX(ret != ENOMEM, "insufficient memory");
+    ASSERTX(ret == 0, "posix_memalign failed -- unknown reason");
+    return ptr;
+}
+
+
 
 #include <mmintrin.h>
 #include <xmmintrin.h>
