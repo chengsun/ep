@@ -54,8 +54,8 @@ extern "C"
         } \
     } while (0)
 #else
-#   define LOG(...)    ((void)0)
-#   define ASSERTX(x, ...) ((void)0)
+#   define LOG(...)    do { (void) 0; } while (0)
+#   define ASSERTX(x, ...) do { (void) sizeof(x); } while (0)
 #endif
 
 
