@@ -7,3 +7,5 @@
 defsym(demo_init,         void, unsigned, unsigned);
 defsym(demo_prepareFrame, bool);
 defsym(demo_drawFrame,    void);
+defsym(demo_evtMouseButton,    void, uint8_t, bool);
+defsym(demo_evtMouseMove,    void, int, int);

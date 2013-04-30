@@ -50,6 +50,7 @@ public:
     GLuint id;
     GLenum type;
     const char *name, *strType;
+    std::string code;
 
     static Shader FromFile(GLenum type, const char *filename);
     static Shader Inline(GLenum type, std::string shaderCode, const char *name = "<inline>");
@@ -83,18 +84,11 @@ struct ProgramMesh : public Program
 
     virtual void updateMeshBuf(const Mesh &mesh);
     virtual void draw() const;
-    virtual void meshDraw() const;
+    void drawWire() const;
 
     GLuint vaoId, vertBufId, idxBufId;
     std::vector<Vert> vertBuf;
     std::vector<U32> idxBuf;
-};
-
-struct ProgramMeshWire : public ProgramMesh
-{
-    ProgramMeshWire(std::initializer_list<Shader> &&_shaders) :
-        ProgramMesh(std::move(_shaders)) {}
-    virtual void meshDraw() const;
 };
 
 struct ProgramRaw : public ProgramMesh
@@ -112,9 +106,11 @@ struct ProgramTexturedQuad : public ProgramMesh
     ProgramTexturedQuad(GLuint texUnit = 0);
 
     void updateTexture(const Texture2DBase &tex);
-    void meshDraw() const;
+    void draw() const;
 
     GLuint texId, texSampler, texUnit;
+private:
+    static const Shader vs, fs;
 };
 
 #endif

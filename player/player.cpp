@@ -185,6 +185,15 @@ int main(int argc, char *argv[])
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
+                case SDL_MOUSEMOTION:
+                    demo_evtMouseMove(event.motion.x,
+                                      screen->h - event.motion.y - 1);
+                    break;
+                case SDL_MOUSEBUTTONDOWN:
+                case SDL_MOUSEBUTTONUP:
+                    demo_evtMouseButton(event.button.button,
+                                        event.type == SDL_MOUSEBUTTONDOWN);
+                    break;
                 case SDL_QUIT:
                     LOG("Window closed");
                     done = true;

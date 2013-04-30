@@ -156,7 +156,22 @@ void ProgramMesh::draw() const
     glEnableClientState(GL_PRIMITIVE_RESTART_NV);
     glPrimitiveRestartIndexNV(PrimitiveRestartIndex);
 
-    meshDraw();
+    glBindVertexArray(vaoId);
+    glDrawElements(GL_TRIANGLE_FAN, idxBuf.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+
+    glDisableClientState(GL_PRIMITIVE_RESTART_NV);
+    glUseProgram(0);
+}
+void ProgramMesh::drawWire() const
+{
+    glUseProgram(id);
+    glEnableClientState(GL_PRIMITIVE_RESTART_NV);
+    glPrimitiveRestartIndexNV(PrimitiveRestartIndex);
+
+    glBindVertexArray(vaoId);
+    glDrawElements(GL_LINE_LOOP, idxBuf.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
 
     glDisableClientState(GL_PRIMITIVE_RESTART_NV);
     glUseProgram(0);
@@ -199,41 +214,29 @@ void ProgramMesh::updateMeshBuf(const Mesh &mesh)
     glBindVertexArray(0);
 }
 
-void ProgramMesh::meshDraw() const
-{
-    glBindVertexArray(vaoId);
-    glDrawElements(GL_TRIANGLE_FAN, idxBuf.size(), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
-}
-
-void ProgramMeshWire::meshDraw() const
-{
-    glBindVertexArray(vaoId);
-    glDrawElements(GL_LINE_LOOP, idxBuf.size(), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
-}
+const Shader ProgramTexturedQuad::vs =
+    Shader::Inline(GL_VERTEX_SHADER, R"(
+        #version 130
+        in vec4 position;
+        void main()
+        {
+            gl_Position = position;
+        }
+    )", "ProgramTexturedQuad::vs");
+const Shader ProgramTexturedQuad::fs =
+    Shader::Inline(GL_FRAGMENT_SHADER, R"(
+        #version 130
+        uniform sampler2D tex;
+        uniform ivec2 viewSize;
+        void main()
+        {
+            gl_FragColor = texture(tex, gl_FragCoord.xy/viewSize).rrra;
+            //gl_FragColor = vec4((gl_FragCoord.x+50.f)/400.f, 0.f, 0.f, 1.f);
+        }
+    )", "ProgramTexturedQuad::fs");
 
 ProgramTexturedQuad::ProgramTexturedQuad(GLuint _texUnit) :
-    ProgramMesh({
-        Shader::Inline(GL_VERTEX_SHADER, R"(
-            #version 130
-            in vec4 position;
-            void main()
-            {
-                gl_Position = position;
-            }
-        )"),
-        Shader::Inline(GL_FRAGMENT_SHADER, R"(
-            #version 130
-            uniform sampler2D tex;
-            uniform ivec2 viewSize;
-            void main()
-            {
-                gl_FragColor = texture(tex, gl_FragCoord.xy/viewSize).rrra;
-                //gl_FragColor = vec4((gl_FragCoord.x+50.f)/400.f, 0.f, 0.f, 1.f);
-            }
-        )")
-    }),
+    ProgramMesh({vs, fs}),
     texId(0), texSampler(0), texUnit(_texUnit)
 {
     updateMeshBuf(*Mesh::createRing(4, PI/4.f, 2.f));
@@ -260,8 +263,12 @@ void ProgramTexturedQuad::updateTexture(const Texture2DBase &tex)
     texId = tex.id;
 }
 
-void ProgramTexturedQuad::meshDraw() const
+void ProgramTexturedQuad::draw() const
 {
+    glUseProgram(id);
+    glEnableClientState(GL_PRIMITIVE_RESTART_NV);
+    glPrimitiveRestartIndexNV(PrimitiveRestartIndex);
+
     glActiveTexture(GL_TEXTURE0 + texUnit);
     glBindTexture(GL_TEXTURE_2D, texId);
     glBindSampler(texUnit, texSampler);
@@ -272,4 +279,7 @@ void ProgramTexturedQuad::meshDraw() const
 
     glBindSampler(texUnit, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
+
+    glDisableClientState(GL_PRIMITIVE_RESTART_NV);
+    glUseProgram(0);
 }
