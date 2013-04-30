@@ -295,6 +295,35 @@ Progress Log
 -------
 * More work on wave simulation
 
+20/4/13
+-------
+* I've been reading lots of online papers on fluid simulation.
+* Researched cloth simulation using verlet integration.
+* Found implementation in JavaScript at [this website][subprotocol verlet].
+
+27/4/13
+-------
+* Looked at efficient collision detection with octrees.
+
+28/4/13
+-------
+* After a review of progress so far, I am scaling down the ambition of my
+  project to just two things that I want to demonstrate: cloth simulation using
+  verlet integration, and wave simulation using discrete grid-based methods.
+* I have updated the Timeline to reflect this.
+* I have written an end of April review.
+
+29/4/13
+-------
+* I'm looking at rendering to a texture using an FBO. The documents that I am
+  using is [this website][gamedev framebuffer101].
+
+30/4/13
+-------
+* Updated Timeline with more granular targets and estimates of time that it
+  will take.
+* Updated and finished end of April review.
+
 
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
 [ryg halfedge-practice]: http://fgiesen.wordpress.com/2012/03/24/half-edge-based-mesh-representations-practice/
@@ -313,5 +342,7 @@ Progress Log
 [hoetzlein surface-reconstruction]: http://www.rchoetzlein.com/theory/2010/surface-reconstruction-of-sph-fluids/
 [gamedev water-effect]: http://www.gamedev.net/page/resources/_/technical/graphics-programming-and-theory/the-water-effect-explained-r915
 [falstad ripple]: http://falstad.com/ripple/
+[subprotocol verlet]: http://subprotocol.com/verlet-js/
+[gamedev framebuffer101]: http://www.gamedev.net/page/resources/_/technical/opengl/opengl-frame-buffer-object-101-r2331
 
 <!-- vim: set tw=79: -->

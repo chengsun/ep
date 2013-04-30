@@ -1,7 +1,7 @@
 February end-of-month review
 ===
 
-(written 04/03/2013)
+(written 4 March)
 
 I had intended to do a lot of work during February, in order to achieve the
 important technological milestones that I had set myself in my Timeline.
@@ -49,5 +49,14 @@ last free month I get before I become bogged down with revision and exams in
 April through to the beginning of June. However, I am optimistic that with
 careful scheduling and management, I will be back on track again come the exam
 period.
+
+
+Overview of this month's progress on the timeline:
+
+**End of February**:
+
+  *Targets*:
+  * Make a working demo of the mesh renderer. (done)
+  * Start a prototype of fluid simulation (not done)
 
 <!-- vim: set tw=79: -->
