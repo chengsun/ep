@@ -35,13 +35,23 @@ void demo_init(unsigned, unsigned)
     program = new ProgramTest;
     program->link();
 
+    /*
     mesh = Mesh::createRing(4, PI/4.f);
     mesh->splitVert(mesh->eEdge(0,0), mesh->eVertPrev(0,0));
     mesh->splitVert(mesh->eEdge(0,2), mesh->eVertPrev(0,2));
     mesh->splitVert(mesh->eEdge(0,4), mesh->eVertPrev(0,4));
     mesh->splitVert(mesh->eEdge(0,6), mesh->eVertPrev(0,6));
+    mesh->verts[4].pos.x = 0;
+    mesh->verts[6].pos.x = 0;
+    mesh->verts[5].pos.y = 0;
+    mesh->verts[7].pos.y = 0;
     U32 edge = mesh->splitFace(mesh->eEdge(0,1), mesh->eEdge(0,5));
-    ASSERTX(edge/8 == 2 && mesh->eOpposite(edge)/8 == 0);
+    mesh->splitVert(edge, mesh->eVertPrev(edge));
+    mesh->debugOut();
+    ASSERTX(mesh->check());
+    */
+
+    mesh = Mesh::createGrid(3, 2);
     mesh->debugOut();
     ASSERTX(mesh->check());
 

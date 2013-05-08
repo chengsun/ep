@@ -102,6 +102,40 @@ std::unique_ptr<Mesh> Mesh::createRing(unsigned sides, float phase, float radius
     return mesh;
 }
 
+std::unique_ptr<Mesh> Mesh::createGrid(int w, int h)
+{
+    std::unique_ptr<Mesh> m = Mesh::createRing(4, PI/4.f);
+
+    /* first slice vertically */
+    const Vec3 &botL = m->verts[m->vertIdx(0,0)].pos,
+               &botR = m->verts[m->vertIdx(0,0)].pos,
+               &topL = m->verts[m->vertIdx(0,2)].pos,
+               &topR = m->verts[m->vertIdx(0,2)].pos;
+
+    for (int x = w-1; x > 0; --x) {
+        U32 eBotNew = m->splitVert(m->eEdge(0,0), m->eVertPrev(m->eEdge(0,0)));
+        // (0,3) is formerly (0,2)
+        U32 eTopNew = m->splitVert(m->eEdge(0,3), m->eVertPrev(m->eEdge(0,3)));
+        m->verts[m->vertIdx(eBotNew)].pos = lerp(botL, botR, x, w);
+        m->verts[m->vertIdx(eTopNew)].pos = lerp(topL, topR, x, w);
+        m->debugOut();
+        m->splitFace(m->eVertPrev(eBotNew), m->eVertPrev(eTopNew));
+        m->splitFace(eBotNew, eTopNew);
+    }
+
+    /* then slice horizontally */
+    /*
+    for (int y = 0; y < h; ++y) {
+        m->splitVert(eLeft
+        for (int x = 0; x < w; ++x) {
+            m->slice(m->);
+        }
+    }
+    */
+
+    return m;
+}
+
 /*
 void Mesh::extrudeFace(U32 faceIdx, float length)
 {

@@ -46,6 +46,7 @@ struct Mesh
     // basic operations
 
     static std::unique_ptr<Mesh> createRing(unsigned sides, float phase = 0.f, float radius = 1.f);
+    static std::unique_ptr<Mesh> createGrid(int w, int h);
 
     bool check() const;
     /* meshCheckFlags checks a mesh to ensure that the selected flags are all
