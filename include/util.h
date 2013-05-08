@@ -53,9 +53,16 @@ extern "C"
             abort(); \
         } \
     } while (0)
+#   define CHECK_GL_ERROR(where) \
+    glErr = glGetError(); \
+    if (glErr) { \
+        LOG("GL error: %s", gluErrorString(glErr)); \
+        ASSERTX(!glErr, "GL error detected (%s)", where); \
+    }
 #else
 #   define LOG(...)    do { (void) 0; } while (0)
 #   define ASSERTX(x, ...) do { (void) sizeof(x); } while (0)
+#   define CHECK_GL_ERROR(where) do { (void) sizeof(where); } while (0)
 #endif
 
 
