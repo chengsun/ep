@@ -93,13 +93,13 @@ struct Mesh
 
     inline bool eCheck(U32 face, U32 slot) const {
         if (face >= faces.size()) {
-            LOG("eCheck failed for (face %u, slot %u): invalid face index",
-                face, slot);
+            LOG("eCheck failed for (face %u, slot %u): invalid face index (%u faces)",
+                face, slot, faces.size());
             return false;
         }
         if (slot >= faces[face].count) {
-            LOG("eCheck failed for (face %u, slot %u): invalid slot index",
-                face, slot);
+            LOG("eCheck failed for (face %u, slot %u): invalid slot index (%u slots)",
+                face, slot, faces[face].count);
             return false;
         }
         return true;
@@ -110,8 +110,8 @@ struct Mesh
 
     inline U32 ePrev(U32 face, U32 slot) const {
         ASSERTX(eCheck(face, slot));
-        const U8 &faceCount = faces[face].count;
-        return (face*8) + ((slot+faceCount-1) % faceCount);
+        const U8 &slotCount = faces[face].count;
+        return (face*8) + ((slot+slotCount-1) % slotCount);
     }
     inline U32 ePrev(U32 edge) const {
         return ePrev(edge/8, edge%8);
@@ -119,8 +119,8 @@ struct Mesh
 
     inline U32 eNext(U32 face, U32 slot) const {
         ASSERTX(eCheck(face, slot));
-        const U8 &faceCount = faces[face].count;
-        return (face*8) + ((slot+1) % faceCount);
+        const U8 &slotCount = faces[face].count;
+        return (face*8) + ((slot+1) % slotCount);
     }
     inline U32 eNext(U32 edge) const {
         return eNext(edge/8, edge%8);
