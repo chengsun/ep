@@ -10,6 +10,7 @@
  *****************************************************************************/
 
 #define VECTOR_DECL(VecType) \
+    bool operator==(VecType const &v) const; \
     float &operator[](const size_t i); \
     const float &operator[](const size_t i) const; \
     constexpr VecType operator+(const VecType &b) const; \
@@ -21,6 +22,15 @@
     VecType &operator*=(float f);
 
 #define VECTOR_DEFS(VecType) \
+    inline bool eq(const VecType &a, const VecType &b) { \
+        for (unsigned x = 0; x < VecType::size(); ++x) { \
+            if (a[x] != b[x]) return false; \
+        } \
+        return true; \
+    } \
+    inline bool VecType::operator==(VecType const &v) const { \
+        return eq(*this, v); \
+    } \
     inline constexpr VecType sub(const VecType &a, const VecType &b) { \
         return add(a, neg(b)); \
     } \
@@ -186,6 +196,7 @@ VECTOR_DEFS(Vec4)
     static constexpr unsigned size() { \
         return nCols() * nRows(); \
     } \
+    MatType transpose() const; \
     bool operator==(MatType const &m) const; \
     MatType::ColType &operator[](size_t i); \
     constexpr MatType::ColType const &operator[](size_t i); \
@@ -200,6 +211,15 @@ VECTOR_DEFS(Vec4)
             } \
         } \
         return true; \
+    } \
+    inline MatType MatType::transpose() const { \
+        MatType m; \
+        for (unsigned c = 0; c < MatType::nCols(); ++c) { \
+            for (unsigned r = 0; r < MatType::nRows(); ++r) { \
+                m[r][c] = (*this)[c][r]; \
+            } \
+        } \
+        return m; \
     } \
     inline bool MatType::operator==(MatType const &m) const { \
         return eq(*this, m); \
@@ -289,7 +309,7 @@ struct Mat3
 
     float det() const {
         return v[0][0] * (v[1][1]*v[2][2] - v[2][1]*v[1][2])
-             - v[1][0] * (v[2][1]*v[0][2] - v[0][1]*v[2][2])
+             + v[1][0] * (v[2][1]*v[0][2] - v[0][1]*v[2][2])
              + v[2][0] * (v[0][1]*v[1][2] - v[1][1]*v[0][2]);
     }
 
