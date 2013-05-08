@@ -55,14 +55,14 @@ Shader::Shader(GLenum _type, const char *_name) :
     }
 }
 
-Shader Shader::FromFile(GLenum type, const char *filename)
+std::shared_ptr<Shader> Shader::FromFile(GLenum type, const char *filename)
 {
-    Shader shader(type, filename);
+    std::shared_ptr<Shader> shader = std::make_shared<Shader>(type, filename);
 
-    LOG("Opening %s shader program \"%s\"", shader.strType, filename);
+    LOG("Opening %s shader program \"%s\"", shader->strType, filename);
 
     FILE *file = fopen(filename, "rb");
-    ASSERTX(file, "Failed to open %s shader program \"%s\"", shader.strType,
+    ASSERTX(file, "Failed to open %s shader program \"%s\"", shader->strType,
             filename);
     fseek(file, 0, SEEK_END);
     unsigned long fileLength = ftell(file);
@@ -72,26 +72,26 @@ Shader Shader::FromFile(GLenum type, const char *filename)
     int shaderReadLength = fread(shaderCode, 1, fileLength, file);
     fclose(file);
 
-    shader.compile(std::string(shaderCode, shaderReadLength));
+    shader->code = std::string(shaderCode, shaderReadLength);
     delete[] shaderCode;
 
     return shader;
 }
 
-Shader Shader::Inline(GLenum type, std::string shaderCode, const char *name)
+std::shared_ptr<Shader> Shader::Inline(GLenum type, std::string shaderCode, const char *name)
 {
-    Shader shader(type, name);
-    shader.compile(shaderCode);
+    std::shared_ptr<Shader> shader = std::make_shared<Shader>(type, name);
+    shader->code = shaderCode;
     return shader;
 }
 
-bool Shader::compile(std::string shaderCode)
+bool Shader::compile()
 {
     LOG("Compiling %s shader program \"%s\"", strType, name);
 
     id = glCreateShader(type);
-    const char *codeStr = shaderCode.data();
-    int codeLen = shaderCode.size();
+    const char *codeStr = code.data();
+    int codeLen = code.size();
     glShaderSource(id, 1, &codeStr, &codeLen);
 
     glCompileShader(id);
@@ -122,16 +122,21 @@ Shader::~Shader()
 
 constexpr U32 Program::PrimitiveRestartIndex;
 
-Program::Program(std::initializer_list<Shader> &&_shaders) :
+Program::Program(std::initializer_list<std::shared_ptr<Shader> > &&_shaders) :
+    id(-1u),
     shaders(_shaders)
 {
-    LOG("Linking shader program");
+}
 
-    id = glCreateProgram();
-
+bool Program::link()
+{
     for (unsigned shaderIdx = 0; shaderIdx < shaders.size(); shaderIdx++)
-        glAttachShader(id, shaders[shaderIdx].id);
+        shaders[shaderIdx]->compileLazy();
 
+    LOG("Linking shader program");
+    id = glCreateProgram();
+    for (unsigned shaderIdx = 0; shaderIdx < shaders.size(); shaderIdx++)
+        glAttachShader(id, shaders[shaderIdx]->id);
     glLinkProgram(id);
 
     GLint status;
@@ -144,14 +149,47 @@ Program::Program(std::initializer_list<Shader> &&_shaders) :
         glGetProgramInfoLog(id, infoLogLength, NULL, strInfoLog);
         ASSERTX(false, "Shader linker failure: %s\n", strInfoLog);
         delete[] strInfoLog;
+        return false;
     }
 
     for (unsigned shaderIdx = 0; shaderIdx < shaders.size(); shaderIdx++)
-        glDetachShader(id, shaders[shaderIdx].id);
+        glDetachShader(id, shaders[shaderIdx]->id);
+    return true;
 }
+
+const std::shared_ptr<Shader> ProgramMesh::vsDebug =
+    Shader::Inline(GL_VERTEX_SHADER, R"(
+        #version 130
+        in vec4 position;
+        void main()
+        {
+            gl_Position = position;
+        }
+    )", "ProgramMesh::vsDebug");
+const std::shared_ptr<Shader> ProgramMesh::fsDebugFace =
+    Shader::Inline(GL_FRAGMENT_SHADER, R"(
+        #version 130
+        uniform sampler2D tex;
+        uniform ivec2 viewSize;
+        void main()
+        {
+            gl_FragColor = vec4(1.f, 1.f, 1.f, 1.f);
+        }
+    )", "ProgramMesh::fsDebugFace");
+const std::shared_ptr<Shader> ProgramMesh::fsDebugEdge =
+    Shader::Inline(GL_FRAGMENT_SHADER, R"(
+        #version 130
+        uniform sampler2D tex;
+        uniform ivec2 viewSize;
+        void main()
+        {
+            gl_FragColor = vec4(1.f, 1.f, 1.f, 1.f);
+        }
+    )", "ProgramMesh::fsDebugEdge");
 
 void ProgramMesh::draw() const
 {
+    ASSERTX(id != -1u, "Shader program not compiled");
     glUseProgram(id);
     glEnableClientState(GL_PRIMITIVE_RESTART_NV);
     glPrimitiveRestartIndexNV(PrimitiveRestartIndex);
@@ -165,6 +203,7 @@ void ProgramMesh::draw() const
 }
 void ProgramMesh::drawWire() const
 {
+    ASSERTX(id != -1u, "Shader program not compiled");
     glUseProgram(id);
     glEnableClientState(GL_PRIMITIVE_RESTART_NV);
     glPrimitiveRestartIndexNV(PrimitiveRestartIndex);
@@ -214,7 +253,7 @@ void ProgramMesh::updateMeshBuf(const Mesh &mesh)
     glBindVertexArray(0);
 }
 
-const Shader ProgramTexturedQuad::vs =
+const std::shared_ptr<Shader> ProgramTexturedQuad::vs =
     Shader::Inline(GL_VERTEX_SHADER, R"(
         #version 130
         in vec4 position;
@@ -223,7 +262,7 @@ const Shader ProgramTexturedQuad::vs =
             gl_Position = position;
         }
     )", "ProgramTexturedQuad::vs");
-const Shader ProgramTexturedQuad::fs =
+const std::shared_ptr<Shader> ProgramTexturedQuad::fs =
     Shader::Inline(GL_FRAGMENT_SHADER, R"(
         #version 130
         uniform sampler2D tex;

@@ -1,13 +1,13 @@
 #include "demo.h"
 #include "mesh.h"
 
-struct ProgramTest : public ProgramMeshWire
+struct ProgramTest : public ProgramMesh
 {
     ProgramTest();
 };
 
 ProgramTest::ProgramTest() :
-    ProgramMeshWire({
+    ProgramMesh({
         Shader::Inline(GL_VERTEX_SHADER, R"(
             #version 130
             in vec4 position;
@@ -33,6 +33,7 @@ ProgramTest *program;
 void demo_init(unsigned, unsigned)
 {
     program = new ProgramTest;
+    program->link();
 
     mesh = Mesh::createRing(4, PI/4.f);
     mesh->splitVert(mesh->eEdge(0,0), mesh->eVertPrev(0,0));
@@ -56,5 +57,12 @@ void demo_drawFrame()
 {
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    program->draw();
+    program->drawWire();
+}
+
+void demo_evtMouseMove(int x, int y)
+{
+}
+void demo_evtMouseButton(uint8_t button, bool state)
+{
 }
