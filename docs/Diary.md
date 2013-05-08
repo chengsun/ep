@@ -328,6 +328,16 @@ Progress Log
 ------
 * Abstracted shader construction from compilation
 
+7/5/13 *(2 hours)*
+------
+* Started working on 3D grid mesh.
+
+8/5/13 *(2 hours)*
+------
+* Continued working on 3D grid mesh.
+* Fixed vector determinant calculation, and implemented transpose.
+
+
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
 [ryg halfedge-practice]: http://fgiesen.wordpress.com/2012/03/24/half-edge-based-mesh-representations-practice/
 [ryg halfedge-redux]: http://fgiesen.wordpress.com/2012/04/03/half-edges-redux/
