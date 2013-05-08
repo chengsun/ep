@@ -89,4 +89,10 @@ inline void *dlib_malloc(size_t size, size_t alignment)
 #define unlikely(expr) __builtin_expect(!!(expr), 0)
 #define   likely(expr) __builtin_expect(!!(expr), 1)
 
+template <class T>
+T lerp(T a, T b, int num, int den)
+{
+    return a + (b-a)*num/den;
+}
+
 #endif
