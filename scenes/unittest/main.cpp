@@ -50,20 +50,55 @@ void demo_init(unsigned, unsigned)
     ASSERTX(edge/8 == 2 && mesh->eOpposite(edge)/8 == 0);
     ASSERTX(mesh->check());
 
-    TEST_EQ(Mat2::identity().det(), 1.f);
-    TEST_EQ((Mat2::identity()*4.f).det(), 16.f);
+    TEST_EQ(lerp(0.f, 1.f, -1, 1), -1.f);
+    TEST_EQ(lerp(0.f, 1.f, 0, 1), 0.f);
+    TEST_EQ(lerp(0.f, 1.f, 1, 2), .5f);
+    TEST_EQ(lerp(0.f, 1.f, 1, 1), 1.f);
+    TEST_EQ(lerp(0.f, 1.f, 2, 1), 2.f);
+
+    TEST_EQ(lerp(1.f, 0.f, -1, 1), 2.f);
+    TEST_EQ(lerp(1.f, 0.f, 0, 1), 1.f);
+    TEST_EQ(lerp(1.f, 0.f, 1, 2), .5f);
+    TEST_EQ(lerp(1.f, 0.f, 1, 1), 0.f);
+    TEST_EQ(lerp(1.f, 0.f, 2, 1), -1.f);
+
+    TEST_EQ(lerp(Vec3({3.f,0.f,3.f}), Vec3({0.f,3.f,0.f}), 2, 3),
+            Vec3({1.f,2.f,1.f}));
+
     {
-        Mat2 m = {{{normRand(), normRand()},
-                   {normRand(), normRand()}}};
-        TEST_EQ(m*Mat2::identity(), m);
-        TEST_EQ(Mat2::identity()*m, m);
+        TEST_EQ(Mat2::identity().det(), 1.f);
+        TEST_EQ((Mat2::identity()*4.f).det(), 16.f);
+
+        Mat2 mr = {{{normRand(), normRand()},
+                    {normRand(), normRand()}}};
+        TEST_EQ(mr*Mat2::identity(), mr);
+        TEST_EQ(Mat2::identity()*mr, mr);
+        TEST_EQ(mr.transpose().transpose(), mr);
+        TEST_EQ(mr.transpose().transpose().det(), mr.det());
     }
 
-    TEST_EQ(Mat3::identity().det(), 1.f);
-    TEST_EQ((Mat3::identity()*4.f).det(), 64.f);
-    TEST_EQ(Mat3({{{-2.f,2.f,3.f},
-                   {-1.f,1.f,3.f},
-                   {2.f,0.f,-1.f}}}).det(), 6.f);
+    {
+        Mat3 mr = {{{normRand(), normRand(), normRand()},
+                    {normRand(), normRand(), normRand()},
+                    {normRand(), normRand(), normRand()}}};
+
+        TEST_EQ(Mat3::identity().det(), 1.f);
+        TEST_EQ((Mat3::identity()*4.f).det(), 64.f);
+
+        Mat3 ma({{{-2.f,-1.f,2.f},
+                 {2.f,1.f,0.f},
+                 {3.f,3.f,-1.f}}});
+
+        TEST_EQ(ma[0][0], -2.f); TEST_EQ(ma[0][1], -1.f); TEST_EQ(ma[0][2],  2.f);
+        TEST_EQ(ma[1][0],  2.f); TEST_EQ(ma[1][1],  1.f); TEST_EQ(ma[1][2],  0.f);
+        TEST_EQ(ma[2][0],  3.f); TEST_EQ(ma[2][1],  3.f); TEST_EQ(ma[2][2], -1.f);
+        TEST_EQ(ma[0][0] * (ma[1][1]*ma[2][2] - ma[2][1]*ma[1][2]), 2.f);
+        TEST_EQ(ma[1][0] * (ma[2][1]*ma[0][2] - ma[0][1]*ma[2][2]), 10.f);
+        TEST_EQ(ma[2][0] * (ma[0][1]*ma[1][2] - ma[1][1]*ma[0][2]), -6.f);
+        TEST_EQ(ma.det(), 6.f);
+        TEST_EQ(ma.transpose().det(), 6.f);
+        TEST_EQ(ma.transpose().transpose(), ma);
+    }
 }
 
 bool demo_prepareFrame()
@@ -72,5 +107,12 @@ bool demo_prepareFrame()
 }
 
 void demo_drawFrame()
+{
+}
+
+void demo_evtMouseMove(int x, int y)
+{
+}
+void demo_evtMouseButton(uint8_t button, bool state)
 {
 }
