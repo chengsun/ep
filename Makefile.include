@@ -76,8 +76,8 @@ CPPFLAGS += -Wall -Wextra -Wdouble-promotion -std=c++11 \
 LDFLAGS += -Wl,--gc-sections -Wl,-rpath,.
 
 ifeq ($(OPT),0)
-    CPPFLAGS += -DDEBUG -O2 -g -march=$(arch) -ffast-math
-    LDFLAGS += -O2 -g -march=$(arch)
+    CPPFLAGS += -DDEBUG -Og -g -march=$(arch) -ffast-math
+    LDFLAGS += -Og -g -march=$(arch)
 else
     CPPFLAGS += -DNDEBUG -O3 -g -march=$(arch) -fomit-frame-pointer -ffast-math
     LDFLAGS += -O3 -g -march=$(arch)
