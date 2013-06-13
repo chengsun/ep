@@ -28,7 +28,7 @@ struct Texture2DBase : public Texture
 template <typename T>
 struct Texture2D : public Texture2DBase
 {
-    Texture2D(unsigned _w, unsigned _h, T *_data);
+    Texture2D(unsigned _w, unsigned _h, T *_data = std::nullptr);
 
     void update();
 
