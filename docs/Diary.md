@@ -337,6 +337,9 @@ Progress Log
 * Continued working on 3D grid mesh.
 * Fixed vector determinant calculation, and implemented transpose.
 
+31/5/13 *(3 hours)*
+-------
+* Worked on FBOs
 
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
 [ryg halfedge-practice]: http://fgiesen.wordpress.com/2012/03/24/half-edge-based-mesh-representations-practice/
