@@ -142,9 +142,17 @@ int main(int argc, char *argv[])
 
     ENABLE_FTZ();
 
-    LOG("Initialising SDL video");
-    SDL_Init(SDL_INIT_VIDEO);
+    LOG("Initialising SDL");
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        LOG("ERROR: SDL initialisation failed: %s", SDL_GetError());
+        exit(1);
+    }
     atexit(SDL_Quit);
+    if (TTF_Init() < 0) {
+        LOG("ERROR: SDL-ttf initialisation failed: %s", TTF_GetError());
+        exit(1);
+    }
+    atexit(TTF_Quit);
     SDL_WM_SetCaption("Demo player", "player");
 
     LOG("Initialising GL");

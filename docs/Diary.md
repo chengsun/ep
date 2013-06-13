@@ -341,6 +341,16 @@ Progress Log
 -------
 * Worked on FBOs
 
+11/6/13 *(1 hour)*
+-------
+* Researched text rendering in OpenGL. Used a [tutorial][sdltutorials sdl-ttf]
+  and the [official SDL-ttf docs][sdl-ttf docs].
+* Read paper by Valve on [smooth text rendering using SDFs][valve sdf-mag].
+
+12/6/13 *(1 hour)*
+-------
+* Started implementing text rendering.
+
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
 [ryg halfedge-practice]: http://fgiesen.wordpress.com/2012/03/24/half-edge-based-mesh-representations-practice/
 [ryg halfedge-redux]: http://fgiesen.wordpress.com/2012/04/03/half-edges-redux/
@@ -360,5 +370,8 @@ Progress Log
 [falstad ripple]: http://falstad.com/ripple/
 [subprotocol verlet]: http://subprotocol.com/verlet-js/
 [gamedev framebuffer101]: http://www.gamedev.net/page/resources/_/technical/opengl/opengl-frame-buffer-object-101-r2331
+[sdltutorials sdl-ttf]: http://www.sdltutorials.com/sdl-ttf
+[sdl-ttf docs]: http://www.libsdl.org/projects/SDL_ttf/docs/SDL_ttf.html
+[valve sdf-mag]: http://www.valvesoftware.com/publications/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf
 
 <!-- vim: set tw=79: -->

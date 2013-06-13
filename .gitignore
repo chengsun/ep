@@ -1,10 +1,9 @@
 *.d
 *.o
 *.swp
+*.*~
 
-player
-!player/
-player.exe
+player/player
 *.so
 *.dll
 
