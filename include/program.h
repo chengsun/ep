@@ -7,17 +7,54 @@
 #include <string>
 #include <memory>
 
-struct Texture
+struct Texture;
+
+struct FBBase
 {
-    Texture();
-    ~Texture();
+};
+
+struct FBDefault : public FBBase
+{
+    void bindTexture(const Texture &tex);
+};
+
+struct FBO : public FBBase
+{
+    const int w, h;
+    GLuint id, depthBufId;
+
+    enum ConstructionFlags {
+        DEPTHBUF = 1,
+    };
+
+    FBO(int _w, int _h, int flags = 0);
+    ~FBO();
+    void bind();
+    void unbind();
+
+    void bindTexture(const Texture &tex, int attachment=0);
+};
+
+struct GLContext
+{
+    GLContext();
+    void bindFBO(const FBO &fbo);
+    void unbindFBO();
+    FBDefault defaultFB;
+    FBBase *curFBO;
+};
+
+struct TextureBase
+{
+    TextureBase();
+    ~TextureBase();
 
     virtual void update() = 0;
 
     GLuint id;
 };
 
-struct Texture2DBase : public Texture
+struct Texture2DBase : public TextureBase
 {
     Texture2DBase(unsigned _w, unsigned _h) :
         w(_w), h(_h)

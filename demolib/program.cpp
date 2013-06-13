@@ -1,13 +1,62 @@
 #include "demolib.h"
 #include <cstdio>
 
-Texture::Texture()
+GLContext::GLContext() :
+    curFBO(0)
+{
+}
+
+void GLContext::bindFBO(const FBO &fbo)
+{
+    if (curFBO) unbindFBO();
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo.id);
+    ASSERTX(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Bind on incomplete framebuffer");
+    glPushAttrib(GL_VIEWPORT_BIT);
+    glViewport(0, 0, fbo.w, fbo.h);
+}
+void GLContext::unbindFBO()
+{
+    if (!curFBO) {
+        LOG("WARNING: unbinding FBO when no FBO attached; ignoring");
+        return;
+    }
+    glPopAttrib();
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+FBO::FBO(int _w, int _h, int flags) :
+w(_w), h(_h), id(-1), depthBufId(-1)
+{
+    glGenFramebuffers(1, &id);
+    glBindFramebuffer(GL_FRAMEBUFFER, id);
+    if (flags & DEPTHBUF) {
+        glGenRenderbuffers(1, &depthBufId);
+        glBindRenderbuffer(GL_RENDERBUFFER, depthBufId);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT,
+                                 w, h);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER,
+                                     GL_DEPTH_ATTACHMENT,
+                                     GL_RENDERBUFFER, depthBufId);
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+FBO::~FBO()
+{
+    glDeleteFramebuffers(1, &id);
+}
+void FBO::bindTexture(const TextureBase &tex, int attachment)
+{
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+attachment,
+                           GL_TEXTURE_2D, tex.id, 0);
+}
+
+TextureBase::TextureBase()
 {
     glGenTextures(1, &id);
     LOG("Created texture %d", id);
 }
 
-Texture::~Texture()
+TextureBase::~TextureBase()
 {
     glDeleteTextures(1, &id);
 }
