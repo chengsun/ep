@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 #include <SDL.h>
+#include <SDL_ttf.h>
 #include <cstdio>
 #include <ctime>
 #include <getopt.h>

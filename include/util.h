@@ -13,6 +13,10 @@ typedef int8_t S8;
 typedef int16_t S16;
 typedef int32_t S32;
 
+#include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtc/type_precision.hpp>
+
 
 #define ARRAYLEN(x) (sizeof(x)/sizeof((x)[0]))
 #define PI 3.14159265359f

@@ -1,10 +1,11 @@
 #include "text.h"
+#include "SDL_ttf.h"
 #include <string>
 
 Font::Font(std::string file, int size)
 {
-    font = TTF_OpenFont(file, size);
-    ASSERTX(font, "Font %s @ %dpt failed to load", file, size);
+    font = TTF_OpenFont(file.c_str(), size);
+    ASSERTX(font, "Font %s @ %dpt failed to load", file.c_str(), size);
 }
 
 Font::~Font()
@@ -12,9 +13,9 @@ Font::~Font()
     TTF_CloseFont(font);
 }
 
-Vec2 Font::measure(std::string text)
+glm::i32vec2 Font::measure(std::string text)
 {
-    Vec2 size;
+    glm::i32vec2 size;
     if (!TTF_SizeText(font, text.c_str(), &size.x, &size.y)) {
         ASSERTX(font, "Font: could not measure size");
     }
@@ -23,21 +24,21 @@ Vec2 Font::measure(std::string text)
 
 SDL_Surface *Font::draw(std::string text)
 {
-    SDL_Surface *ret = TTF_RenderText_Solid(font, text.c_str(), {0,0,0});
+    SDL_Surface *ret = TTF_RenderText_Solid(font, text.c_str(), SDL_Color{0,0,0,0});
     ASSERTX(ret, "Font: could not draw text");
     return ret;
 }
 
 TextureTextSDF::TextureTextSDF(SDL_Surface *surf, int scale, int spread) :
-    Texture2D<uint8_t>(),
-    font(_font), text(_text)
+    Texture2D<uint8_t>()
 {
     w = surf->w / scale;
     h = surf->h / scale;
     data = new uint8_t[w*h];
+    const uint8_t *odata = static_cast<uint8_t *>(surf->pixels);
     for (int y = 0; y < surf->h; ++y) {
         for (int x = 0; x < surf->w; ++x) {
-            if (surf->pixels[y*surf->w + x] == 0) {
+            if (odata[y*surf->w + x] == 0) {
                 continue;
             }
             bool edge = false;
@@ -48,7 +49,7 @@ TextureTextSDF::TextureTextSDF(SDL_Surface *surf, int scale, int spread) :
                     nx = x + dx[i];
                 if (ny >= 0 && ny < surf->h &&
                     nx >= 0 && nx < surf->w) {
-                    if (surf->pixels[ny*surf->w + nx] == 0) {
+                    if (odata[ny*surf->w + nx] == 0) {
                         edge = true;
                         break;
                     }
@@ -82,10 +83,10 @@ TextureTextSDF::TextureTextSDF(SDL_Surface *surf, int scale, int spread) :
 }
 TextureTextSDF::~TextureTextSDF()
 {
-    SDL_FreeSurface(surface);
     delete[] data;
 }
 
+/*
 Const std::shared_ptr<Shader> ProgramTextSDF::vs =
     Shader::Inline(GL_VERTEX_SHADER, R"(
         #version 130
@@ -155,3 +156,4 @@ void ProgramTextSDF::draw() const
     glDisableClientState(GL_PRIMITIVE_RESTART_NV);
     glUseProgram(0);
 }
+*/

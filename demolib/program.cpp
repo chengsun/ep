@@ -66,12 +66,6 @@ TextureBase::~TextureBase()
 template <typename T>
 const GLenum Texture2D<T>::pixelType = -1;
 */
-template <typename T>
-Texture2D<T>::Texture2D(unsigned _w, unsigned _h, T *_data) :
-    Texture2DBase(_w, _h),
-    data(_data)
-{
-}
 
 template <typename T>
 void Texture2D<T>::update()
@@ -346,7 +340,7 @@ ProgramTexturedQuad::ProgramTexturedQuad(GLuint _texUnit) :
     glSamplerParameteri(texSampler, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 }
 
-void ProgramTexturedQuad::updateTexture(const Texture2DBase &tex)
+void ProgramTexturedQuad::setTexture(const Texture2DBase &tex)
 {
     texId = tex.id;
 }

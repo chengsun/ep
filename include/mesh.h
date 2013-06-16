@@ -2,7 +2,6 @@
 #define MESH_H
 
 #include "util.h"
-#include "linmat.h"
 #include <vector>
 
 extern "C" {
@@ -14,8 +13,8 @@ struct MeshVert
 {
     U8 selected;
     U32 tmp;
-    Vec3 pos;
-    Vec3 normal;
+    glm::vec3 pos;
+    glm::vec3 normal;
 };
 
 struct MeshFace
@@ -25,7 +24,7 @@ struct MeshFace
     U8 selected;
     U32 tmp;
 
-    Vec3 normal;
+    glm::vec3 normal;
     U32 verts[MAXVERT];         // vertex indices
     U32 opposite[MAXVERT];      // half-edge which is opposite
 };

@@ -4,14 +4,15 @@
 #include "program.h"
 #include <string>
 
-class Vec2;
+struct SDL_Surface;
+typedef struct _TTF_Font TTF_Font;
 
 class Font
 {
     Font(std::string file, int size);
     ~Font();
 
-    Vec2 measure(std::string text);
+    glm::i32vec2 measure(std::string text);
     SDL_Surface *draw(std::string text);
 
 private:
@@ -22,9 +23,12 @@ class TextureTextSDF : public Texture2D<uint8_t>
 {
     TextureTextSDF(SDL_Surface *surf, int scaleDown = 128, int spread = 16);
     ~TextureTextSDF();
-    const Font &font;
-
-    SDL_Surface *surface;
 };
+
+/*
+class ProgramTextSDF : public ProgramMesh
+{
+};
+*/
 
 #endif

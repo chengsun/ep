@@ -80,15 +80,15 @@ std::unique_ptr<Mesh> Mesh::createRing(unsigned sides, float phase, float radius
     mesh->faces[1].count = sides;
     mesh->faces[0].material = 0;
     mesh->faces[1].material = 0;
-    mesh->faces[0].normal = {0.f, 0.f,  1.f};
-    mesh->faces[1].normal = {0.f, 0.f, -1.f};
+    mesh->faces[0].normal = glm::vec3(0.f, 0.f,  1.f);
+    mesh->faces[1].normal = glm::vec3(0.f, 0.f, -1.f);
 
     float curRot = 0.f, incRot = 2*PI / sides;
     for (unsigned slot = 0; slot < sides; slot++, curRot += incRot) {
         MeshVert &thisVert = mesh->verts[slot];
-        thisVert.pos = {cosf(phase+curRot)*radius,
-                        sinf(phase+curRot)*radius,
-                        0.f};
+        thisVert.pos = glm::vec3(cosf(phase+curRot)*radius,
+                            sinf(phase+curRot)*radius,
+                            0.f);
         thisVert.normal = thisVert.pos;
 
         mesh->faces[0].verts[slot] = slot;
@@ -107,7 +107,7 @@ std::unique_ptr<Mesh> Mesh::createGrid(int w, int h)
     std::unique_ptr<Mesh> m = Mesh::createRing(4, PI/4.f);
 
     /* first slice vertically */
-    const Vec3 &botL = m->verts[m->vertIdx(0,0)].pos,
+    const glm::vec3 &botL = m->verts[m->vertIdx(0,0)].pos,
                &botR = m->verts[m->vertIdx(0,0)].pos,
                &topL = m->verts[m->vertIdx(0,2)].pos,
                &topR = m->verts[m->vertIdx(0,2)].pos;
@@ -116,8 +116,8 @@ std::unique_ptr<Mesh> Mesh::createGrid(int w, int h)
         U32 eBotNew = m->splitVert(m->eEdge(0,0), m->eVertPrev(m->eEdge(0,0)));
         // (0,3) is formerly (0,2)
         U32 eTopNew = m->splitVert(m->eEdge(0,3), m->eVertPrev(m->eEdge(0,3)));
-        m->verts[m->vertIdx(eBotNew)].pos = lerp(botL, botR, x, w);
-        m->verts[m->vertIdx(eTopNew)].pos = lerp(topL, topR, x, w);
+        m->verts[m->vertIdx(eBotNew)].pos = glm::mix(botL, botR, static_cast<float>(x)/w);
+        m->verts[m->vertIdx(eTopNew)].pos = glm::mix(topL, topR, static_cast<float>(x)/w);
         m->debugOut();
         m->splitFace(m->eVertPrev(eBotNew), m->eVertPrev(eTopNew));
         m->splitFace(eBotNew, eTopNew);
@@ -151,7 +151,7 @@ void Mesh::extrudeFace(U32 faceIdx, float length)
         newFace.count = 4;
         newFace.material = face.material;
         // XXX: is this the right way of calculating the new face normals?
-        newFace.normal = Vec3::cross(face.normal,
+        newFace.normal = glm::vec3::cross(face.normal,
                                      verts[face.verts[slot+1]].pos -
                                      verts[face.verts[slot]].pos);
     }

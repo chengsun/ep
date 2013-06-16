@@ -7,7 +7,7 @@
 #include <string>
 #include <memory>
 
-struct Texture;
+struct TextureBase;
 
 struct FBBase
 {
@@ -15,7 +15,7 @@ struct FBBase
 
 struct FBDefault : public FBBase
 {
-    void bindTexture(const Texture &tex);
+    void bindTexture(const TextureBase &tex);
 };
 
 struct FBO : public FBBase
@@ -32,7 +32,7 @@ struct FBO : public FBBase
     void bind();
     void unbind();
 
-    void bindTexture(const Texture &tex, int attachment=0);
+    void bindTexture(const TextureBase &tex, int attachment=0);
 };
 
 struct GLContext
@@ -56,20 +56,19 @@ struct TextureBase
 
 struct Texture2DBase : public TextureBase
 {
-    Texture2DBase(unsigned _w, unsigned _h) :
-        w(_w), h(_h)
-    {}
-    unsigned w, h;
+    Texture2DBase(int _w = -1, int _h = 1) : w(_w), h(_h) {}
+
+    int w, h;
 };
 
 template <typename T>
 struct Texture2D : public Texture2DBase
 {
-    Texture2D(unsigned _w, unsigned _h, T *_data = std::nullptr);
-
-    void update();
-
+    Texture2D(int _w = -1, int _h = -1, T *_data = nullptr) :
+        Texture2DBase(_w, _h), data(_data) {}
     T *data;
+
+    virtual void update();
 
     static const GLenum pixelType;
 };
@@ -117,7 +116,7 @@ struct ProgramMesh : public Program
 {
     struct Vert
     {
-        Vec3 pos;
+        glm::vec3 pos;
     };
 
     ProgramMesh(std::initializer_list<std::shared_ptr<Shader> > &&_shaders) :
@@ -148,7 +147,7 @@ struct ProgramTexturedQuad : public ProgramMesh
 {
     ProgramTexturedQuad(GLuint texUnit = 0);
 
-    void updateTexture(const Texture2DBase &tex);
+    void setTexture(const Texture2DBase &tex);
     void draw() const;
 
     GLuint texId, texSampler, texUnit;

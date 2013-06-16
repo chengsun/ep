@@ -10,11 +10,11 @@ struct SceneNode
     Mesh *mesh;
     Program *program;
 
-    Vec3 *pos;
-    Quat *orientation;
+    glm::vec3 *pos;
+    glm::quat *orientation;
     float scale;
 
-    Texture *texture;
+    TextureBase *texture;
 };
 
 struct Scene
