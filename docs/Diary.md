@@ -351,6 +351,11 @@ Progress Log
 -------
 * Started implementing text rendering.
 
+17/6/13 *(2 hours)*
+-------
+* Moved to using [GLM][glm] for vector and matrices. This is a well-tested
+  library and is used in many projects already.
+
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
 [ryg halfedge-practice]: http://fgiesen.wordpress.com/2012/03/24/half-edge-based-mesh-representations-practice/
 [ryg halfedge-redux]: http://fgiesen.wordpress.com/2012/04/03/half-edges-redux/
@@ -373,5 +378,6 @@ Progress Log
 [sdltutorials sdl-ttf]: http://www.sdltutorials.com/sdl-ttf
 [sdl-ttf docs]: http://www.libsdl.org/projects/SDL_ttf/docs/SDL_ttf.html
 [valve sdf-mag]: http://www.valvesoftware.com/publications/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf
+[glm]: http://glm.g-truc.net/
 
 <!-- vim: set tw=79: -->
