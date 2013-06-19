@@ -107,10 +107,10 @@ std::unique_ptr<Mesh> Mesh::createGrid(int w, int h)
     std::unique_ptr<Mesh> m = Mesh::createRing(4, PI/4.f);
 
     /* first slice vertically */
-    const glm::vec3 &botL = m->verts[m->vertIdx(0,0)].pos,
-               &botR = m->verts[m->vertIdx(0,0)].pos,
-               &topL = m->verts[m->vertIdx(0,2)].pos,
-               &topR = m->verts[m->vertIdx(0,2)].pos;
+    const glm::vec3 botL = m->verts[m->vertIdx(0,0)].pos,
+                    botR = m->verts[m->vertIdx(0,0)].pos,
+                    topL = m->verts[m->vertIdx(0,2)].pos,
+                    topR = m->verts[m->vertIdx(0,2)].pos;
 
     for (int x = w-1; x > 0; --x) {
         U32 eBotNew = m->splitVert(m->eEdge(0,0), m->eVertPrev(m->eEdge(0,0)));
