@@ -355,6 +355,11 @@ Progress Log
 -------
 * Moved to using [GLM][glm] for vector and matrices. This is a well-tested
   library and is used in many projects already.
+* Updated Timeline
+
+19/6/13 *(30 minutes)*
+-------
+* Fixed a bug in mesh code.
 
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
 [ryg halfedge-practice]: http://fgiesen.wordpress.com/2012/03/24/half-edge-based-mesh-representations-practice/
