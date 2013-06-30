@@ -158,7 +158,7 @@ Progress Log
 * I started writing the vector and matrix code.
   I am referring to my FP4 maths class notes, and also for implementation
   details I am gaining inspiration by reading the code from an existing
-  vector/matrix library called [glm][glm github].
+  vector/matrix library called [GLM][glm].
 * Whilst writing the code, I encountered some problems...  
   `../include/types.h:244:48: error: could not convert ‘{{((((float)(&(&
   a)->Mat2::operator[](0ul))->Vec2::operator[](0ul)) * ((float)(&(&
@@ -361,6 +361,22 @@ Progress Log
 -------
 * Fixed a bug in mesh code.
 
+25/6/13 *(1 hour)*
+-------
+* Continued working on mesh grid code.
+
+28/6/13 *(3 hours)*
+-------
+* Found a [web page][democritis verlet] as a reference for the Verlet
+  algorithm.
+* Wrote a prototype verlet integration physics engine in JavaScript, which
+  simulates a ragdoll in 2D, which can be controlled by the mouse. I am very
+  pleased with the outcome.
+
+30/6/13 *(30 minutes)*
+-------
+* Started writing May & June end-of-month review.
+
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
 [ryg halfedge-practice]: http://fgiesen.wordpress.com/2012/03/24/half-edge-based-mesh-representations-practice/
 [ryg halfedge-redux]: http://fgiesen.wordpress.com/2012/04/03/half-edges-redux/
@@ -373,7 +389,6 @@ Progress Log
 [arcsynthesis 17-scenegraph]: http://www.arcsynthesis.org/gltut/Texturing/Tutorial%2017.html#d0e15853
 [opengl core-api]: http://www.opengl.org/wiki/Category:Core_API_Reference
 [cprogramming quat]: http://www.cprogramming.com/tutorial/3d/quaternions.html
-[glm github]: https://github.com/g-truc/glm/tree/0.9.4/glm/core
 [navis 2007]: http://navis-asd.blogspot.co.uk/2010/04/2007-and-now.html
 [hoetzlein surface-reconstruction]: http://www.rchoetzlein.com/theory/2010/surface-reconstruction-of-sph-fluids/
 [gamedev water-effect]: http://www.gamedev.net/page/resources/_/technical/graphics-programming-and-theory/the-water-effect-explained-r915
@@ -384,5 +399,6 @@ Progress Log
 [sdl-ttf docs]: http://www.libsdl.org/projects/SDL_ttf/docs/SDL_ttf.html
 [valve sdf-mag]: http://www.valvesoftware.com/publications/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf
 [glm]: http://glm.g-truc.net/
+[democritis verlet]: http://www.compsoc.man.ac.uk/~lucky/Democritus/Theory/verlet.html#verlet
 
 <!-- vim: set tw=79: -->
