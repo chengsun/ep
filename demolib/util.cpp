@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <cstdarg>
 #include <ctime>
+#include <execinfo.h>
 
 void dlib_log(const char *file, unsigned line, const char *format, ...)
 {
@@ -19,4 +20,11 @@ void dlib_log(const char *file, unsigned line, const char *format, ...)
     fprintf(stderr, "\n");
 
     va_end(args);
+}
+
+void dlib_stacktrace()
+{
+    void *array[10];
+    size_t size = backtrace(array, 10);
+    backtrace_symbols_fd(array, size, 2);
 }

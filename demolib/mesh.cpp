@@ -62,7 +62,10 @@ void Mesh::debugOut() const
     for (unsigned f = 0; f < faces.size(); f++) {
         for (unsigned s = 0; s < faces[f].count; s++) {
             U32 opp = eOpposite(f,s);
-            LOG("(%u,%u) is v%u. Opposite: (%u,%u)", f,s, vertIdx(f,s), opp/8,opp%8);
+            const glm::vec3 &pos = verts[vertIdx(f,s)].pos;
+            const glm::vec2 &texCoord = verts[vertIdx(f,s)].texCoord;
+            LOG("(%u,%u) is v%u. Opposite: (%u,%u) Pos: (%2.3f,%2.3f,%2.3f) Tex: (%2.3f,%2.3f)",
+                   f, s, vertIdx(f,s), opp/8,opp%8, (double) pos.x, (double) pos.y, (double) pos.z, (double) texCoord.x, (double) texCoord.y);
         }
     }
 }
@@ -87,9 +90,10 @@ std::unique_ptr<Mesh> Mesh::createRing(unsigned sides, float phase, float radius
     for (unsigned slot = 0; slot < sides; slot++, curRot += incRot) {
         MeshVert &thisVert = mesh->verts[slot];
         thisVert.pos = glm::vec3(cosf(phase+curRot)*radius,
-                            sinf(phase+curRot)*radius,
+                                 sinf(phase+curRot)*radius,
                             0.f);
         thisVert.normal = thisVert.pos;
+        thisVert.texCoord = (glm::vec2(thisVert.pos) + glm::vec2(1.f,1.f)) / 2.f;
 
         mesh->faces[0].verts[slot] = slot;
         mesh->faces[1].verts[slot] = (sides-slot)%sides;
@@ -106,10 +110,10 @@ std::unique_ptr<Mesh> Mesh::createGrid(int w, int h)
 {
     std::unique_ptr<Mesh> m = Mesh::createRing(4, PI/4.f);
 
-    /* first slice vertically */
+    /* first slice vertically from left to right */
     const glm::vec3 botL = m->verts[m->vertIdx(0,0)].pos,
-                    botR = m->verts[m->vertIdx(0,0)].pos,
-                    topL = m->verts[m->vertIdx(0,2)].pos,
+                    botR = m->verts[m->vertIdx(0,1)].pos,
+                    topL = m->verts[m->vertIdx(0,3)].pos,
                     topR = m->verts[m->vertIdx(0,2)].pos;
 
     for (int x = w-1; x > 0; --x) {
@@ -118,20 +122,24 @@ std::unique_ptr<Mesh> Mesh::createGrid(int w, int h)
         U32 eTopNew = m->splitVert(m->eEdge(0,3), m->eVertPrev(m->eEdge(0,3)));
         m->verts[m->vertIdx(eBotNew)].pos = glm::mix(botL, botR, static_cast<float>(x)/w);
         m->verts[m->vertIdx(eTopNew)].pos = glm::mix(topL, topR, static_cast<float>(x)/w);
-        m->debugOut();
-        m->splitFace(m->eVertPrev(eBotNew), m->eVertPrev(eTopNew));
+        m->splitFace(m->eVertNext(eBotNew), m->eVertNext(eTopNew));
         m->splitFace(eBotNew, eTopNew);
     }
 
-    /* then slice horizontally */
-    /*
+    /* then slice horizontally from top to bottom */
+    int nFaces = m->faces.size();
     for (int y = 0; y < h; ++y) {
-        m->splitVert(eLeft
-        for (int x = 0; x < w; ++x) {
-            m->slice(m->);
+        for (int f = 0; f < /*nFaces*/1; ++f) {
+            /* make a split to the left */
+            const glm::vec3 rowL = glm::mix(m->verts[m->vertIdx(f,3)].pos,
+                                            m->verts[m->vertIdx(f,0)].pos,
+                                            static_cast<float>(y)/h);
+            U32 eLeftNew = m->splitVert(m->eEdge(f, 3), m->eVertPrev(m->eEdge(f, 3)));
+            LOG("(face %u, slot %u)", eLeftNew/8, eLeftNew%8);
+            m->verts[m->vertIdx(eLeftNew)].pos = rowL;
+            //m->splitFace(eRightNew, eLeftNew);
         }
     }
-    */
 
     return m;
 }

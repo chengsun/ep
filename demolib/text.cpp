@@ -29,13 +29,15 @@ SDL_Surface *Font::draw(std::string text)
     return ret;
 }
 
-TextureTextSDF::TextureTextSDF(SDL_Surface *surf, int scale, int spread) :
+TextureTextSDF::TextureTextSDF(SDL_Surface *surf, int spread) :
     Texture2D<uint8_t>()
 {
     w = surf->w / scale;
     h = surf->h / scale;
+    w++;
     data = new uint8_t[w*h];
     const uint8_t *odata = static_cast<uint8_t *>(surf->pixels);
+    /*
     for (int y = 0; y < surf->h; ++y) {
         for (int x = 0; x < surf->w; ++x) {
             if (odata[y*surf->w + x] == 0) {
@@ -77,6 +79,12 @@ TextureTextSDF::TextureTextSDF(SDL_Surface *surf, int scale, int spread) :
                     }
                 }
             }
+        }
+    }
+    */
+    for (int y = 0; y < h; ++y) {
+        for (int x = 0; x < w; ++x) {
+            data[y*w + x] = x;
         }
     }
     SDL_FreeSurface(surf);

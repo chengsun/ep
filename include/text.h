@@ -7,7 +7,7 @@
 struct SDL_Surface;
 typedef struct _TTF_Font TTF_Font;
 
-class Font
+struct Font
 {
     Font(std::string file, int size);
     ~Font();
@@ -19,14 +19,14 @@ private:
     TTF_Font *font;
 };
 
-class TextureTextSDF : public Texture2D<uint8_t>
+struct TextureTextSDF : public Texture2D<uint8_t>
 {
-    TextureTextSDF(SDL_Surface *surf, int scaleDown = 128, int spread = 16);
+    TextureTextSDF(SDL_Surface *surf, int scaleDown = 16, int spread = 32);
     ~TextureTextSDF();
 };
 
 /*
-class ProgramTextSDF : public ProgramMesh
+struct ProgramTextSDF : public ProgramMesh
 {
 };
 */

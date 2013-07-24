@@ -16,7 +16,8 @@ typedef int32_t S32;
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/type_precision.hpp>
-
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #define ARRAYLEN(x) (sizeof(x)/sizeof((x)[0]))
 #define PI 3.14159265359f
@@ -30,6 +31,7 @@ inline T clamp(const T x, const T min, const T max)
 extern "C"
 {
     void dlib_log(const char *file, unsigned line, const char *format, ...);
+    void dlib_stacktrace();
 }
 
 #ifdef LOG
@@ -54,15 +56,18 @@ extern "C"
         if (!(x)) { \
             LOG("* ASSERTION '%s' FAILED! *", #x); \
             LOG("" __VA_ARGS__); \
+            dlib_stacktrace(); \
             abort(); \
         } \
     } while (0)
 #   define CHECK_GL_ERROR(where) \
-    glErr = glGetError(); \
-    if (glErr) { \
-        LOG("GL error: %s", gluErrorString(glErr)); \
-        ASSERTX(!glErr, "GL error detected (%s)", where); \
-    }
+    do { \
+        GLenum glErr = glGetError(); \
+        if (glErr) { \
+            LOG("GL error: %s", gluErrorString(glErr)); \
+            ASSERTX(!glErr, "GL error detected (%s)", where); \
+        } \
+    } while (0)
 #else
 #   define LOG(...)    do { (void) 0; } while (0)
 #   define ASSERTX(x, ...) do { (void) sizeof(x); } while (0)

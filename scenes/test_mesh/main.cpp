@@ -1,7 +1,7 @@
 #include "demo.h"
 #include "mesh.h"
 
-struct ProgramTest : public ProgramMesh
+struct ProgramTest : public ProgramMesh<VertBufPT>
 {
     ProgramTest();
 };
@@ -11,16 +11,22 @@ ProgramTest::ProgramTest() :
         Shader::Inline(GL_VERTEX_SHADER, R"(
             #version 130
             in vec4 position;
+            in vec2 texCoords;
+            uniform mat4 gTransform;
+            out vec2 textTexCoords;
             void main()
             {
-                gl_Position = position;
+                gl_Position = gTransform*position;
+                textTexCoords = texCoords;
             }
         )"),
         Shader::Inline(GL_FRAGMENT_SHADER, R"(
             #version 130
+            in vec2 textTexCoords;
+            uniform sampler2D textTexCoords;
             void main()
             {
-               gl_FragColor = vec4(1.0f, 1.0f, 1.0f, 0.5f);
+               gl_FragColor = vec4(texture(textTex, textTexCoords).rrr, 0.5f);
             }
         )")
     })
@@ -29,6 +35,7 @@ ProgramTest::ProgramTest() :
 
 std::unique_ptr<Mesh> mesh;
 ProgramTest *program;
+TextureTextSDF *textTex;
 
 void demo_init(unsigned, unsigned)
 {
@@ -65,9 +72,13 @@ bool demo_prepareFrame()
 
 void demo_drawFrame()
 {
+    static float t = 0.f;
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    program->drawWire();
+    program->use();
+    program->setUniform("gTransform", glm::rotate(glm::mat4(), t+=2.f, glm::vec3(0.f,1.f,0.f)));
+    program->draw();
+    program->unuse();
 }
 
 void demo_evtMouseMove(int x, int y)

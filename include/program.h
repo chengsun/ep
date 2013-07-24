@@ -7,49 +7,13 @@
 #include <string>
 #include <memory>
 
-struct TextureBase;
-
-struct FBBase
-{
-};
-
-struct FBDefault : public FBBase
-{
-    void bindTexture(const TextureBase &tex);
-};
-
-struct FBO : public FBBase
-{
-    const int w, h;
-    GLuint id, depthBufId;
-
-    enum ConstructionFlags {
-        DEPTHBUF = 1,
-    };
-
-    FBO(int _w, int _h, int flags = 0);
-    ~FBO();
-    void bind();
-    void unbind();
-
-    void bindTexture(const TextureBase &tex, int attachment=0);
-};
-
-struct GLContext
-{
-    GLContext();
-    void bindFBO(const FBO &fbo);
-    void unbindFBO();
-    FBDefault defaultFB;
-    FBBase *curFBO;
-};
-
 struct TextureBase
 {
     TextureBase();
     ~TextureBase();
 
-    virtual void update() = 0;
+    virtual void bind(GLuint texUnit) const = 0;
+    virtual void update(GLuint texUnit) = 0;
 
     GLuint id;
 };
@@ -59,16 +23,22 @@ struct Texture2DBase : public TextureBase
     Texture2DBase(int _w = -1, int _h = 1) : w(_w), h(_h) {}
 
     int w, h;
+
+    void bind(GLuint texUnit) const;
+    void unbind() const;
 };
 
 template <typename T>
 struct Texture2D : public Texture2DBase
 {
-    Texture2D(int _w = -1, int _h = -1, T *_data = nullptr) :
-        Texture2DBase(_w, _h), data(_data) {}
+    Texture2D(int _w = -1, int _h = -1, T *_data = nullptr);
     T *data;
+    bool allocated;
 
-    virtual void update();
+    /* must be called once after init */
+    virtual void allocate(GLuint texUnit);
+    /* called every time texture is to change */
+    virtual void update(GLuint texUnit);
 
     static const GLenum pixelType;
 };
@@ -104,34 +74,108 @@ protected:
 
 public:
     virtual void draw() const = 0;
+    static GLuint doLink(std::vector<std::shared_ptr<Shader> > &shaders);
     bool link();
 
+    /* overloadable use functions */
+    virtual void useId(GLuint id);
+    virtual void unuse();
+    /* convenience */
+    void use() {useId(id);}
+    /* checks */
+    static bool isInUseId(GLuint id);
+    bool isInUse() const {return isInUseId(id);}
+
+    GLint uniformLocation(const char *name);
+    bool setUniform(const char *name, GLint v);
+    bool setUniform(const char *name, float v);
+    bool setUniform(const char *name, const glm::vec2 &v);
+    bool setUniform(const char *name, const glm::vec3 &v);
+    bool setUniform(const char *name, const glm::vec4 &v);
+    bool setUniform(const char *name, const glm::mat2 &v, bool trans=false);
+    bool setUniform(const char *name, const glm::mat3 &v, bool trans=false);
+    bool setUniform(const char *name, const glm::mat4 &v, bool trans=false);
+
+
     GLuint id;
+
+protected:
+    /* called once link succeeds -- set up uniforms here */
+    virtual void postLink() {}
 
 private:
     std::vector<std::shared_ptr<Shader> > shaders;
 };
 
+struct VertexAttribDescriptor
+{
+    const char *shaderAttrName;
+    unsigned offset;
+};
+
+struct VertBuf
+{
+    glm::vec3 pos;
+    glm::vec2 texCoord;
+    VertBuf &operator=(const MeshVert &vert) {
+        pos = vert.pos;
+        texCoord = vert.texCoord;
+        return (*this);
+    }
+};
+
 struct ProgramMesh : public Program
 {
-    struct Vert
-    {
-        glm::vec3 pos;
-    };
-
     ProgramMesh(std::initializer_list<std::shared_ptr<Shader> > &&_shaders) :
         Program(std::move(_shaders)) {}
 
+    virtual void useId(GLuint id);
+    virtual void unuse();
+
     virtual void updateMeshBuf(const Mesh &mesh);
+    /* draw after doing sanity checks that this program is being used */
     virtual void draw() const;
-    void drawWire() const;
+    virtual void drawWire() const;
+    /* example:
+     * prog->link();
+     * ...
+     * prog->use();
+     * prog->draw();
+     * prog->unuse();
+     */
 
     GLuint vaoId, vertBufId, idxBufId;
-    std::vector<Vert> vertBuf;
+    std::vector<VertBuf> vertBuf;
     std::vector<U32> idxBuf;
 
+    /* debug programs */
     static const std::shared_ptr<Shader> vsDebug, fsDebugFace, fsDebugEdge;
+    static GLuint debugFaceId, debugEdgeId;
+
+    /* ensure debug programs are used */
+    void debugLink();
+    /* draw without doing checks */
+    void debugDraw() const;
+    void debugDrawWire() const;
+    /* debug example:
+     * prog->debugLink();
+     * ...
+     * prog->use(prog->debugFaceId);
+     * prog->debugDraw();
+     * prog->unuse();
+     */
+
+private:
+    void doDraw(GLenum mode) const;
 };
+
+/*
+struct ProgramMeshDebug : public ProgramMesh
+{
+    ProgramMeshDebug();
+    virtual void draw() const;
+};
+*/
 
 struct ProgramRaw : public ProgramMesh
 {
@@ -145,14 +189,63 @@ private:
 
 struct ProgramTexturedQuad : public ProgramMesh
 {
-    ProgramTexturedQuad(GLuint texUnit = 0);
+    ProgramTexturedQuad(GLuint texUnit);
 
-    void setTexture(const Texture2DBase &tex);
-    void draw() const;
+    GLuint texUnit;
 
-    GLuint texId, texSampler, texUnit;
+protected:
+    virtual void postLink();
 private:
     static const std::shared_ptr<Shader> vs, fs;
 };
+
+
+
+struct FBBase
+{
+};
+
+struct FBDefault : public FBBase
+{
+};
+
+struct FBO : public FBBase
+{
+    const int w, h;
+    GLuint id, depthBufId;
+
+    enum ConstructionFlags {
+        DEPTHBUF = 1,
+    };
+
+    FBO(int _w, int _h, int flags = 0);
+    virtual ~FBO();
+    void bind();
+    void unbind();
+
+    /* bind a texture to draw to */
+    void bindTexture(const Texture2DBase &tex, int attachment=0);
+};
+
+struct GLContext
+{
+    static GLContext &get()
+    {
+        static GLContext instance;
+        return instance;
+    }
+
+    void bindFBO(const FBO &fbo);
+    void unbindFBO();
+
+    FBDefault defaultFB;
+    FBBase *curFBO;
+private:
+    GLContext() : curFBO(0) {}
+    GLContext(GLContext const&);
+    void operator=(GLContext const&);
+};
+
+
 
 #endif

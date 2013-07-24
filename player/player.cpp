@@ -176,15 +176,18 @@ int main(int argc, char *argv[])
     LOG("GLU not present");
 #endif
 
+    CHECK_GL_ERROR("after OpenGL initialisation");
+
     LOG("Loading demo library \"%s\"", demoLibrary);
     pl_loadDemoLib(demoLibrary);
 
     LOG("Initialising demo");
     demo_init(screen->w, screen->h);
 
+    CHECK_GL_ERROR("after demo init");
+
     LOG("Beginning render loop");
     unsigned nFrames = 0, oldTicks = SDL_GetTicks();
-    GLenum glErr;
     while (1) {
         if (!demo_prepareFrame()) {
             break;

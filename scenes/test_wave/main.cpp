@@ -47,7 +47,10 @@ void demo_init(unsigned, unsigned)
     wave = new Wave(256, 256);
     nextstepstep();
     waveTex = new TextureWave(*wave);
-    program = new ProgramTexturedQuad;
+    waveTex->allocate(0);
+    program = new ProgramTexturedQuad(0);
+    program->link();
+    program->debugLink();
 }
 
 bool demo_prepareFrame()
@@ -59,8 +62,6 @@ bool demo_prepareFrame()
             wave->D(100,(tick/20)%256) = cosf(tick * 0.05f);
             tick++; wave->update();
         }
-        waveTex->update();
-        program->updateTexture(*waveTex);
         if (tick > 2000) nextstepstep();
         return true;
     case 1:
@@ -70,8 +71,6 @@ bool demo_prepareFrame()
             }
             tick++; wave->update();
         }
-        waveTex->update();
-        program->updateTexture(*waveTex);
         if (tick > 2000) nextstepstep();
         return true;
     default:
@@ -83,5 +82,19 @@ void demo_drawFrame()
 {
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+
+    waveTex->update(0);
+
+    program->use();
+    static float time = 0.f;
+    program->setUniform("transform", glm::rotate(glm::mat4(), time++, glm::vec3(1.f, 1.f, 0.f)));
     program->draw();
+    program->unuse();
+}
+
+void demo_evtMouseMove(int x, int y)
+{
+}
+void demo_evtMouseButton(uint8_t button, bool state)
+{
 }

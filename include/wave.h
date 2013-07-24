@@ -46,7 +46,7 @@ struct Wave
 struct TextureWave : public Texture2D<uint8_t>
 {
     TextureWave(const Wave &wave);
-    void update();
+    void update(GLuint texUnit);
 
     const Wave &wave;
 };

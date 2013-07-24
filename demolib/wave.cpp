@@ -88,11 +88,11 @@ TextureWave::TextureWave(const Wave &_wave) :
 {
 }
 
-void TextureWave::update()
+void TextureWave::update(GLuint texUnit)
 {
     unsigned end = h*w;
     for (unsigned i = 0; i < end; ++i) {
         data[i] = clamp(int(wave.data[i].v*127.f) + 128, 0, 255);
     }
-    Texture2D::update();
+    Texture2D::update(texUnit);
 }
