@@ -377,6 +377,22 @@ Progress Log
 -------
 * Started writing May & June end-of-month review.
 
+23/7/13 *(4 hours)*
+-------
+* Arrived home from summer school; work on EP restarts from today.
+* Worked on OpenGL shader program and texture code. Not quite working yet.
+* Looking to implement text output by tomorrow.
+
+24/7/13 *(4 hours)*
+-------
+* Continued working on Texture code. Got texture code to work well, by using
+  information from the [OpenGL wiki][opengl core-api].
+* Text output is almost done, except for a bug in the texture upload, which
+  causes the texture to be the wrong width. After an hour's worth of debugging 
+  I believe that this is caused by the graphics driver expecting a texture
+  width that is divisible by 8, which I am not providing.
+  I will have to change the code tomorrow to deal with this issue.
+
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
 [ryg halfedge-practice]: http://fgiesen.wordpress.com/2012/03/24/half-edge-based-mesh-representations-practice/
 [ryg halfedge-redux]: http://fgiesen.wordpress.com/2012/04/03/half-edges-redux/
