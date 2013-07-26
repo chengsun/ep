@@ -30,8 +30,8 @@ const GLenum Texture2D<T>::pixelType = -1;
 */
 
 template <typename T>
-Texture2D<T>::Texture2D(int _w, int _h, T *_data) :
-Texture2DBase(_w, _h), data(_data), allocated(false)
+Texture2D<T>::Texture2D(int _w, int _h, T *_data, int _stride) :
+Texture2DBase(_w, _h, _stride), data(_data), allocated(false)
 {
 }
 
@@ -42,7 +42,9 @@ void Texture2D<T>::allocate(GLuint texUnit)
         LOG("WARNING: Allocate on already allocated texture %d", id);
     }
     bind(texUnit);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, stride);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, w, h, 0, GL_RED, pixelType, data);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
     unbind();
@@ -54,7 +56,9 @@ void Texture2D<T>::update(GLuint texUnit)
 {
     ASSERTX(allocated, "Updating unallocated texture %d", id);
     bind(texUnit);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, stride);
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_RED, pixelType, data);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
 }
 
 template <> const GLenum Texture2D<uint8_t>::pixelType = GL_UNSIGNED_BYTE;
@@ -420,12 +424,13 @@ const std::shared_ptr<Shader> ProgramTexturedQuad::fs =
         uniform sampler2D tex;
         void main()
         {
-           gl_FragColor = vec4(texture(tex, fTexCoord).rrr, 1.0f);
+            gl_FragColor = vec4(texture(tex, fTexCoord).rrr, 1.0f);
         }
     )", "ProgramTexturedQuad::fs");
 
-ProgramTexturedQuad::ProgramTexturedQuad(GLuint _texUnit) :
-    ProgramMesh({vs, fs}),
+ProgramTexturedQuad::ProgramTexturedQuad(GLuint _texUnit,
+            std::initializer_list<std::shared_ptr<Shader> > &&_shaders) :
+    ProgramMesh(std::move(_shaders)),
     texUnit(_texUnit)
 {
     std::unique_ptr<Mesh> mesh = Mesh::createRing(4, PI/4.f, sqrt(2.f));

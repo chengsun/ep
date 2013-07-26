@@ -175,8 +175,12 @@ int main(int argc, char *argv[])
 #else
     LOG("GLU not present");
 #endif
-
     CHECK_GL_ERROR("after OpenGL initialisation");
+
+    LOG("Setting defaults...");
+    glEnable(GL_ALPHA_TEST);
+    glAlphaFunc(GL_GREATER, 0.5);
+    CHECK_GL_ERROR("after setting defaults");
 
     LOG("Loading demo library \"%s\"", demoLibrary);
     pl_loadDemoLib(demoLibrary);

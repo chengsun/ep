@@ -20,9 +20,10 @@ struct TextureBase
 
 struct Texture2DBase : public TextureBase
 {
-    Texture2DBase(int _w = -1, int _h = 1) : w(_w), h(_h) {}
+    Texture2DBase(int _w, int _h, int _stride) : w(_w), h(_h), stride(_stride) {}
 
     int w, h;
+    int stride;
 
     void bind(GLuint texUnit) const;
     void unbind() const;
@@ -31,9 +32,10 @@ struct Texture2DBase : public TextureBase
 template <typename T>
 struct Texture2D : public Texture2DBase
 {
-    Texture2D(int _w = -1, int _h = -1, T *_data = nullptr);
+    Texture2D(int _w = -1, int _h = -1, T *_data = nullptr, int _stride = 0);
     T *data;
-    bool allocated;
+    bool allocated;         // if glTexImage2D already called (via allocate())
+                            // to allocate memory on the GPU
 
     /* must be called once after init */
     virtual void allocate(GLuint texUnit);
@@ -189,14 +191,14 @@ private:
 
 struct ProgramTexturedQuad : public ProgramMesh
 {
-    ProgramTexturedQuad(GLuint texUnit);
+    ProgramTexturedQuad(GLuint texUnit,
+            std::initializer_list<std::shared_ptr<Shader> > &&_shaders = {vs, fs});
 
     GLuint texUnit;
+    static const std::shared_ptr<Shader> vs, fs;
 
 protected:
     virtual void postLink();
-private:
-    static const std::shared_ptr<Shader> vs, fs;
 };
 
 
