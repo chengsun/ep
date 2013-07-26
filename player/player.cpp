@@ -177,9 +177,13 @@ int main(int argc, char *argv[])
 #endif
     CHECK_GL_ERROR("after OpenGL initialisation");
 
-    LOG("Setting defaults...");
+    LOG("Setting OpenGL defaults");
     glEnable(GL_ALPHA_TEST);
     glAlphaFunc(GL_GREATER, 0.5);
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_LEQUAL);
+    glDepthRange(0.f, 1.f);
     CHECK_GL_ERROR("after setting defaults");
 
     LOG("Loading demo library \"%s\"", demoLibrary);

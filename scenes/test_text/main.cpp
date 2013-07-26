@@ -34,7 +34,8 @@ void demo_drawFrame()
 {
     static float t = 0.f;
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClearDepth(1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     textTex->bind(0);
 
@@ -45,7 +46,7 @@ void demo_drawFrame()
               C = glm::scale(B, glm::vec3(1.0f,-0.2f,1.f)),
               D = glm::translate(C, glm::vec3(sin(t/30.f)*0.6f, sin(t/70.f)*0.3f, 0.f));
     program->setUniform("transform", D);
-    program->setUniform("threshold", (float) (fabs(fmod(t/100.f,1.98f)-0.99f)+0.01f));
+    program->setUniform("threshold", clamp((float) fabs(fmod(t/100.f,1.40f)-0.70f)+0.30f, 0.5f, 1.0f));
     program->setUniform("glowColor", glm::vec4(sin(t/100.f)/2+0.5, sin(t/100.f + 2*PI/3)/2+0.5, sin(t/100.f + 4*PI/3)/2+0.5, 1.f));
     t += 1.f;
     program->draw();
