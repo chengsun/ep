@@ -393,6 +393,23 @@ Progress Log
   width that is divisible by 8, which I am not providing.
   I will have to change the code tomorrow to deal with this issue.
 
+25/7/13 *(5 hours)*
+-------
+* Tracked down the bug where the texture would not render properly if its width
+  was not divisible by 8. This was caused due to the stride not being equal to
+  the number of pixels; there was padding on the end of each row to ensure that
+  each row was aligned to 32 bytes. Fixed this by changing pixel access in
+  SDL_Surfaces to `y*surf->pitch + x` rather than `y*surf->w + x`. Now all
+  sizes of SDL_Surface work.
+* Completed the text rendering code. An almost complete implementation of the
+  method outlined in the [Valve paper][valve sdf-mag].
+* Wrote a test to show off features of the text rendering:
+    * High quality output
+    * Small texture size (128x128)
+    * Customisable boldness
+    * Glow effect
+  ![Rendering high-quality text with various effects](https://raw.github.com/chengsun/ep/master/docs/images/260713_text.png)
+
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
 [ryg halfedge-practice]: http://fgiesen.wordpress.com/2012/03/24/half-edge-based-mesh-representations-practice/
 [ryg halfedge-redux]: http://fgiesen.wordpress.com/2012/04/03/half-edges-redux/
