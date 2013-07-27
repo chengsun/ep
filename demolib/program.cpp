@@ -24,17 +24,6 @@ void Texture2DBase::unbind() const
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-/*
-template <typename T>
-const GLenum Texture2D<T>::pixelType = -1;
-*/
-
-template <typename T>
-Texture2D<T>::Texture2D(int _w, int _h, T *_data, int _stride) :
-Texture2DBase(_w, _h, _stride), data(_data), allocated(false)
-{
-}
-
 template <typename T>
 void Texture2D<T>::allocate(GLuint texUnit)
 {

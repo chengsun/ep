@@ -9,25 +9,14 @@ struct ProgramTest : public ProgramMesh
 
 ProgramTest::ProgramTest() :
     ProgramMesh({
-        Shader::Inline(GL_VERTEX_SHADER, R"(
-            #version 130
-            in vec4 position;
-            in vec2 texCoords;
-            uniform mat4 gTransform;
-            out vec2 textTexCoords;
-            void main()
-            {
-                gl_Position = gTransform*position;
-                textTexCoords = texCoords;
-            }
-        )"),
+        ProgramTexturedQuad::vs,
         Shader::Inline(GL_FRAGMENT_SHADER, R"(
             #version 130
-            in vec2 textTexCoords;
-            uniform sampler2D textTexCoords;
+            in vec2 fTexCoords;
+            uniform sampler2D tex;
             void main()
             {
-               gl_FragColor = vec4(texture(textTex, textTexCoords).rrr, 0.5f);
+               gl_FragColor = vec4(texture(tex, fTexCoords).rrr, 0.5f);
             }
         )")
     })
@@ -78,7 +67,7 @@ void demo_drawFrame()
     glClearDepth(1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     program->use();
-    program->setUniform("gTransform", glm::rotate(glm::mat4(), t+=2.f, glm::vec3(0.f,1.f,0.f)));
+    //program->setUniform("gTransform", glm::rotate(glm::mat4(), t+=2.f, glm::vec3(0.f,1.f,0.f)));
     program->draw();
     program->unuse();
 }

@@ -29,75 +29,13 @@ SDL_Surface *Font::draw(std::string text)
     return ret;
 }
 
-TextureTextSDF::TextureTextSDF(SDL_Surface *surf, int scale, int spread) :
-    Texture2D<uint8_t>()
-{
-    w = surf->w / scale;
-    h = surf->h / scale;
-    data = new uint8_t[w*h];
-    const uint8_t *odata = static_cast<uint8_t *>(surf->pixels);
-    /*
-    for (int y = 0; y < surf->h; ++y) {
-        for (int x = 0; x < surf->w; ++x) {
-            if (odata[y*surf->pitch + x] == 0) {
-                continue;
-            }
-            bool edge = false;
-            const int dx[8] = {-1, 0, 1, 1, 1, 0,-1,-1},
-                      dy[8] = {-1,-1,-1, 0, 1, 1, 1, 0};
-            for (int i = 0; i < 8; ++i) {
-                int ny = y + dy[i],
-                    nx = x + dx[i];
-                if (ny >= 0 && ny < surf->h &&
-                    nx >= 0 && nx < surf->w) {
-                    if (odata[ny*surf->pitch + nx] == 0) {
-                        edge = true;
-                        break;
-                    }
-                }
-            }
-            if (!edge) {
-                continue;
-            }
-            for (int ty = 0, tyScaled = scale/2;
-                 ty < h;
-                 ++ty, tyScaled += scale) {
-                if (std::abs(tyScaled - y) > spread) {
-                    continue;
-                }
-                for (int tx = 0, txScaled = scale/2;
-                     tx < w;
-                     ++tx, txScaled += scale) {
-                    if (std::abs(txScaled - x) > spread) {
-                        continue;
-                    }
-                    double dist = hypot(tyScaled - y, txScaled - x);
-                    uint8_t distVal = dist*256./spread;
-                    if (data[ty*w + tx] > distVal) {
-                        data[ty*w + tx] = distVal;
-                    }
-                }
-            }
-        }
-    }
-    */
-    for (int y = 0; y < h; ++y) {
-        for (int x = 0; x < w; ++x) {
-            data[y*w + x] = x;
-        }
-    }
-    SDL_FreeSurface(surf);
-}
-
 TextureTextSDF::TextureTextSDF(int w, int h, SDL_Surface *surf, int spread) :
-    Texture2D<uint8_t>(w, h)
+    Texture2D<uint8_t>(w, h, new uint8_t[w*h])
 {
-    data = new uint8_t[w*h];
     uint8_t *odata = static_cast<uint8_t *>(surf->pixels);
     float xscale = (float) surf->w / w,
           yscale = (float) surf->h / h;
-    LOG("scales are %fx%f", xscale, yscale);
-    LOG("min is %fx%f, max is %fx%f", (0+0.5f) * xscale, (0+0.5f) * yscale,  (w-1+0.5f) * xscale, (h-1+0.5f) * yscale);
+    LOG("Text SDF: scales are %fx%f", (double) xscale, (double) yscale);
 
     /* twiddle the input surface
      * currently bit 1 (lsb) indicates the inside of the font
@@ -170,12 +108,6 @@ TextureTextSDF::TextureTextSDF(int w, int h, SDL_Surface *surf, int spread) :
     SDL_FreeSurface(surf);
 }
 
-
-TextureTextSDF::~TextureTextSDF()
-{
-    delete[] data;
-}
-
 const std::shared_ptr<Shader> ProgramTextSDF::fs =
     Shader::Inline(GL_FRAGMENT_SHADER, R"(
         #version 130
@@ -188,7 +120,7 @@ const std::shared_ptr<Shader> ProgramTextSDF::fs =
             vec4 basec = vec4(1.f, 1.f, 1.f, 1.f);
             float texv = texture(tex, fTexCoord).r;
             basec.a = float(texv >= threshold);
-            vec4 glowc = glowColor * smoothstep(threshold*0.3f, threshold*1.0f, texv);
+            vec4 glowc = glowColor * smoothstep(threshold*0.5f, threshold*1.0f, texv);
             basec = mix(glowc, basec, basec.a);
             gl_FragColor = basec;
         }

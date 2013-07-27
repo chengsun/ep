@@ -23,7 +23,6 @@ struct TextureTextSDF : public Texture2D<uint8_t>
 {
     TextureTextSDF(SDL_Surface *surf, int scaleDown = 16, int spread = 32);
     TextureTextSDF(int w, int h, SDL_Surface *surf, int spread = 32);
-    ~TextureTextSDF();
 };
 
 struct ProgramTextSDF : public ProgramTexturedQuad

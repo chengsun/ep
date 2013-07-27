@@ -12,7 +12,9 @@ struct TextureBase
     TextureBase();
     ~TextureBase();
 
+    // bind texture without updating
     virtual void bind(GLuint texUnit) const = 0;
+    // bind and update texture
     virtual void update(GLuint texUnit) = 0;
 
     GLuint id;
@@ -23,17 +25,49 @@ struct Texture2DBase : public TextureBase
     Texture2DBase(int _w, int _h, int _stride) : w(_w), h(_h), stride(_stride) {}
 
     int w, h;
-    int stride;
+    int stride;     // can be set to 0
 
     void bind(GLuint texUnit) const;
     void unbind() const;
 };
 
+/* 2D texture with optionally automatically managed memory */
 template <typename T>
 struct Texture2D : public Texture2DBase
 {
-    Texture2D(int _w = -1, int _h = -1, T *_data = nullptr, int _stride = 0);
-    T *data;
+    /* pass all defaults to not initialise anything:
+     *      autoManaged is set to false, nothing done on destruction
+     * pass width/height but not data
+     *      autoManaged is set to true, data is automatically allocated and
+     *      destroyed
+     * pass width height and data
+     *      autoManaged is set to false
+     */
+    // constructor to do nothing: manually set everything
+    Texture2D() :
+        Texture2DBase(-1, -1, 0), data(nullptr),
+        autoManaged(false), allocated(false)
+    {}
+    // constructor to auto-manage memory: manually set nothing
+    Texture2D(int _w, int _h) :
+        Texture2DBase(_w, _h, 0), data(new T[_w*_h]),
+        autoManaged(true), allocated(false)
+    {}
+    // constructor to manually-manage memory from an external source:
+    // memory will not be deallocated on destruction
+    Texture2D(int _w, int _h, T *_data, int _stride = 0) :
+        Texture2DBase(_w, _h, _stride), data(_data),
+        autoManaged(false), allocated(false)
+    {}
+
+    virtual ~Texture2D()
+    {
+        if (autoManaged) {
+            delete[] data;
+        }
+    }
+    T *const data;
+    const bool autoManaged; // if we need to deallocate memory on destruction
     bool allocated;         // if glTexImage2D already called (via allocate())
                             // to allocate memory on the GPU
 
@@ -222,11 +256,9 @@ struct FBO : public FBBase
 
     FBO(int _w, int _h, int flags = 0);
     virtual ~FBO();
-    void bind();
-    void unbind();
 
-    /* bind a texture to draw to */
-    void bindTexture(const Texture2DBase &tex, int attachment=0);
+    // bind a texture to draw to
+    void bindTexture(const Texture2DBase &tex, int attachment);
 };
 
 struct GLContext
