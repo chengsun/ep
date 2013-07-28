@@ -1,6 +1,7 @@
 #include "demo.h"
 #include "wave.h"
 #include "program.h"
+#include "pngwrite.h"
 #include <cmath>
 
 Wave *wave;
@@ -47,7 +48,8 @@ void demo_init(unsigned, unsigned)
     wave = new Wave(256, 256);
     nextstepstep();
     waveTex = new TextureWave(*wave);
-    waveTex->allocate(0);
+    waveTex->bind(0);
+    waveTex->allocate();
     program = new ProgramTexturedQuad(0);
     program->link();
     program->debugLink();
@@ -55,6 +57,12 @@ void demo_init(unsigned, unsigned)
 
 bool demo_prepareFrame()
 {
+
+    static int c = 0;
+    if (++c == 200) {
+        PNGWrite(waveTex, "test.png");
+        return false;
+    }
     switch (stepstep) {
     case 0:
         for (int i = 0; i < 10; ++i) {
@@ -84,18 +92,13 @@ void demo_drawFrame()
     glClearDepth(1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    waveTex->update(0);
+    waveTex->bind(0);
+    waveTex->update();
 
     program->use();
-    static float time = 0.f;
-    program->setUniform("transform", glm::rotate(glm::mat4(), time++, glm::vec3(1.f, 1.f, 0.f)));
+    //static float time = 0.f;
+    //program->setUniform("transform", glm::rotate(glm::mat4(), time++, glm::vec3(1.f, 1.f, 0.f)));
+    program->setUniform("transform", glm::mat4());
     program->draw();
     program->unuse();
-}
-
-void demo_evtMouseMove(int x, int y)
-{
-}
-void demo_evtMouseButton(uint8_t button, bool state)
-{
 }

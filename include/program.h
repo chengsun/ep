@@ -12,10 +12,21 @@ struct TextureBase
     TextureBase();
     ~TextureBase();
 
+    bool allocated;         // if glTexImage#D already called (via allocate())
+                            // to allocate memory on the GPU
+
     // bind texture without updating
     virtual void bind(GLuint texUnit) const = 0;
-    // bind and update texture
-    virtual void update(GLuint texUnit) = 0;
+    // allocate and update texture (only called once), needs to be bound first
+    virtual void allocate() = 0;
+    // update texture, needs to be bound first
+    virtual void update() = 0;
+    // get texture from GPU
+    virtual void updateLocal() = 0;
+
+    static bool isInUseId(GLuint id) {return currentId() == id;}
+    bool isInUse() const {return isInUseId(id);}
+    static GLuint currentId();
 
     GLuint id;
 };
@@ -46,18 +57,18 @@ struct Texture2D : public Texture2DBase
     // constructor to do nothing: manually set everything
     Texture2D() :
         Texture2DBase(-1, -1, 0), data(nullptr),
-        autoManaged(false), allocated(false)
+        autoManaged(false)
     {}
     // constructor to auto-manage memory: manually set nothing
     Texture2D(int _w, int _h) :
         Texture2DBase(_w, _h, 0), data(new T[_w*_h]),
-        autoManaged(true), allocated(false)
+        autoManaged(true)
     {}
     // constructor to manually-manage memory from an external source:
     // memory will not be deallocated on destruction
     Texture2D(int _w, int _h, T *_data, int _stride = 0) :
         Texture2DBase(_w, _h, _stride), data(_data),
-        autoManaged(false), allocated(false)
+        autoManaged(false)
     {}
 
     virtual ~Texture2D()
@@ -68,15 +79,12 @@ struct Texture2D : public Texture2DBase
     }
     T *const data;
     const bool autoManaged; // if we need to deallocate memory on destruction
-    bool allocated;         // if glTexImage2D already called (via allocate())
-                            // to allocate memory on the GPU
 
-    /* must be called once after init */
-    virtual void allocate(GLuint texUnit);
-    /* called every time texture is to change */
-    virtual void update(GLuint texUnit);
+    virtual void allocate();
+    virtual void update();
+    virtual void updateLocal();
 
-    static const GLenum pixelType;
+    static const GLenum pixelType, pixelFormat, internalPixelFormat;
 };
 
 
@@ -115,11 +123,13 @@ public:
 
     /* overloadable use functions */
     virtual void useId(GLuint id);
-    virtual void unuse();
+    virtual void unuseId(GLuint id);
     /* convenience */
     void use() {useId(id);}
+    void unuse() {unuseId(id);}
     /* checks */
-    static bool isInUseId(GLuint id);
+    static GLuint currentId();
+    static bool isInUseId(GLuint id) {return currentId() == id;}
     bool isInUse() const {return isInUseId(id);}
 
     GLint uniformLocation(const char *name);
@@ -166,7 +176,7 @@ struct ProgramMesh : public Program
         Program(std::move(_shaders)) {}
 
     virtual void useId(GLuint id);
-    virtual void unuse();
+    virtual void unuseId(GLuint id);
 
     virtual void updateMeshBuf(const Mesh &mesh);
     /* draw after doing sanity checks that this program is being used */
@@ -196,9 +206,9 @@ struct ProgramMesh : public Program
     /* debug example:
      * prog->debugLink();
      * ...
-     * prog->use(prog->debugFaceId);
+     * prog->useId(prog->debugFaceId);
      * prog->debugDraw();
-     * prog->unuse();
+     * prog->unuseId(prog->debugFaceId);
      */
 
 private:
@@ -269,7 +279,7 @@ struct GLContext
         return instance;
     }
 
-    void bindFBO(const FBO &fbo);
+    void bindFBO(FBO &fbo);
     void unbindFBO();
 
     FBDefault defaultFB;

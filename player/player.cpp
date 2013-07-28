@@ -8,7 +8,7 @@
 #include <getopt.h>
 
 
-#define defsym(symname, ret, ...) \
+#define defsym(required, symname, ret, ...) \
     static ret (*symname)(__VA_ARGS__) = 0;
 #include "defsym.h"
 #undef defsym
@@ -32,7 +32,7 @@ static std::unique_ptr<char, LocalFree_deleter> formattedError(DWORD err)
 {
     char *lpMsgBuf;
     FormatMessageA(
-            FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+            FORMAT_MESSAGE_ALLOCATE_BUFFER |
             FORMAT_MESSAGE_FROM_SYSTEM |
             FORMAT_MESSAGE_IGNORE_INSERTS,
             NULL,
@@ -43,9 +43,9 @@ static std::unique_ptr<char, LocalFree_deleter> formattedError(DWORD err)
     return std::unique_ptr<char, LocalFree_deleter>(lpMsgBuf);
 }
 
-#define defsym(symname, ret, ...) \
+#define defsym(required, symname, ret, ...) \
     symname = reinterpret_cast<ret (*)(__VA_ARGS__)>(GetProcAddress(demoLib, #symname)); \
-    if (!symname) { \
+    if (required && !symname) { \
         LOG("ERROR: Symbol \"%s\" undefined in demo library \"%s\"", #symname, libName); \
         missingSymbol = true; \
     }
@@ -71,9 +71,9 @@ static void pl_loadDemoLib(const char *libName)
 
 #include <dlfcn.h>
 
-#define defsym(symname, ret, ...) \
+#define defsym(required, symname, ret, ...) \
     symname = reinterpret_cast<ret (*)(__VA_ARGS__)>(dlsym(demoLib, #symname)); \
-    if (!symname) { \
+    if (required && !symname) { \
         LOG("ERROR: Symbol \"%s\" undefined in demo library \"%s\"", #symname, libName); \
         missingSymbol = true; \
     }
@@ -198,6 +198,7 @@ int main(int argc, char *argv[])
     unsigned nFrames = 0, oldTicks = SDL_GetTicks();
     while (1) {
         if (!demo_prepareFrame()) {
+            LOG("Demo finished");
             break;
         }
         CHECK_GL_ERROR("after frame preparation");
@@ -207,13 +208,17 @@ int main(int argc, char *argv[])
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
                 case SDL_MOUSEMOTION:
-                    demo_evtMouseMove(event.motion.x,
-                                      screen->h - event.motion.y - 1);
+                    if (demo_evtMouseMove) {
+                        demo_evtMouseMove(event.motion.x,
+                                          screen->h - event.motion.y - 1);
+                    }
                     break;
                 case SDL_MOUSEBUTTONDOWN:
                 case SDL_MOUSEBUTTONUP:
-                    demo_evtMouseButton(event.button.button,
-                                        event.type == SDL_MOUSEBUTTONDOWN);
+                    if (demo_evtMouseButton) {
+                        demo_evtMouseButton(event.button.button,
+                                            event.type == SDL_MOUSEBUTTONDOWN);
+                    }
                     break;
                 case SDL_QUIT:
                     LOG("Window closed");

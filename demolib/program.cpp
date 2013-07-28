@@ -1,7 +1,8 @@
 #include "demolib.h"
 #include <cstdio>
 
-TextureBase::TextureBase()
+TextureBase::TextureBase() :
+    allocated(false)
 {
     glGenTextures(1, &id);
     LOG("Created texture %d", id);
@@ -10,6 +11,14 @@ TextureBase::TextureBase()
 TextureBase::~TextureBase()
 {
     glDeleteTextures(1, &id);
+}
+
+GLuint TextureBase::currentId()
+{
+    if (!IS_DEBUG) LOG("WARNING: TextureBase::currentId called; slow");
+    GLint curId;
+    glGetIntegerv(GL_TEXTURE_BINDING_2D, &curId);
+    return curId;
 }
 
 void Texture2DBase::bind(GLuint texUnit) const
@@ -21,40 +30,63 @@ void Texture2DBase::bind(GLuint texUnit) const
 
 void Texture2DBase::unbind() const
 {
+    ASSERTX(isInUse(), "Unbinding unbound texture %u", id);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 template <typename T>
-void Texture2D<T>::allocate(GLuint texUnit)
+void Texture2D<T>::allocate()
 {
     if (allocated) {
-        LOG("WARNING: Allocate on already allocated texture %d", id);
+        LOG("WARNING: Allocate on already allocated texture %u", id);
     }
-    bind(texUnit);
+    ASSERTX(isInUse(), "Allocating unbound texture %u", id);
     glPixelStorei(GL_UNPACK_ROW_LENGTH, stride);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, w, h, 0, GL_RED, pixelType, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, internalPixelFormat, w, h, 0, pixelFormat, pixelType, data);
     glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
-    unbind();
     allocated = true;
 }
 
 template <typename T>
-void Texture2D<T>::update(GLuint texUnit)
+void Texture2D<T>::update()
 {
-    ASSERTX(allocated, "Updating unallocated texture %d", id);
-    bind(texUnit);
+    ASSERTX(allocated, "Updating unallocated texture %u", id);
+    ASSERTX(isInUse(), "Updating unbound texture %u", id);
     glPixelStorei(GL_UNPACK_ROW_LENGTH, stride);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_RED, pixelType, data);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, pixelFormat, pixelType, data);
     glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
 }
 
+template <typename T>
+void Texture2D<T>::updateLocal()
+{
+    ASSERTX(allocated, "Locally updating unallocated texture %u", id);
+    ASSERTX(isInUse(), "Locally updating unbound texture %u", id);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, stride);
+    glGetTexImage(GL_TEXTURE_2D, 0, pixelFormat, pixelType, data);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+}
+
+
 template <> const GLenum Texture2D<uint8_t>::pixelType = GL_UNSIGNED_BYTE;
 template <> const GLenum Texture2D<float>::pixelType = GL_FLOAT;
+template <> const GLenum Texture2D<glm::u8vec4>::pixelType = GL_UNSIGNED_BYTE;
+
+template <> const GLenum Texture2D<uint8_t>::pixelFormat = GL_RED;
+template <> const GLenum Texture2D<float>::pixelFormat = GL_RED;
+template <> const GLenum Texture2D<glm::u8vec4>::pixelFormat = GL_RGBA;
+
+template <> const GLenum Texture2D<uint8_t>::internalPixelFormat = GL_R8;
+template <> const GLenum Texture2D<float>::internalPixelFormat = GL_R8;
+template <> const GLenum Texture2D<glm::u8vec4>::internalPixelFormat = GL_RGBA8;
+
+
 
 template struct Texture2D<uint8_t>;
 template struct Texture2D<float>;
+template struct Texture2D<glm::u8vec4>;
 
 
 
@@ -146,18 +178,20 @@ Program::Program(std::initializer_list<std::shared_ptr<Shader> > &&_shaders) :
 
 void Program::useId(GLuint id)
 {
+    ASSERTX(currentId() == 0, "Program already in use");
     glUseProgram(id);
 }
-void Program::unuse()
+void Program::unuseId(GLuint id)
 {
-    ASSERTX(isInUse(), "Program not being used");
+    ASSERTX(isInUseId(id), "Program not being used");
     glUseProgram(0);
 }
-bool Program::isInUseId(GLuint id)
+GLuint Program::currentId()
 {
+    if (!IS_DEBUG) LOG("WARNING: Program::currentId called; slow");
     GLint curId;
     glGetIntegerv(GL_CURRENT_PROGRAM, &curId);
-    return curId == static_cast<GLint> (id);
+    return curId;
 }
 
 GLuint Program::doLink(std::vector<std::shared_ptr<Shader> > &shaders)
@@ -310,10 +344,10 @@ void ProgramMesh::useId(GLuint id)
     glEnableClientState(GL_PRIMITIVE_RESTART_NV);
     glPrimitiveRestartIndexNV(PrimitiveRestartIndex);
 }
-void ProgramMesh::unuse()
+void ProgramMesh::unuseId(GLuint id)
 {
     glDisableClientState(GL_PRIMITIVE_RESTART_NV);
-    Program::unuse();
+    Program::unuseId(id);
 }
 
 void ProgramMesh::doDraw(GLenum mode) const
@@ -413,7 +447,7 @@ const std::shared_ptr<Shader> ProgramTexturedQuad::fs =
         uniform sampler2D tex;
         void main()
         {
-            gl_FragColor = vec4(texture(tex, fTexCoord).rrr, 1.0f);
+            gl_FragColor = texture(tex, fTexCoord);
         }
     )", "ProgramTexturedQuad::fs");
 
@@ -445,30 +479,60 @@ w(_w), h(_h), id(-1), depthBufId(-1)
         glGenRenderbuffers(1, &depthBufId);
         glBindRenderbuffer(GL_RENDERBUFFER, depthBufId);
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT,
-                                 w, h);
+                              w, h);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER,
-                                     GL_DEPTH_ATTACHMENT,
-                                     GL_RENDERBUFFER, depthBufId);
+                                  GL_DEPTH_ATTACHMENT,
+                                  GL_RENDERBUFFER, depthBufId);
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 FBO::~FBO()
 {
+    glDeleteRenderbuffers(1, &depthBufId);
     glDeleteFramebuffers(1, &id);
 }
 void FBO::bindTexture(const Texture2DBase &tex, int attachment)
 {
+    ASSERTX(tex.id != -1u, "Binding invalid texture");
+    ASSERTX(tex.allocated, "Binding unallocated texture %u", tex.id);
+    ASSERTX(w == tex.w && h == tex.h, "Binding texture of incorrect size to FBO"
+                                      "(FBO %dx%d, tex %dx%d)",
+                                      w, h, tex.w, tex.h);
+    glBindFramebuffer(GL_FRAMEBUFFER, id);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+attachment,
                            GL_TEXTURE_2D, tex.id, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void GLContext::bindFBO(const FBO &fbo)
+#define CASE(x) case x: return #x
+static const char *FrameBufferError(GLenum err) {
+    switch (err) {
+        CASE(GL_FRAMEBUFFER_COMPLETE);
+        CASE(GL_FRAMEBUFFER_UNDEFINED);
+        CASE(GL_FRAMEBUFFER_UNSUPPORTED);
+        CASE(GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT);
+        CASE(GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT);
+        CASE(GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER);
+        CASE(GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER);
+        CASE(GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE);
+        CASE(GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS);
+        case 0: return "<error>";
+        default: return "<unknown>";
+    }
+}
+#undef CASE
+
+void GLContext::bindFBO(FBO &fbo)
 {
+    if (&fbo == curFBO) return;
     if (curFBO) unbindFBO();
     glBindFramebuffer(GL_FRAMEBUFFER, fbo.id);
-    ASSERTX(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Bind on incomplete framebuffer");
+    ASSERTX(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE,
+            "Bind on incomplete framebuffer (error %s)",
+            FrameBufferError(glCheckFramebufferStatus(GL_FRAMEBUFFER)));
     glPushAttrib(GL_VIEWPORT_BIT);
     glViewport(0, 0, fbo.w, fbo.h);
+    curFBO = &fbo;
 }
 void GLContext::unbindFBO()
 {
@@ -478,4 +542,5 @@ void GLContext::unbindFBO()
     }
     glPopAttrib();
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    curFBO = nullptr;
 }

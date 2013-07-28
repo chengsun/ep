@@ -62,19 +62,13 @@ bool demo_prepareFrame()
 
 void demo_drawFrame()
 {
-    static float t = 0.f;
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClearDepth(1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     program->use();
+    //static float t = 0.f;
     //program->setUniform("gTransform", glm::rotate(glm::mat4(), t+=2.f, glm::vec3(0.f,1.f,0.f)));
     program->draw();
     program->unuse();
 }
 
-void demo_evtMouseMove(int x, int y)
-{
-}
-void demo_evtMouseButton(uint8_t button, bool state)
-{
-}

@@ -49,6 +49,7 @@ extern "C"
 #define INFO(...) dlib_log(__FILE__, __LINE__, __VA_ARGS__)
 
 #ifdef DEBUG
+    static constexpr bool IS_DEBUG = true;
 #   include <cstdlib>
 #   define LOG(...) INFO(__VA_ARGS__)
 #   define ASSERTX(x, ...) \
@@ -69,6 +70,7 @@ extern "C"
         } \
     } while (0)
 #else
+    static constexpr bool IS_DEBUG = false;
 #   define LOG(...)    do { (void) 0; } while (0)
 #   define ASSERTX(x, ...) do { (void) sizeof(x); } while (0)
 #   define CHECK_GL_ERROR(where) do { (void) sizeof(where); } while (0)
