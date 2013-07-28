@@ -410,6 +410,26 @@ Progress Log
     * Glow effect
   ![Rendering high-quality text with various effects](https://raw.github.com/chengsun/ep/master/docs/images/260713_text.png)
 
+27/7/13 *(4 hours)*
+-------
+* Worked on PNG writer code. This will allow me to save a texture that is
+  stored in memory into the hard drive for use later.
+* Worked on implementing the framebuffer object (FBO). This will allow me not
+  only to render to the screen, but also to an in-memory texture, which I can
+  subsequently save using my PNG writing code, or use in a subsequent mesh.
+* Wrote a test `test_rendertex` to test rendering text into a texture using a
+  framebuffer object, and subsequently saving that texture using the PNG
+  writer code. Currently the code is not working: random garbage gets stored in
+  the texture.
+
+28/7/13 *(4 hours)*
+-------
+* Implemented colour (and transparent) textures using vec4 to represent the
+  RGBA values.
+* Fixed and finished both the PNG writer code and the framebuffer code. The
+  test works.
+  ![Text as rendered into a texture](https://raw.github.com/chengsun/ep/master/docs/images/280713_rendertex.png)
+
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
 [ryg halfedge-practice]: http://fgiesen.wordpress.com/2012/03/24/half-edge-based-mesh-representations-practice/
 [ryg halfedge-redux]: http://fgiesen.wordpress.com/2012/04/03/half-edges-redux/
