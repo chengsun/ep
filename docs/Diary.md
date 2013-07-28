@@ -388,7 +388,7 @@ Progress Log
 * Continued working on Texture code. Got texture code to work well, by using
   information from the [OpenGL wiki][opengl core-api].
 * Text output is almost done, except for a bug in the texture upload, which
-  causes the texture to be the wrong width. After an hour's worth of debugging 
+  causes the texture to be the wrong width. After an hour's worth of debugging
   I believe that this is caused by the graphics driver expecting a texture
   width that is divisible by 8, which I am not providing.
   I will have to change the code tomorrow to deal with this issue.
@@ -408,6 +408,7 @@ Progress Log
     * Small texture size (128x128)
     * Customisable boldness
     * Glow effect
+    
   ![Rendering high-quality text with various effects](https://raw.github.com/chengsun/ep/master/docs/images/260713_text.png)
 
 27/7/13 *(4 hours)*
@@ -427,7 +428,7 @@ Progress Log
 * Implemented colour (and transparent) textures using vec4 to represent the
   RGBA values.
 * Fixed and finished both the PNG writer code and the framebuffer code. The
-  test works.
+  test works. Below shows the text as rendered into a square 128x128 texture.  
   ![Text as rendered into a texture](https://raw.github.com/chengsun/ep/master/docs/images/280713_rendertex.png)
 
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
