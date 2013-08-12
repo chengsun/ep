@@ -1,5 +1,4 @@
 #include "demolib.h"
-#include <cstdio>
 
 TextureBase::TextureBase() :
     allocated(false)
@@ -176,14 +175,14 @@ Program::Program(std::initializer_list<std::shared_ptr<Shader> > &&_shaders) :
 {
 }
 
-void Program::useId(GLuint id)
+void Program::use()
 {
     ASSERTX(currentId() == 0, "Program already in use");
     glUseProgram(id);
 }
-void Program::unuseId(GLuint id)
+void Program::unuse()
 {
-    ASSERTX(isInUseId(id), "Program not being used");
+    ASSERTX(isInUse(), "Program not being used");
     glUseProgram(0);
 }
 GLuint Program::currentId()
@@ -238,7 +237,11 @@ bool Program::link()
 
 GLint Program::uniformLocation(const char *name)
 {
-    return glGetUniformLocation(id, name);
+    GLint loc = glGetUniformLocation(id, name);
+    if (loc == -1) {
+        LOG("WARNING: no uniform named %s", name);
+    }
+    return loc;
 }
 
 bool Program::setUniform(const char *name, GLint v)
@@ -290,64 +293,62 @@ bool Program::setUniform(const char *name, const glm::mat4 &v, bool trans)
     return loc != -1;
 }
 
-const std::shared_ptr<Shader> ProgramMesh::vsDebug =
+const std::shared_ptr<Shader> ProgramMesh::vs =
     Shader::Inline(GL_VERTEX_SHADER, R"(
         #version 130
-        in vec4 pos;
-        in vec2 texCoord;
-        uniform mat4 transform;
-        out vec2 fTexCoord;
+
+        in vec4 iPos;
+        in vec2 iTexCoord;
+
+        uniform mat4 uTransform;
+
+        out vec2 vTexCoord;
+        flat out float vVertexId;
+
         void main()
         {
-            gl_Position = transform * pos;
-            fTexCoord = texCoord;
+            gl_Position = uTransform * iPos;
+            vTexCoord = iTexCoord;
+            vVertexId = gl_VertexID;
         }
-    )", "ProgramMesh::vsDebug");
-const std::shared_ptr<Shader> ProgramMesh::fsDebugFace =
+    )", "ProgramMesh::vs");
+
+const std::shared_ptr<Shader> ProgramMeshDebugVisFace::fs =
     Shader::Inline(GL_FRAGMENT_SHADER, R"(
         #version 130
-        in vec2 fTexCoord;
+
+        in vec2 vTexCoord;
+
         void main()
         {
-            gl_FragColor = vec4(fTexCoord, 0.f, 1.f);
+            gl_FragColor = vec4(vTexCoord, 0.f, 1.f);
         }
-    )", "ProgramMesh::fsDebugFace");
-const std::shared_ptr<Shader> ProgramMesh::fsDebugEdge =
+    )", "ProgramMeshDebugVisFace::fs");
+
+const std::shared_ptr<Shader> ProgramMeshDebugVisEdge::fs =
     Shader::Inline(GL_FRAGMENT_SHADER, R"(
         #version 130
-        in vec2 fTexCoord;
+
+        in vec2 vTexCoord;
+        flat in float vVertexId;
+
         void main()
         {
-            gl_FragColor = vec4(1.f, 1.f, 1.f, 1.f);
+            float edgePos = vVertexId*0.3f;
+            gl_FragColor = vec4(edgePos-1.f, 1.f, edgePos, 1.f);
         }
-    )", "ProgramMesh::fsDebugEdge");
+    )", "ProgramMeshDebugVisEdge::fs");
 
-
-void ProgramMesh::debugLink()
+void ProgramMesh::use()
 {
-    std::vector<std::shared_ptr<Shader> >
-            shadersDebugFace = {vsDebug, fsDebugFace},
-            shadersDebugEdge = {vsDebug, fsDebugEdge};
-    if (debugFaceId == -1u) {
-        debugFaceId = doLink(shadersDebugFace);
-        ASSERTX(debugFaceId != -1u, "Failed to compile debug face program");
-    }
-    if (debugEdgeId == -1u) {
-        debugEdgeId = doLink(shadersDebugEdge);
-        ASSERTX(debugEdgeId != -1u, "Failed to compile debug edge program");
-    }
-}
-
-void ProgramMesh::useId(GLuint id)
-{
-    Program::useId(id);
+    Program::use();
     glEnableClientState(GL_PRIMITIVE_RESTART_NV);
     glPrimitiveRestartIndexNV(PrimitiveRestartIndex);
 }
-void ProgramMesh::unuseId(GLuint id)
+void ProgramMesh::unuse()
 {
     glDisableClientState(GL_PRIMITIVE_RESTART_NV);
-    Program::unuseId(id);
+    Program::unuse();
 }
 
 void ProgramMesh::doDraw(GLenum mode) const
@@ -372,29 +373,20 @@ void ProgramMesh::drawWire() const
     doDraw(GL_LINE_LOOP);
 }
 
-GLuint ProgramMesh::debugFaceId = -1u;
-GLuint ProgramMesh::debugEdgeId = -1u;
-
-void ProgramMesh::debugDraw() const
-{
-    doDraw(GL_TRIANGLE_FAN);
-}
-void ProgramMesh::debugDrawWire() const
-{
-    doDraw(GL_LINE_LOOP);
-}
-
-void ProgramMesh::updateMeshBuf(const Mesh &mesh)
+void ProgramMesh::updateMeshBuf(const Mesh &mesh, uint8_t vertMask, uint8_t faceMask)
 {
     vertBuf.resize(mesh.verts.size());
     for (U32 vertIdx = 0; vertIdx < mesh.verts.size(); vertIdx++) {
-        vertBuf[vertIdx] = mesh.verts[vertIdx];
+        const MeshVert &vert = mesh.verts[vertIdx];
+        if ((vert.mask | vertMask) != 0xFF) continue;
+        vertBuf[vertIdx] = vert;
     }
 
     idxBuf.clear();
     for (U32 faceIdx = 0; faceIdx < mesh.faces.size(); faceIdx++) {
         const MeshFace &face = mesh.faces[faceIdx];
         if (face.material == 0xFF) continue;
+        if ((face.mask | faceMask) != 0xFF) continue;
         if (!idxBuf.empty()) {
             idxBuf.push_back(PrimitiveRestartIndex);
         }
@@ -425,29 +417,34 @@ void ProgramMesh::updateMeshBuf(const Mesh &mesh)
 }
 
 
-
-
 const std::shared_ptr<Shader> ProgramTexturedQuad::vs =
     Shader::Inline(GL_VERTEX_SHADER, R"(
         #version 130
-        in vec4 pos;
-        in vec2 texCoord;
-        uniform mat4 transform;
-        out vec2 fTexCoord;
+        in vec4 iPos;
+        in vec2 iTexCoord;
+        uniform mat4 uTransform;
+        out vec2 vTexCoord;
+
         void main()
         {
-            gl_Position = transform*pos;
-            fTexCoord = texCoord;
+            gl_Position = uTransform*iPos;
+            vTexCoord = iTexCoord;
         }
     )", "ProgramTexturedQuad::vs");
 const std::shared_ptr<Shader> ProgramTexturedQuad::fs =
     Shader::Inline(GL_FRAGMENT_SHADER, R"(
         #version 130
-        in vec2 fTexCoord;
-        uniform sampler2D tex;
+        in vec2 vTexCoord;
+        uniform sampler2D uTex;
+        uniform bool uTexIsGray = false;
+
         void main()
         {
-            gl_FragColor = texture(tex, fTexCoord);
+            vec4 color = texture(uTex, vTexCoord);
+            if (uTexIsGray) {
+                color = color.rrra;
+            }
+            gl_FragColor = color;
         }
     )", "ProgramTexturedQuad::fs");
 

@@ -25,7 +25,6 @@ void demo_init(unsigned, unsigned)
     program = new ProgramTextSDF(0/*, {ProgramTexturedQuad::vs, ProgramTexturedQuad::fs}*/);
     program->link();
     progMain = new ProgramTexturedQuad(0);
-    progMain->debugLink();
     progMain->link();
 
     font = new Font("/usr/share/fonts/TTF/FreeSans.ttf", 600);

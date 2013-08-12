@@ -52,7 +52,6 @@ void demo_init(unsigned, unsigned)
     waveTex->allocate();
     program = new ProgramTexturedQuad(0);
     program->link();
-    program->debugLink();
 }
 
 bool demo_prepareFrame()
@@ -97,8 +96,9 @@ void demo_drawFrame()
 
     program->use();
     //static float time = 0.f;
-    //program->setUniform("transform", glm::rotate(glm::mat4(), time++, glm::vec3(1.f, 1.f, 0.f)));
-    program->setUniform("transform", glm::mat4());
+    //program->setUniform("uTransform", glm::rotate(glm::mat4(), time++, glm::vec3(1.f, 1.f, 0.f)));
+    program->setUniform("uTransform", glm::mat4());
+    program->setUniform("uTexIsGray", true);
     program->draw();
     program->unuse();
 }

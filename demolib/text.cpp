@@ -111,18 +111,33 @@ TextureTextSDF::TextureTextSDF(int w, int h, SDL_Surface *surf, int spread) :
 const std::shared_ptr<Shader> ProgramTextSDF::fs =
     Shader::Inline(GL_FRAGMENT_SHADER, R"(
         #version 130
-        in vec2 fTexCoord;
-        uniform sampler2D tex;
-        uniform float threshold = 0.5f;
-        uniform vec4 glowColor = vec4(0.f, 1.f, 0.f, 1.f);
+        in vec2 vTexCoord;
+        uniform sampler2D uTex;
+
+        struct TextSDFParms {
+            vec4 baseColor;
+            bool glow;
+            vec4 glowColor;
+            float threshold;
+        };
+        uniform TextSDFParms uTextParms = TextSDFParms(
+            vec4(1.f, 1.f, 1.f, 1.f),
+            false,
+            vec4(0.f, 1.f, 0.f, 1.f),
+            0.5
+        );
         void main()
         {
-            vec4 basec = vec4(1.f, 1.f, 1.f, 1.f);
-            float texv = texture(tex, fTexCoord).r;
-            basec.a = float(texv >= threshold);
-            vec4 glowc = glowColor * smoothstep(threshold*0.5f, threshold*1.0f, texv);
-            basec = mix(glowc, basec, basec.a);
-            gl_FragColor = basec;
+            vec4 color = uTextParms.baseColor;
+            float texv = texture(uTex, vTexCoord).r;
+            color.a = float(texv >= uTextParms.threshold);
+            if (uTextParms.glow) {
+                vec4 glowColor = uTextParms.glowColor *
+                                 smoothstep(uTextParms.threshold*0.5f,
+                                            uTextParms.threshold*1.0f, texv);
+                color = mix(glowColor, color, color.a);
+            }
+            gl_FragColor = color;
         }
     )", "ProgramTextSDF::fs");
 

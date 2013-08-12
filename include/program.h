@@ -4,8 +4,6 @@
 #include "mesh.h"
 #include <GL/gl.h>
 #include <vector>
-#include <string>
-#include <memory>
 
 struct TextureBase
 {
@@ -121,12 +119,8 @@ public:
     static GLuint doLink(std::vector<std::shared_ptr<Shader> > &shaders);
     bool link();
 
-    /* overloadable use functions */
-    virtual void useId(GLuint id);
-    virtual void unuseId(GLuint id);
-    /* convenience */
-    void use() {useId(id);}
-    void unuse() {unuseId(id);}
+    virtual void use();
+    virtual void unuse();
     /* checks */
     static GLuint currentId();
     static bool isInUseId(GLuint id) {return currentId() == id;}
@@ -159,6 +153,15 @@ struct VertexAttribDescriptor
     unsigned offset;
 };
 
+struct ProgramRaw : public Program
+{
+    ProgramRaw(std::initializer_list<std::shared_ptr<Shader> > &&_shaders) :
+        Program(std::move(_shaders)) {}
+
+private:
+    void draw() const {};
+};
+
 struct VertBuf
 {
     glm::vec3 pos;
@@ -175,10 +178,11 @@ struct ProgramMesh : public Program
     ProgramMesh(std::initializer_list<std::shared_ptr<Shader> > &&_shaders) :
         Program(std::move(_shaders)) {}
 
-    virtual void useId(GLuint id);
-    virtual void unuseId(GLuint id);
+    virtual void use();
+    virtual void unuse();
 
-    virtual void updateMeshBuf(const Mesh &mesh);
+    /* accepts vertices iff (vert.mask | vertMask) == 0xFF */
+    virtual void updateMeshBuf(const Mesh &mesh, uint8_t vertMask = 0xFF, uint8_t faceMask = 0xFF);
     /* draw after doing sanity checks that this program is being used */
     virtual void draw() const;
     virtual void drawWire() const;
@@ -194,43 +198,25 @@ struct ProgramMesh : public Program
     std::vector<VertBuf> vertBuf;
     std::vector<U32> idxBuf;
 
-    /* debug programs */
-    static const std::shared_ptr<Shader> vsDebug, fsDebugFace, fsDebugEdge;
-    static GLuint debugFaceId, debugEdgeId;
-
-    /* ensure debug programs are used */
-    void debugLink();
-    /* draw without doing checks */
-    void debugDraw() const;
-    void debugDrawWire() const;
-    /* debug example:
-     * prog->debugLink();
-     * ...
-     * prog->useId(prog->debugFaceId);
-     * prog->debugDraw();
-     * prog->unuseId(prog->debugFaceId);
-     */
-
+    static const std::shared_ptr<Shader> vs;
 private:
     void doDraw(GLenum mode) const;
 };
 
-/*
-struct ProgramMeshDebug : public ProgramMesh
+struct ProgramMeshDebugVisFace : public ProgramMesh
 {
-    ProgramMeshDebug();
-    virtual void draw() const;
+    ProgramMeshDebugVisFace() :
+        ProgramMesh({vs, fs})
+    {}
+    static const std::shared_ptr<Shader> fs;
 };
-*/
 
-struct ProgramRaw : public ProgramMesh
+struct ProgramMeshDebugVisEdge : public ProgramMesh
 {
-    ProgramRaw(std::initializer_list<std::shared_ptr<Shader> > &&_shaders) :
-        ProgramMesh(std::move(_shaders)) {}
-
-private:
-    void updateMeshBuf(const Mesh &) {};
-    void draw() const {};
+    ProgramMeshDebugVisEdge() :
+        ProgramMesh({vs, fs})
+    {}
+    static const std::shared_ptr<Shader> fs;
 };
 
 struct ProgramTexturedQuad : public ProgramMesh

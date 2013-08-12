@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <cinttypes>
+#include <vector>
 
 typedef uint8_t U8;
 typedef uint16_t U16;
@@ -18,6 +19,33 @@ typedef int32_t S32;
 #include <glm/gtc/type_precision.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+/* matrix stack */
+
+template <class M>
+struct MatStack
+{
+    void push() {
+        stack.push_back(curr);
+    }
+    void pop() {
+        curr = stack.back();
+        stack.pop_back();
+    }
+    const M &top() const {
+        return curr;
+    }
+    MatStack &operator*=(const M &m) {
+        curr *= m;
+        return *this;
+    }
+
+    std::vector<M> stack;
+    M curr;
+};
+
+template struct MatStack<glm::mat4>;
+typedef MatStack<glm::mat4> Mat4Stack;
 
 #define ARRAYLEN(x) (sizeof(x)/sizeof((x)[0]))
 #define PI 3.14159265359f

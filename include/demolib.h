@@ -4,7 +4,7 @@
 #include <GL/glew.h>
 
 #include "util.h"
-#include "program.h"
 #include "mesh.h"
+#include "program.h"
 
 #endif

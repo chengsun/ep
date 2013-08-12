@@ -19,6 +19,7 @@ void demo_init(unsigned w, unsigned h)
         Shader::FromFile(GL_VERTEX_SHADER, "data/impostor.vs"),
         Shader::FromFile(GL_FRAGMENT_SHADER, "data/impostor.fs")
     });
+    triangleProgram->link();
 
     // initialise vertex buffer
 
@@ -27,13 +28,16 @@ void demo_init(unsigned w, unsigned h)
     glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertexPositions), vertexPositions, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    CHECK_GL_ERROR("1");
 
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
+    CHECK_GL_ERROR("2");
 
     glViewport(0, 0, (GLsizei) w, (GLsizei) h);
 
     timeUniform = glGetUniformLocation(triangleProgram->id, "time");
+    CHECK_GL_ERROR("3");
 }
 
 bool demo_prepareFrame()

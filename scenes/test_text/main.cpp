@@ -22,7 +22,8 @@ void demo_init(unsigned, unsigned)
     textTex = new TextureTextSDF(128, 128, surf, 200);
     surf = NULL;
     LOG("got size %dx%d", textTex->w, textTex->h);
-    textTex->allocate(0);
+    textTex->bind(0);
+    textTex->allocate();
 }
 
 bool demo_prepareFrame()
@@ -45,9 +46,9 @@ void demo_drawFrame()
               B = glm::rotate(A, t*1.1f, glm::vec3(0.f, 1.f, 0.f)),
               C = glm::scale(B, glm::vec3(1.0f,-0.2f,1.f)),
               D = glm::translate(C, glm::vec3(sin(t/30.f)*0.6f, sin(t/70.f)*0.3f, 0.f));
-    program->setUniform("transform", D);
-    program->setUniform("threshold", clamp((float) fabs(fmod(t/100.f,1.40f)-0.70f)+0.30f, 0.5f, 1.0f));
-    program->setUniform("glowColor", glm::vec4(sin(t/100.f)/2+0.5, sin(t/100.f + 2*PI/3)/2+0.5, sin(t/100.f + 4*PI/3)/2+0.5, 1.f));
+    program->setUniform("uTransform", D);
+    program->setUniform("uTextParms.threshold", clamp((float) fabs(fmod(t/100.f,1.40f)-0.70f)+0.30f, 0.5f, 1.0f));
+    program->setUniform("uTextParms.glowColor", glm::vec4(sin(t/100.f)/2+0.5, sin(t/100.f + 2*PI/3)/2+0.5, sin(t/100.f + 4*PI/3)/2+0.5, 1.f));
     t += 1.f;
     program->draw();
     program->unuse();
@@ -56,6 +57,7 @@ void demo_drawFrame()
 void demo_evtMouseMove(int x, int y)
 {
 }
+
 void demo_evtMouseButton(uint8_t button, bool state)
 {
 }

@@ -49,10 +49,10 @@ bool Mesh::check() const
 bool Mesh::checkFlags() const
 {
     for (unsigned i = 0, vertSize = verts.size(); i < vertSize; i++) {
-        if (verts[i].selected) return false;
+        if (verts[i].mask) return false;
     }
     for (unsigned i = 0, faceSize = faces.size(); i < faceSize; i++) {
-        if (faces[i].selected) return false;
+        if (faces[i].mask) return false;
     }
     return true;
 }

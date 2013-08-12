@@ -4,14 +4,11 @@
 #include "util.h"
 #include <vector>
 
-extern "C" {
-
-
-static const unsigned MAXVERT = 8;   // max vertices per face
+static constexpr unsigned MAXVERT = 8;   // max vertices per face
 
 struct MeshVert
 {
-    U8 selected;
+    U8 mask;
     U32 tmp;
     glm::vec3 pos;
     glm::vec3 normal;
@@ -22,7 +19,7 @@ struct MeshFace
 {
     U8 count;                   // number of verts/edges
     U8 material;                // material index, 0 for none
-    U8 selected;
+    U8 mask;
     U32 tmp;
 
     glm::vec3 normal;
@@ -177,7 +174,5 @@ struct Mesh
         return vertIdx(edge/8, edge%8);
     }
 };
-
-}
 
 #endif
