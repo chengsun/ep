@@ -14,7 +14,7 @@ TextureBase::~TextureBase()
 
 GLuint TextureBase::currentId()
 {
-    if (!IS_DEBUG) LOG("WARNING: TextureBase::currentId called; slow");
+    if (!IS_DEBUG) INFO("WARNING: TextureBase::currentId called; slow");
     GLint curId;
     glGetIntegerv(GL_TEXTURE_BINDING_2D, &curId);
     return curId;
@@ -187,7 +187,7 @@ void Program::unuse()
 }
 GLuint Program::currentId()
 {
-    if (!IS_DEBUG) LOG("WARNING: Program::currentId called; slow");
+    if (!IS_DEBUG) INFO("WARNING: Program::currentId called; slow");
     GLint curId;
     glGetIntegerv(GL_CURRENT_PROGRAM, &curId);
     return curId;
