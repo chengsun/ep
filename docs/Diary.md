@@ -312,6 +312,12 @@ Progress Log
   verlet integration, and wave simulation using discrete grid-based methods.
 * I have updated the Timeline to reflect this.
 * I have written an end of April review.
+* I have started exploring 3D transformations, lighting and shading using
+  vectors and matrices. I have written a quick prototype demonstrating these
+  three things using JavaScript. The program displays a rotating cube that
+  experiences flat shading from a single light source at infinity. This can be
+  found under `experiments/cube.html`.  
+  ![3D transformations and lighting](https://raw.github.com/chengsun/ep/master/docs/images/280413_cube.png)
 
 29/4/13
 -------
@@ -369,12 +375,20 @@ Progress Log
 -------
 * Found a [web page][democritis verlet] as a reference for the Verlet
   algorithm.
-* Wrote a prototype verlet integration physics engine in JavaScript, which
-  simulates a ragdoll in 2D, which can be controlled by the mouse. I am very
-  pleased with the outcome.
+* In order to test the algorithm, I wrote a prototype verlet integration
+  physics engine in JavaScript. It moves one end of a ribbon around, leaving
+  the other end free to interact with physics. This experiment can be found
+  under `experiments/verletrag.html`.  
+  ![Verlet integration on a ribbon](https://raw.github.com/chengsun/ep/master/docs/images/280613_verlet.png)
 
-30/6/13 *(30 minutes)*
+30/6/13 *(3 hours)*
 -------
+* In order to further test the Verlet algorithm, I wrote a program to simulate
+  a ragdoll in 2D, which can be controlled by the mouse. In addition, there is
+  collision detection using a technique found in a book (Graphics Gems) that
+  uses maths which I learnt in FP4. I am very pleased with the outcome. This
+  experiment can be found under `experiments/verletrag.html`.  
+  ![Verlet integration on a ragdoll](https://raw.github.com/chengsun/ep/master/docs/images/300613_verletrag.jpg)
 * Started writing May & June end-of-month review.
 
 23/7/13 *(4 hours)*
@@ -431,6 +445,25 @@ Progress Log
   test works. Below shows the text as rendered into a square 128x128 texture.  
   ![Text as rendered into a texture](https://raw.github.com/chengsun/ep/master/docs/images/280713_rendertex.png)
 
+13/08/13 *(4 hours)*
+--------
+* Implemented matrix stacks. The idea was based on this guide in the [OpenGL
+  red book][opengl red matrix-stacks]. However I implemented it manually rather
+  than using the OpenGL fixed functions.
+* Implemented the perspective transform using the matrix stacks. Now 3D objects
+  that are further away look smaller on the screen. I used [this question and
+  answer site][stackoverflow glm-perspective] to help me understand and
+  implement the transform.
+* Tried drawing face indices onto the grid in order to help me debug the code.
+
+17/08/13 *(3 hours)*
+--------
+* Started implementing creases into the mesh engine. This allows values (such
+  as texture UV) to change discontinuously. I am using the approach described
+  [in this blog post][ryg halfedge-redux]. It is not completely working.
+
+
+
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
 [ryg halfedge-practice]: http://fgiesen.wordpress.com/2012/03/24/half-edge-based-mesh-representations-practice/
 [ryg halfedge-redux]: http://fgiesen.wordpress.com/2012/04/03/half-edges-redux/
@@ -442,6 +475,7 @@ Progress Log
 [arcsynthesis]: http://www.arcsynthesis.org/gltut/
 [arcsynthesis 17-scenegraph]: http://www.arcsynthesis.org/gltut/Texturing/Tutorial%2017.html#d0e15853
 [opengl core-api]: http://www.opengl.org/wiki/Category:Core_API_Reference
+[opengl red matrix-stacks]: http://www.glprogramming.com/red/chapter03.html#name6
 [cprogramming quat]: http://www.cprogramming.com/tutorial/3d/quaternions.html
 [navis 2007]: http://navis-asd.blogspot.co.uk/2010/04/2007-and-now.html
 [hoetzlein surface-reconstruction]: http://www.rchoetzlein.com/theory/2010/surface-reconstruction-of-sph-fluids/
@@ -454,5 +488,6 @@ Progress Log
 [valve sdf-mag]: http://www.valvesoftware.com/publications/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf
 [glm]: http://glm.g-truc.net/
 [democritis verlet]: http://www.compsoc.man.ac.uk/~lucky/Democritus/Theory/verlet.html#verlet
+[stackoverflow glm-perspective]: http://stackoverflow.com/questions/8115352/glmperspective-explanation
 
 <!-- vim: set tw=79: -->
