@@ -1,4 +1,5 @@
 Thomas Jakobsen's Advanced Character Physics
+===
 
 Paper URL: http://web.archive.org/web/20080410171619/http://www.teknikus.dk/tj/gdc2001.htm
 
