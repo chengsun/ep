@@ -512,20 +512,21 @@ Builder.prototype.unserialise = function (a) {
   this.draw();
 };
 Builder.prototype.reset = function () {
-    this.nodes.length = 0;
-    this.links.length = 0;
-    this.nodes.push(new Node(new Point(100, 300)));
-    this.nodes[0].fixed = true;
-    this.nodes[0].finalised = true;
-    this.nodes.push(new Node(new Point(400, 300)));
-    this.nodes[1].fixed = true;
-    this.nodes[1].finalised = true;
-    this.nodes.push(new Node(new Point(100, 100)));
-    this.nodes[2].fixed = true;
-    this.nodes[2].finalised = true;
-    this.nodes.push(new Node(new Point(400, 100)));
-    this.nodes[3].fixed = true;
-    this.nodes[3].finalised = true;
+  this.nodes.length = 0;
+  this.links.length = 0;
+  this.nodes.push(new Node(new Point(100, 300)));
+  this.nodes[0].fixed = true;
+  this.nodes[0].finalised = true;
+  this.nodes.push(new Node(new Point(400, 300)));
+  this.nodes[1].fixed = true;
+  this.nodes[1].finalised = true;
+  this.nodes.push(new Node(new Point(100, 100)));
+  this.nodes[2].fixed = true;
+  this.nodes[2].finalised = true;
+  this.nodes.push(new Node(new Point(400, 100)));
+  this.nodes[3].fixed = true;
+  this.nodes[3].finalised = true;
+  this.draw();
 };
 Builder.prototype.onKeyPress = function (c) {
   if (c >= 48 && c <= 57) {
