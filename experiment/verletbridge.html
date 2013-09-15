@@ -6,25 +6,28 @@
   html, body {
     margin: 0;
   }
-canvas {
+  canvas {
     background-color: white;
-}
+  }
+  #info {
+    font-weight: bold;
+  }
 </style>
 </head>
 <body id="b">
 <div style="float: left; width: 500px; margin: 0; margin-right: 30px;">
-  <canvas id="c" width="500" height="500">asdf</canvas>
-  <div>
-  <button onclick="setMode(new Simulator(builder));">Start</button>
-  <button onclick="setMode(builder);">Stop</button>
+  <canvas id="c" width="500" height="500">Your browser doesn't support canvas, you suck</canvas>
+  <span style="float: left; font-size: 150%;">Current material: <span id="info">Loading...</span></span>
+  <span style="float: right;">
+    <button onclick="setMode(new Simulator(builder));">Start</button>
+    <button onclick="setMode(builder);">Stop</button>
+  </span>
+  <div style="clear: both; border-top: 1px solid black; margin-top: 10px; padding-top: 5px;">
+    <textarea type="text" style="width: 100%;" id="saveload" autocomplete="off"></textarea>
+    <button onclick="document.getElementById('saveload').value = builder.serialise();">Get build code</button>
+    <button onclick="setMode(builder); builder.unserialise(document.getElementById('saveload').value);">Load from code</button>
+    <button onclick="builder.reset();">Reset build</button>
   </div>
-  <div id="info">.</div>
-  <div>
-  <input type="text" id="saveload" value="" autocomplete="off" />
-  <button onclick="document.getElementById('saveload').value = builder.serialise();">Get build code</button>
-  <button onclick="setMode(builder); builder.unserialise(document.getElementById('saveload').value);">Load from code</button>
-  <button onclick="builder.unserialise();">Reset build</button>
-</div>
 </div>
 <h1>Cheng's unfinished Verlet integration demonstration</h1>
 <h3>Instructions!</h3>
@@ -160,9 +163,9 @@ function isIntersecting(p, p2, q, q2)
 
 var materials = [
   {
-    name: "Iron",
+    name: "Brittle Iron",
     lengthFactor: 1,
-    angStiffness: 1.05,
+    angStiffness: 1.06,
     angLimit: 4 * Math.PI / 180,
     linearStiffness: 1,
     tensionLimit: 1.01,
@@ -239,8 +242,7 @@ ModeBase.prototype = {
   onMouseDown: function () {},
   onMouseMove: function (x, y) {},
   onMouseUp: function () {},
-  onKeyDown: function (c) {},
-  onKeyUp: function (c) {},
+  onKeyPress: function (c) {},
   draw: function () {
     ctx.fillStyle = this.drawStyle.background;
     ctx.fillRect(0,0,c.width,c.height);
@@ -484,10 +486,10 @@ Builder.prototype.serialise = function () {
 };
 Builder.prototype.unserialise = function (a) {
   try {
-    var sin = a.split(' '), ain = [];
-    ain.length = sin.length;
-    for (var i = 0; i < ain.length; ++i) {
-      ain[i] = +sin[i];
+    var sin = a.replace(/[^ \d]/,'').split(' '), ain = [];
+    for (var i = 0; i < sin.length; ++i) {
+      if (!sin[i]) continue;
+      ain.push(+sin[i]);
     }
     this.nodes.length = ain.shift();
     this.links.length = ain.shift();
@@ -503,6 +505,13 @@ Builder.prototype.unserialise = function (a) {
       this.links[i] = link;
     }
   } catch (e) {
+    console.log("Invalid unserialise: resetting.");
+    this.reset();
+    throw e;
+  }
+  this.draw();
+};
+Builder.prototype.reset = function () {
     this.nodes.length = 0;
     this.links.length = 0;
     this.nodes.push(new Node(new Point(100, 300)));
@@ -517,12 +526,12 @@ Builder.prototype.unserialise = function (a) {
     this.nodes.push(new Node(new Point(400, 100)));
     this.nodes[3].fixed = true;
     this.nodes[3].finalised = true;
-  }
-  this.draw();
 };
-Builder.prototype.onKeyUp = function (c) {
+Builder.prototype.onKeyPress = function (c) {
   if (c >= 48 && c <= 57) {
     this.setMaterial(c-48);
+  } else {
+    console.log(c);
   }
 }
 
@@ -694,7 +703,7 @@ Simulator.prototype.simStep = function () {
 var builder = new Builder();
 var currentMode = builder;
 
-builder.unserialise();
+builder.reset();
 builder.start();
 
 function setMode(mode) {
@@ -724,17 +733,8 @@ c.onmouseup = function (e) {
 c.oncontextmenu = function (e) {
   return false;
 };
-window.onkeydown = function (e) {
-  var code = null;
-  if (e.hasOwnProperty('charCode')) code = e.charCode;
-  else code = e.keyCode;
-  currentMode.onKeyDown(code);
-};
-window.onkeyup = function (e) {
-  var code = null;
-  if (e.hasOwnProperty('charCode')) code = e.charCode;
-  else code = e.keyCode;
-  currentMode.onKeyUp(code);
+window.onkeypress = function (e) {
+  currentMode.onKeyPress(e.charCode);
 };
 
 </script>
