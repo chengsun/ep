@@ -3,6 +3,8 @@
 * Goldman, R. (1990) Intersection of Two Lines in Three-Space. In: Glassner, A.
 (ed.) *Graphics Gems*. Academic Press Inc., p. 304.
 * AQA (2006) *GCE Mathematics Further Pure unit 4 Textbook*. [Online] Available from: http://filestore.aqa.org.uk/subjects/AQA-MFP4-TEXTBOOK.PDF [Accessed: 22nd September 2013]
+* Shreiner, D. et al. (
+[opengl red matrix-stacks]: http://www.glprogramming.com/red/chapter03.html#name6
 
 
 **Papers**:
@@ -48,7 +50,6 @@
 [arcsynthesis]: http://www.arcsynthesis.org/gltut/
 [arcsynthesis 17-scenegraph]: http://www.arcsynthesis.org/gltut/Texturing/Tutorial%2017.html#d0e15853
 [opengl core-api]: http://www.opengl.org/wiki/Category:Core_API_Reference
-[opengl red matrix-stacks]: http://www.glprogramming.com/red/chapter03.html#name6
 [navis 2007]: http://navis-asd.blogspot.co.uk/2010/04/2007-and-now.html
 [sdl-ttf docs]: http://www.libsdl.org/projects/SDL_ttf/docs/SDL_ttf.html
 
