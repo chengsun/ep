@@ -37,7 +37,7 @@ void Wave::reset()
 
 void Wave::update()
 {
-    static const float theta = 0.1f;
+    static const float theta = 0.3f;
     static const float sintheta = sinf(theta);
     static const float costheta = cosf(theta);
     static const unsigned edgedamp = 500;
@@ -73,6 +73,8 @@ void Wave::update()
                 re = re * (edgedamp-(edgesize-dist)) / edgedamp;
                 im = im * (edgedamp-(edgesize-dist)) / edgedamp;
             }
+            re *= 0.998f;
+            im *= 0.998f;
 
             D(x,y) = basis + re*costheta - im*sintheta;
             Di(x,y) =        im*costheta + re*sintheta;

@@ -231,6 +231,20 @@ protected:
     virtual void postLink();
 };
 
+struct ProgramTexQuadImp : public Program
+{
+    ProgramTexQuadImp(GLuint texUnit,
+            std::initializer_list<std::shared_ptr<Shader> > &&_shaders = {vs, fs});
+
+    virtual void draw() const;
+
+    GLuint texUnit, vaoId;
+    static const std::shared_ptr<Shader> vs, fs;
+
+protected:
+    virtual void postLink();
+};
+
 
 
 struct FBBase

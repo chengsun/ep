@@ -22,7 +22,6 @@ struct MeshFace
     U8 mask;
     U32 tmp;
 
-    glm::vec3 normal;
     U32 verts[MAXVERT];         // vertex indices
     U32 opposite[MAXVERT];      // half-edge which is opposite
 };
@@ -41,9 +40,13 @@ struct Mesh
     }
 
     // basic operations
-
-    static std::unique_ptr<Mesh> createRing(unsigned sides, float phase = 0.f, float radius = 1.f);
+    static std::unique_ptr<Mesh> createRing(unsigned sides, bool crease, float phase = 0.f, float radius = 1.f);
     static std::unique_ptr<Mesh> createGrid(int w, int h);
+    static std::unique_ptr<Mesh> createGrid_(int w, int h);
+
+    bool samePosVert(U32 v1, U32 v2) const {
+        return (v1 == v2 || verts[v1].pos == verts[v2].pos);
+    }
 
     bool check() const;
     /* meshCheckFlags checks a mesh to ensure that the selected flags are all
@@ -67,13 +70,15 @@ struct Mesh
      * beginEdge - specifies the begin half-edge (inclusive)
      * endEdge - specifies the end half-edge (exclusive)
      * note that the order of edge traversal is CLOCKWISE (i.e. eVertPrev)!
-     * returns the half-edge representing the new vertex
+     * returns the half-edge representing the new vertex (on the old face)
      */
     U32 splitVert(U32 beginEdge, U32 endEdge);
 
     /* splitFace performs a face split
      * beginEdge - specifies the begin half-edge
      * endEdge - specifies the end half-edge
+     * going anticlockwise (eNext) from beginEdge to endEdge, those edges are
+     * moved into the new face
      * returns the half-edge representing the new face which has all vertices
      * between beginEdge and endEdge
      */

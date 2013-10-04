@@ -31,7 +31,7 @@ void demo_init(unsigned, unsigned)
     ASSERTX(mesh->check());
     */
 
-    mesh = Mesh::createGrid(3, 2);
+    mesh = Mesh::createGrid(3, 3);
     mesh->debugOut();
     ASSERTX(mesh->check());
 
@@ -52,6 +52,17 @@ bool demo_prepareFrame()
 
 void demo_drawFrame()
 {
+    static unsigned i = 999;
+    static unsigned u = 999;
+    if (++u > 100) {
+        u = 0;
+        mesh->faces[i].mask = 0x00;
+        if (++i >= mesh->faces.size()) i = 0;
+        mesh->faces[i].mask = 0xFF;
+        program->updateMeshBuf(*mesh, 0xFF, 0x00);
+    }
+
+
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClearDepth(1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -59,42 +70,54 @@ void demo_drawFrame()
     Mat4Stack ms;
     // camera-to-clip
     ms.push();
-    ms *= glm::perspective(35.0f, 1.f, 0.1f, 100.f);
+    ms.top = glm::perspective(35.0f, 1.f, 0.1f, 100.f);
     // world-to-camera
     ms.push();
     ms *= glm::translate(glm::mat4(), glm::vec3(0.f, 0.f, -10.f));
 
     static float t = 0.f;
     ms.push();
-    ms *= glm::rotate(glm::mat4(), t+=2.f, glm::vec3(0.f,1.f,0.f));
+    //ms *= glm::rotate(glm::mat4(), t+=2.f, glm::vec3(0.f,1.f,0.f));
     program->use();
-    program->setUniform("uTransform", ms.top());
+    program->setUniform("uTransform", ms.top);
     program->drawWire();
     program->unuse();
 
     glDisable(GL_DEPTH_TEST);
+    //glEnable(GL_CULL_FACE);
     pTextSDF->use();
-    for (int i = 0; i < mesh->faces.size(); ++i) {
+//    for (unsigned i = 0; i < mesh->faces.size(); ++i) {
+        //glm::vec3 faceNormal;
         glm::vec3 pos;
         const MeshFace &face = mesh->faces[i];
         for (int j = 0; j < face.count; ++j) {
-            pos += mesh->verts[face.verts[j]].pos;
+            const MeshVert &vert = mesh->verts[face.verts[j]];
+            pos += vert.pos;
+            //faceNormal += vert.normal;
         }
         pos /= face.count;
+        //faceNormal = glm::normalize(faceNormal);
+        //faceNormal = glm::vec3(glm::inverse(glm::transpose(ms.top())) * glm::vec4(faceNormal, 1.f));
+
+        /*
+        if (glm::dot(faceNormal, glm::vec3(0.f, 0.f, -1.f)) < 0.f) {
+            continue;
+        }
+        */
 
         ms.push();
-        //ms.curr = glm::translate(glm::mat4(), glm::vec3(ms.curr*glm::vec4(pos, 1.f)));
         ms *= glm::translate(glm::mat4(), pos);
-        ms *= glm::scale(glm::mat4(), glm::vec3(0.1f, 0.1f, 1.f));
-        pTextSDF->setUniform("uTransform", ms.top());
+        ms *= glm::scale(glm::mat4(), glm::vec3(0.2f, -0.2f, 1.f));
+        pTextSDF->setUniform("uTransform", ms.top);
         pTextSDF->setUniform("uTextParms.threshold", 0.5f);
         pTextSDF->setUniform("uTextParms.glow", false);
         sdfNums[i]->bind(0);
         pTextSDF->draw();
         ms.pop();
-    }
+    //}
     pTextSDF->unuse();
     glEnable(GL_DEPTH_TEST);
+    //glDisable(GL_CULL_FACE);
 
     ms.pop();
 

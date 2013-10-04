@@ -143,6 +143,6 @@ const std::shared_ptr<Shader> ProgramTextSDF::fs =
 
 ProgramTextSDF::ProgramTextSDF(GLuint texUnit,
         std::initializer_list<std::shared_ptr<Shader> > &&_shaders) :
-    ProgramTexturedQuad(texUnit, std::move(_shaders))
+    ProgramTexQuadImp(texUnit, std::move(_shaders))
 {
 }

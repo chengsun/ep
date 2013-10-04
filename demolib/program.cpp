@@ -461,8 +461,81 @@ void ProgramTexturedQuad::postLink()
 {
     ProgramMesh::postLink();
     use();
-    setUniform("tex", (GLint) texUnit);
-    setUniform("gTransform", glm::mat4());
+    setUniform("uTex", (GLint) texUnit);
+    unuse();
+}
+
+
+const std::shared_ptr<Shader> ProgramTexQuadImp::vs =
+    Shader::Inline(GL_VERTEX_SHADER, R"(
+        #version 130
+        uniform mat4 uTransform;
+        out vec2 vTexCoord;
+
+        void main()
+        {
+            switch (gl_VertexID)
+            {
+            case 0:
+                // Bottom-left
+                vTexCoord = vec2(-1.0, -1.0);
+                break;
+            case 1:
+                // Top-left
+                vTexCoord = vec2(-1.0, 1.0);
+                break;
+            case 2:
+                // Bottom-right
+                vTexCoord = vec2(1.0, -1.0);
+                break;
+            case 3:
+                // Top-right
+                vTexCoord = vec2(1.0, 1.0);
+                break;
+            }
+
+            gl_Position = uTransform*vec4(vTexCoord, 0.f, 1.f);
+            vTexCoord += 1.f;
+            vTexCoord /= 2.f;
+        }
+    )", "ProgramTexQuadImp::vs");
+const std::shared_ptr<Shader> ProgramTexQuadImp::fs =
+    Shader::Inline(GL_FRAGMENT_SHADER, R"(
+        #version 130
+        in vec2 vTexCoord;
+        uniform sampler2D uTex;
+        uniform bool uTexIsGray = false;
+
+        void main()
+        {
+            vec4 color = texture(uTex, vTexCoord);
+            if (uTexIsGray) {
+                color = color.rrra;
+            }
+            gl_FragColor = color;
+        }
+    )", "ProgramTexQuadImp::fs");
+
+ProgramTexQuadImp::ProgramTexQuadImp(GLuint _texUnit,
+            std::initializer_list<std::shared_ptr<Shader> > &&_shaders) :
+    Program(std::move(_shaders)),
+    texUnit(_texUnit)
+{
+    glGenVertexArrays(1, &vaoId);
+}
+
+void ProgramTexQuadImp::draw() const
+{
+    glBindVertexArray(vaoId);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glBindVertexArray(0);
+}
+
+void ProgramTexQuadImp::postLink()
+{
+    Program::postLink();
+    use();
+    setUniform("uTex", (GLint) texUnit);
     unuse();
 }
 

@@ -26,22 +26,19 @@ template <class M>
 struct MatStack
 {
     void push() {
-        stack.push_back(curr);
+        stack.push_back(top);
     }
     void pop() {
-        curr = stack.back();
+        top = stack.back();
         stack.pop_back();
     }
-    const M &top() const {
-        return curr;
-    }
     MatStack &operator*=(const M &m) {
-        curr *= m;
+        top *= m;
         return *this;
     }
 
     std::vector<M> stack;
-    M curr;
+    M top;
 };
 
 template struct MatStack<glm::mat4>;

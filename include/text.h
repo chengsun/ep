@@ -25,7 +25,7 @@ struct TextureTextSDF : public Texture2D<uint8_t>
     TextureTextSDF(int w, int h, SDL_Surface *surf, int spread = 32);
 };
 
-struct ProgramTextSDF : public ProgramTexturedQuad
+struct ProgramTextSDF : public ProgramTexQuadImp
 {
     ProgramTextSDF(GLuint texUnit,
             std::initializer_list<std::shared_ptr<Shader> > &&_shaders = {vs, fs});
