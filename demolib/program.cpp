@@ -470,31 +470,34 @@ const std::shared_ptr<Shader> ProgramTexQuadImp::vs =
     Shader::Inline(GL_VERTEX_SHADER, R"(
         #version 130
         uniform mat4 uTransform;
+        uniform float uTexScale = 1.f;
         out vec2 vTexCoord;
 
         void main()
         {
+            vec2 vPosition;
             switch (gl_VertexID)
             {
             case 0:
                 // Bottom-left
-                vTexCoord = vec2(-1.0, -1.0);
+                vPosition = vec2(-1.0, -1.0);
                 break;
             case 1:
                 // Top-left
-                vTexCoord = vec2(-1.0, 1.0);
+                vPosition = vec2(-1.0, 1.0);
                 break;
             case 2:
                 // Bottom-right
-                vTexCoord = vec2(1.0, -1.0);
+                vPosition = vec2(1.0, -1.0);
                 break;
             case 3:
                 // Top-right
-                vTexCoord = vec2(1.0, 1.0);
+                vPosition = vec2(1.0, 1.0);
                 break;
             }
+            vTexCoord = vPosition*uTexScale;
 
-            gl_Position = uTransform*vec4(vTexCoord, 0.f, 1.f);
+            gl_Position = uTransform*vec4(vPosition, 0.f, 1.f);
             vTexCoord += 1.f;
             vTexCoord /= 2.f;
         }
