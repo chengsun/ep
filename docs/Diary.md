@@ -361,6 +361,8 @@ Progress Log
 -------
 * Moved to using [GLM][glm] for vector and matrices. This is a well-tested
   library and is used in many projects already.
+* Discovered the Verlet integration scheme for simulating physics
+  [here][codeflow verlet].
 * Updated Timeline
 
 19/6/13 *(30 minutes)*
@@ -370,11 +372,12 @@ Progress Log
 25/6/13 *(1 hour)*
 -------
 * Continued working on mesh grid code.
+* Found a [web page][democritis verlet] as a reference for the Verlet
+  algorithm.
+* Started work on Verlet integration physics engine.
 
 28/6/13 *(3 hours)*
 -------
-* Found a [web page][democritis verlet] as a reference for the Verlet
-  algorithm.
 * In order to test the algorithm, I wrote a prototype verlet integration
   physics engine in JavaScript. It moves one end of a ribbon around, leaving
   the other end free to interact with physics. This experiment can be found
@@ -462,6 +465,70 @@ Progress Log
   as texture UV) to change discontinuously. I am using the approach described
   [in this blog post][ryg halfedge-redux]. It is not completely working.
 
+23/08/13 *(3 hours)*
+--------
+* Started implementing a bridge simulation demonstration, inspired by "Bridge
+  Builder". This is using my existing Verlet integration physics engine, which
+  I have already shown to work.  
+  Created node/link system, to represent a bridge, where nodes are 
+
+24/08/13 *(2 hours)*
+--------
+* Continued working on bridge simulation.  
+  Worked on the user interface side of the demonstration, making mouse and
+  keyboard work properly.
+
+28/08/13 *(1 hour)*
+--------
+* Continued bridge simulation demonstration.  
+  In addition to bridge nodes, I needed to add simulation nodes too, as a link
+  that is drawn by the user cannot be simulated as one single rigid body. It
+  must be split up into smaller components each of which are  simulated
+  individually. These are joined together with simulation nodes.
+
+4/09/13 *(3 hours)*
+--------
+* Continued working on bridge simulation.
+* I implemented the length constraint in the physics engine.
+* I implemented the "cable" material, which is flexible and has high tensile
+  strength.
+
+13/09/13 *(6 hours)*
+--------
+* Continued bridge simulation demonstration.
+* Found out how to calculate angle between two vectors from
+  [here][stackoverflow angles].
+* From this I worked out how to implement an angle constraint, to create
+  inflexible materials such as "iron".
+
+14/09/13 *(5 hours)*
+--------
+* Fixed glitches in the angle constraint.
+* Finished and polished bridge simulation demonstration.
+* Published online, and linked on my Facebook. I got a lot of feedback from my
+  friends.
+
+15/09/13 *(2 hour)*
+--------
+* Tweaked bridge simulation based on feedback from friends.
+* Writing source evaluations.
+
+18/09/13 *(3 hours)*
+--------
+* Started implementing diffuse lighting, based on the cube experiment that I
+  had written earlier.
+* Researched Blinn-Phong lighting.
+
+27/09/13 *(4 hours)*
+--------
+* Completed implementing lighting on my wave demonstration. It uses Blinn-Phong
+  shading based on the Phong reflection model.
+* Assembling the bibliography for my project.
+
+06/10/13 *(5 hours)*
+--------
+* Writing source evaluations and connections.
+
 
 
 [ryg halfedge-theory]: http://fgiesen.wordpress.com/2012/02/21/half-edge-based-mesh-representations-theory/
@@ -487,7 +554,9 @@ Progress Log
 [sdl-ttf docs]: http://www.libsdl.org/projects/SDL_ttf/docs/SDL_ttf.html
 [valve sdf-mag]: http://www.valvesoftware.com/publications/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf
 [glm]: http://glm.g-truc.net/
+[codeflow verlet]: http://codeflow.org/entries/2010/sep/01/hard-constraints-easy-solutions/
 [democritis verlet]: http://www.compsoc.man.ac.uk/~lucky/Democritus/Theory/verlet.html#verlet
 [stackoverflow glm-perspective]: http://stackoverflow.com/questions/8115352/glmperspective-explanation
+[stackoverflow angles]: http://stackoverflow.com/questions/10133957/signed-angle-between-two-vectors-without-a-reference-plane/10145056#10145056
 
 <!-- vim: set tw=79: -->
