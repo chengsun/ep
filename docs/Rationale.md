@@ -1,13 +1,13 @@
 Rationale
 =========
 
-I am trying to make a computer program which is a demonstration of using a
-computer to simulate 3D physics and graphics. This will take the format of a
-realtime demonstration of around 2 minutes in length, similar to a video but
-where each frame is calculated from scratch by my program. I want to make
-something where the process of creation is a technically challenging experience
-for me, but the outcome is presented as a visual demonstration which can be
-appreciated and enjoyed by everyone.
+I am trying to make a computer program which is a demonstration of computer
+algorithms being used to to simulate 3D physics and graphics. This will take
+the format of a realtime demonstration of around 2 minutes in length, similar
+to a video but where each frame is calculated from scratch by my program. I
+want to make something where the process of creation is a technically
+challenging experience for me, but the outcome is presented as a visual
+demonstration which can be appreciated and enjoyed by everyone.
 
 Through this Extended Project I will get the chance to explore and experiment
 with two fields of computer science (computational graphics and physics) that I
