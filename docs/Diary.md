@@ -361,7 +361,7 @@ Progress Log
 -------
 * Moved to using [GLM][glm] for vector and matrices. This is a well-tested
   library and is used in many projects already.
-* Discovered the Verlet integration scheme for simulating physics
+* Found a demonstration of the Verlet integration scheme for simulating physics
   [here][codeflow verlet].
 * Updated Timeline
 

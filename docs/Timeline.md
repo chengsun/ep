@@ -42,7 +42,7 @@ Timeline plan
 
   *Targets*:
   * Research linear algebra, representing 3D points and transformations as vectors, matrices and quaternions (done)
-  * Implement grid mesh (est. 6 hours) (done)
+  * Implement grid mesh (est. 6 hours) (done, 8/5/13)
 
 
 (Timeline revised 17 June from this point onwards)
@@ -54,7 +54,7 @@ Timeline plan
   Summer schools will leave me short of time (only two weeks in this month!)
 
   *Targets*: 
-  * Implement verlet integration (est. 6 hours) (done)
+  * Implement verlet integration (est. 6 hours) (done, 28/6/13)
   * Create prototype of 3D fluid simulation (est. 4 hours)
 
 **End of August**:
@@ -63,8 +63,8 @@ Timeline plan
   Summer arrangements: I will only have one free week in August
 
   *Targets*:
-  * Implement camera perspective (est. 4 hours) (done)
-  * Review sources used and start writing up evaluations
+  * Implement camera perspective (est. 4 hours) (done, 13/8/13)
+  * Review sources used and start writing up evaluations (started)
 
 
 **End of September**:
@@ -73,9 +73,10 @@ Timeline plan
   University applications may leave me short of time
 
   *Targets*:
-  * Assess the result (with feedback from others)
-  * Polish demo: add effects and decorations
-  * Prepare presentation
+  * Implement a bridge simulation game with verlet integration (done, 14/9/13)
+  * Assess the result of wave and physics demos with feedback from others (done, 15/9/13)
+  * Polish demo: add effects and decorations (done, added light effects 27/9/13)
+  * Prepare presentation (started)
 
 
 **October**:
