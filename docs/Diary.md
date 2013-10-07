@@ -523,6 +523,7 @@ Progress Log
 --------
 * Completed implementing lighting on my wave demonstration. It uses Blinn-Phong
   shading based on the Phong reflection model.
+  ![3D wave lighting](https://raw.github.com/chengsun/ep/master/docs/images/270913_wavelighting.png)
 * Assembling the bibliography for my project.
 
 06/10/13 *(5 hours)*
