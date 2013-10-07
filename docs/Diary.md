@@ -10,6 +10,8 @@ Progress Log
   Although I made some interesting models and effects, I decided that making 3D
   models in an art package such as Blender was not the way I wanted to approach
   this project.
+*To do*: investigate ways of rendering 3D using a computer program. Find out
+about "OpenGL".
 
 1/1/13 *(~3 hours)*
 ------
@@ -23,6 +25,7 @@ Progress Log
   My first test, called `test_triangle`, simply draws a white triangle.  
   The second test, called `test_points`, draws some random white points on the
   screen. I got both tests working on Linux.
+*To do*: I need to explore OpenGL shaders, and GL shader language (GLSL).
 
 8/1/13 *(~1 hour)*
 ------
@@ -44,9 +47,9 @@ Progress Log
 * I read about using signed distance fields in [a presentation at GDC
   2012][smash gdc], [a presentation at NVScene by iq][iq rwwtt] and [a
   PDF][upenn raymarch].
-* I made a very basic signed distance field test, `test_sdf`. However, this
-  doesn't display the distance field in 3D, but instead a slice through a 2D
-  plane.  
+* I made a very basic signed distance field test, `test_sdf`, using OpenGL
+  shaders. However, this doesn't display the distance field in 3D, but instead
+  a slice through a 2D plane.  
   ![SDF test](https://raw.github.com/chengsun/ep/master/docs/images/120113_sdf.png)
 
 13/1/13 *(~2 hours)*
@@ -270,7 +273,12 @@ Progress Log
 
 7/3/13 *(3 hours)*
 ------
-* After some fiddling, I have a working wave simulation.
+* After some fiddling, I have a working wave simulation.  
+  However, it is not perfect. I am simulating in a finite area, and when a
+  ripple reaches the edge of the simulation it bounces back and continues
+  rippling, whereas I would like it to "disappear" into infinity. The source
+  that I am using to implement the wave simulation does not have this problem;
+  I need to figure out how to stop this.
 * I have been reading about using textures in OpenGL, so that I can see the
   results of my wave simulation. I have successfully written the texture code,
   and also wrote a scene called `test_wave` that tests all of this.  
@@ -470,7 +478,9 @@ Progress Log
 * Started implementing a bridge simulation demonstration, inspired by "Bridge
   Builder". This is using my existing Verlet integration physics engine, which
   I have already shown to work.  
-  Created node/link system, to represent a bridge, where nodes are 
+  Created node/link system, to represent a bridge, where nodes are the joins
+  between two or more segments of material, and links are the segments of
+  material themselves. This is similar to a graph in mathematics.
 
 24/08/13 *(2 hours)*
 --------
@@ -500,6 +510,7 @@ Progress Log
   [here][stackoverflow angles].
 * From this I worked out how to implement an angle constraint, to create
   inflexible materials such as "iron".
+*To do*: iron out the bugs and get some feedback.
 
 14/09/13 *(5 hours)*
 --------

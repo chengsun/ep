@@ -1,46 +1,46 @@
 # Contents
 
-* Front cover
-* Contents
-* Artefact report & commentary
+* Front cover (TODO)
+* Contents (DOING)
+* Artefact report & commentary (TODO)
 * Artefact evidence
     * Screenshots
-        * `wave` - "3D wave simulation" C++/OpenGL demo
-        * `verletrag` - "Verlet ragdoll" JavaScript game
-        * `bridge` - "bridge simulation" JavaScript game
-    * Annotated `cube` experiment source code
-    * Entire source code for all demos and experiments
+        * `wave` - "3D wave simulation" C++/OpenGL demo (DOING)
+        * `verletrag` - "Verlet ragdoll" JavaScript game (DOING)
+        * `bridge` - "bridge simulation" JavaScript game (DOING)
+    * Annotated `cube` experiment source code (PRINTED)
+    * Entire source code for all demos and experiments (PRINTED)
     * Attached memory stick containing:
-        * Windows and Linux executable files
-        * Videos of demos and experiments
-* Bibliography
-* Source evaluations
+        * Windows and Linux executable files (TODO)
+        * Videos of demos and experiments (TODO)
+* Bibliography (DOING)
+* Source evaluations (DOING)
 * Appendices
-    * Initial research/inspiration
-    * Research diary and notetaking
+    * Initial research/inspiration (TODO)
+    * Research diary and notetaking (DOING)
     * Primary sources used
-        * Facebook comments on `bridge`
-        * Facebook chat on `bridge`
-        * Attempted email communications
-    * Rationale
-    * Timeline plan
+        * Facebook comments on `bridge` (DOING)
+        * Facebook chat on `bridge` (PRINTED)
+        * Attempted email communications (TODO)
+    * Rationale (PRINTED)
+    * Timeline plan (PRINTED)
         * Revision prior to 29/1/13
         * Revision prior to 30/4/13
         * Final revision, since 17/6/13
-    * Progress log
+    * Progress log (DOING)
     * Mid-project reviews
-        * End of January
-        * End of February
-        * End of April
-        * End of June
-        * End of August
-        * Final evaluation
-    * Project Progression Record
-    * Verification of Topic and Title
+        * End of January (PRINTED)
+        * End of February (PRINTED)
+        * End of April (PRINTED)
+        * End of June (PRINTED)
+        * End of August (TODO)
+        * Final evaluation (TODO)
+    * Project Progression Record (DOING)
+    * Verification of Topic and Title (DOING)
     * Old screenshots
-        * `triangle` - "polygon shading" OpenGL experiment
-        * `sdf` - "signed distance fields" OpenGL experiment
-        * `mesh` - "mesh rendering" OpenGL experiment
-        * `text` - "high quality text rendering" OpenGL experiment
-        * `verlet` - "Verlet ribbon" JavaScript experiment
-        * `cube` - "3D cube lighting" JavaScript experiment
+        * `triangle` - "polygon shading" OpenGL experiment (DOING)
+        * `sdf` - "signed distance fields" OpenGL experiment (DOING)
+        * `mesh` - "mesh rendering" OpenGL experiment (DOING)
+        * `text` - "high quality text rendering" OpenGL experiment (DOING)
+        * `verlet` - "Verlet ribbon" JavaScript experiment (DOING)
+        * `cube` - "3D cube lighting" JavaScript experiment (DOING)
