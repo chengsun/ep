@@ -16,6 +16,7 @@
 * Bibliography
 * Source evaluations
 * Appendices
+    * Initial research/inspiration
     * Research diary and notetaking
     * Primary sources used
         * Facebook comments on `bridge`
