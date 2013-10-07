@@ -97,8 +97,8 @@ Progress Log
 -------
 * After more work, the mesh vertex splitting operation seems to work now.  
   I still need to test the corner cases.
-* I am now trying to implement the [face split operation][ryg
-  halfedge-practice].
+* I am now trying to implement the
+  [face split operation][ryg halfedge-practice].
 
 23/1/13 *(30 minutes)*
 -------
