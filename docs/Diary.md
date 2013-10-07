@@ -204,9 +204,9 @@ Progress Log
   have the hardware to do anything extremely sophisticated.  
   Even if I do get a particle simulation working, rendering the particles and
   making it look like a fluid would be a challenge all in itself. Looking at
-  the ["state of the art" in actually rendering these particles][hoetzlein
-  surface-reconstruction], the techniques either look unrealistic or don't run
-  in real time.  
+  the
+  ["state of the art" in actually rendering these particles][hoetzlein surface-reconstruction],
+  the techniques either look unrealistic or don't run in real time.  
   The only way that I can envision the waterfall simulation succeeding is by
   cheating a lot. This means not strictly obeying physics and using "common
   sense physics" and graphical effects to trick the viewer. This is something I
