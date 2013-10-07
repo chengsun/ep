@@ -1,7 +1,4 @@
-# Evaluation (300 words)
-
-
-# Artefact report
+# Artefact report / commentary
 
 
 ## AO1 -- management
@@ -51,6 +48,7 @@ Why not?
 What was learned?
 
 What would or would not be repeated next time?
+
 
 
 <!-- vim: set tw=79: -->
