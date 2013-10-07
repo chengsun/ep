@@ -10,9 +10,9 @@
     * `bridge` - "bridge simulation" JavaScript game
   * Annotated `cube` experiment source code
   * Entire source code for all demos and experiments
-  * *Attached memory stick containing*:
-    * *Windows and Linux executable files*
-    * *Videos of demos and experiments*
+  * Attached memory stick containing:
+    * Windows and Linux executable files
+    * Videos of demos and experiments
 * Bibliography
 * Source evaluations
 * Appendices
