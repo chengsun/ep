@@ -16,7 +16,7 @@
 * Bibliography (DOING)
 * Source evaluations (DOING)
 * Appendices
-    * Initial research/inspiration (TODO)
+    * Initial research/inspiration (DONE)
     * Research diary and notetaking (DOING)
     * Primary sources used
         * Facebook comments on `bridge` (DOING)
@@ -33,8 +33,8 @@
         * End of February (PRINTED)
         * End of April (PRINTED)
         * End of June (PRINTED)
-        * End of August (TODO)
-        * Final evaluation (TODO)
+        * End of August (DOING)
+        * Final evaluation (DOING)
     * Project Progression Record (DOING)
     * Verification of Topic and Title (DOING)
     * Old screenshots

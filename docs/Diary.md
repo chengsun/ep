@@ -10,7 +10,7 @@ Progress Log
   Although I made some interesting models and effects, I decided that making 3D
   models in an art package such as Blender was not the way I wanted to approach
   this project.
-*To do*: investigate ways of rendering 3D using a computer program. Find out
+* I need to investigate ways of rendering 3D using a computer program. Find out
 about "OpenGL".
 
 1/1/13 *(~3 hours)*
@@ -25,7 +25,29 @@ about "OpenGL".
   My first test, called `test_triangle`, simply draws a white triangle.  
   The second test, called `test_points`, draws some random white points on the
   screen. I got both tests working on Linux.
-*To do*: I need to explore OpenGL shaders, and GL shader language (GLSL).
+* I need to explore OpenGL shaders, and GL shader language (GLSL).
+
+**Sources used**:
+
+* Learning Modern 3D Graphics Programming  
+  Jason L. McKesson  
+  <http://arcsynthesis.org/gltut/>
+    * Written by a reputable graphics programmer.
+    * Referenced from Stack Overflow a lot, as a great starting point for
+      learning OpenGL.
+    * I am going to use this source a lot, as a reference for OpenGL.
+    * Task: get used to OpenGL by writing a program that draws a simple shape
+      on the screen.
+
+* Pouet  
+  <http://www.pouet.net>
+    * The biggest online resource for demos. Has lists of demos, groups and a
+      (poorly moderated) forum.
+    * I wanted to find out about some of the most famous demos. I also found
+      information about demogroups, and links to YouTube videos (I can't
+      actually run many of the demos on my underpowered laptop...)
+    * Questions raised: is it feasible to do *any* of the effects shown on the
+      demos in a project of mine?
 
 8/1/13 *(~1 hour)*
 ------
@@ -42,6 +64,19 @@ about "OpenGL".
   Blender uses LBM. (However, Blender's fluid simulation is intended for
   non-realtime rendering)
 
+**Sources used**:
+
+* "numb res."  
+  Smash -- direct to video blog  
+  <http://directtovideo.wordpress.com/2011/05/03/numb-res/>
+    * smash is a democoder from the group Fairlight.
+    * Referenced from a pouet.net page about Fairlight's demo "numb res".
+    * Stated that fluid simulation using particles is expensive, and even with
+      state-of-the-art optimisations it's not going to work very well on my
+      laptop, unless I use a small number of particles.
+    * Questions raised: Just how feasible is it? investigate the signed
+      distance fields
+
 12/1/13 *(~1 hour)*
 -------
 * I read about using signed distance fields in [a presentation at GDC
@@ -52,6 +87,41 @@ about "OpenGL".
   a slice through a 2D plane.  
   ![SDF test](https://raw.github.com/chengsun/ep/master/docs/images/120113_sdf.png)
 
+**Sources used**:
+
+* "Advanced Procedural Rendering in DirectX 11"  
+  Smash -- GDC 2012  
+  <http://directtovideo.files.wordpress.com/2012/03/gdc_2012_released.pdf>
+    * Presentation smash gave at the Game Developers Conference.  Talked mostly
+      about how he used signed distance fields in his demo "uncovering static".
+      Answered many of my questions about signed distance fields and why they
+      are useful.
+    * Questions raised: signed distance fields require ray marching?
+
+* "Rendering Worlds With Two Triangles"  
+  iq -- NVScene 2008  
+  <http://www.iquilezles.org/www/material/nvscene2008/rwwtt.pdf>
+    * iq is a democoder.
+    * This is a presentation he gave at a graphics convention held by NVidia.
+      He talked about various ways of drawing scenes without using polygons,
+      which is the traditional way. This included brief descriptions of signed
+      distance fields and ray marching which agreed with the information I read
+      in smash's presentation. It partially answered my question, however there
+      was not enough detail about ray marching.
+    * Questions raised: more details? ray marching sounds expensive -- can I do
+      it on my laptop?
+
+* "Ray Marching Distance Fields in Real-time on WebGL"  
+  Prutsdom Jiarathanakul  
+  <http://www.seas.upenn.edu/~pjia/raymarch/report.pdf>
+    * References the presentation iq gave at NVScene.
+    * A paper about a computer graphics project done by a student at UPenn. It
+      involves ray marching. The paper goes into great detail about how the ray
+      marching was done, and screenshots of results. It was informational and
+      the results looked good.
+    * Questions raised: not sure if this is the right approach for me. Need to
+      investigate polygon based meshes?
+
 13/1/13 *(~2 hours)*
 -------
 * I successfully compiled and tested my program on Windows.
@@ -61,15 +131,47 @@ about "OpenGL".
   halfedge-redux]. This will be used for "solid" (i.e. non-fluid) stuff, such
   as the landscape.
 
+**Sources used**:
+
+* "Half-edges redux"  
+  The ryg blog  
+  <http://fgiesen.wordpress.com/2012/04/03/half-edges-redux/>
+    * ryg is a democoder from the group farbrausch.
+    * Referenced from farbrausch homepage, from pouet.net.
+    * Talked about polygon meshes, specifically the half edge representation of
+      it, and how this particular representation is useful. This sounds much
+      more relevant to me than signed distance fields.
+    * Task: make this work in my code
+
 14/1/13 *(~1 hour)*
 -------
-* I read further about Navier-Stokes equations.
+* I read further about Navier-Stokes equations. However, I still need to find a
+  source which explains the equations in a way that I can understand.
 * I wrote my rationale, and expanded my progress log with references.
 * I started my timeline plan.
+
+**Sources used**:
+* "Navier-Stokes equations"
+  Wikipedia
+  <https://en.wikipedia.org/wiki/Navier-stokes_equations>
+    * Phrases things in a mathematical way -- not very useful to me, as I only
+      want to assess the feasibility of calculating this on a computer.
+    * Questions raised: still the same question -- can I do this feasibly?
 
 15/1/13 *(~30 minutes)*
 -------
 * Found detailed explanation of Navier-Stokes in [a PDF][fluid rest of us].
+
+**Sources used**:
+* "Fluid Flow for the Rest of Us: Tutorial of the Marker and Cell Method in
+  Computer Graphics"  
+  David Cline, David Cardon, Parris K. Egbert
+  <http://people.sc.fsu.edu/~jburkardt/pdf/fluid_flow_for_the_rest_of_us.pdf>
+    * More accessible. Explains things more thoroughly, and with a computer
+      simulation context in mind. Unfortunately this article does not cover the
+      question about the efficiency of the method either.
+    * Questions raised: same. I still need to evaluate how feasible it would be
+      to make this work on my laptop.
 
 18/1/13 *(~30 minutes)*
 -------
@@ -78,8 +180,9 @@ about "OpenGL".
 
 19/1/13 *(~3 hours)*
 -------
-* Continued work on mesh representation. I am trying to implement the [vertex
-  split operation][ryg halfedge-practice].
+* Continued work on mesh representation. I am trying to implement the
+  [vertex split operation][ryg halfedge-practice] using ryg's half-edge blog
+  post.
 
 20/1/13 *(~2 hours)*
 -------
@@ -94,14 +197,16 @@ about "OpenGL".
 21/1/13 *(~4 hours)*
 -------
 * Expanded on my Rationale and Timeline.
-* Continued work on mesh vertex split operation.
+* Continued work on mesh vertex split operation using ryg's half-edge blog
+  post.
 
 22/1/13 *(~4 hours)*
 -------
 * After more work, the mesh vertex splitting operation seems to work now.  
   I still need to test the corner cases.
 * I am now trying to implement the
-  [face split operation][ryg halfedge-practice].
+  [face split operation][ryg halfedge-practice] using ryg's half-edge blog
+  post.
 
 23/1/13 *(30 minutes)*
 -------
@@ -138,6 +243,17 @@ about "OpenGL".
   information about extrusion. This topic was on his list of blog posts to
   write, but it seems that he hasn't gotten round to it yet. Hopefully I'll get
   a response, but if not I will look elsewhere for information.
+
+**Sources used**:
+* OpenGL core api
+  OpenGL.org wiki
+  <http://www.opengl.org/wiki/Category:Core_API_Reference>
+    * This is a wiki, and so nothing can be said about reliability. However,
+      the code that I have written based on the documentation found here seems
+      to work, and the wiki is hosted and maintained by OpenGL.org, the
+      official website for OpenGL.
+    * I used this site as a reference guide. All my programming-related
+      queries were resolved.
 
 27/1/13 *(30 minutes)*
 -------
