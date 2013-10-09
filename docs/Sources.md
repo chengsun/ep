@@ -2,11 +2,11 @@
 
 **Books**:
 
-* Goldman, R. (1990) Intersection of Two Lines in Three-Space. In: Glassner, A.
-(ed.) *Graphics Gems*. Academic Press Inc., p. 304.
-* AQA (2006) *GCE Mathematics Further Pure unit 4 Textbook*. [Online] Available
+* AQA (2006) *GCE Mathematics Further Pure unit 4 Textbook*. Available
   from: <http://filestore.aqa.org.uk/subjects/AQA-MFP4-TEXTBOOK.PDF> [Accessed:
   22nd September 2013]
+* Goldman, R. (1990) Intersection of Two Lines in Three-Space. In: Glassner, A.
+(ed.) *Graphics Gems*. Academic Press Inc., p. 304.
 * Woo, M., Neider, J., Davis, T., and OpenGL Architecture Review Board (1997)
   *OpenGL Programming Guide: The Official Guide to Learning OpenGL, Version
   1.1*. 2nd edition. Addison-Wesley Publishing.
@@ -14,14 +14,6 @@
 
 **Papers**:
 
-* Jakobsen, T. (2001) Advanced Character Physics. In: *Proceedings of the Game
-  Developers Conference 2001*. Available from:
-  <http://web.archive.org/web/20080410171619/http://www.teknikus.dk/tj/gdc2001.htm>
-  [Accessed: 22nd September 2013]
-* Jiarathanakul, P. (2012) Ray Marching Distance Fields in Real-time on WebGL.
-  University of Pennsylvania.
-  Available from: <http://www.seas.upenn.edu/~pjia/raymarch/report.pdf>
-  [Accessed: 22nd September 2013]
 * Cline, D., Cardon, D., and Egbert, P. K. (2007) Fluid Flow for the Rest of
   Us: Tutorial of the Marker and Cell Method in Computer Graphics. Available
   from:
@@ -31,76 +23,104 @@
   Special Effects. In: *Proceedings of ACM SIGGRAPH 2007*. Available from:
   <http://www.valvesoftware.com/publications/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf>
   [Accessed: 22nd September 2013]
-
-**Presentations**:
-* Swoboda, M. (2012) *Advanced Procedural Rendering in DirectX 11*
-  [Presentation] Game Developers Conference 2012, 5th March. Slides available
-  from:
-  <http://directtovideo.files.wordpress.com/2012/03/gdc_2012_released.pdf>
+* Jakobsen, T. (2001) Advanced Character Physics. In: *Proceedings of the Game
+  Developers Conference 2001*. Available from:
+  <http://web.archive.org/web/20080410171619/http://www.teknikus.dk/tj/gdc2001.htm>
   [Accessed: 22nd September 2013]
+* Jiarathanakul, P. (2012) Ray Marching Distance Fields in Real-time on WebGL.
+  University of Pennsylvania.
+  Available from: <http://www.seas.upenn.edu/~pjia/raymarch/report.pdf>
+  [Accessed: 22nd September 2013]
+
+**Lectures & Presentations**:
 * Quilezles, I. (2008) *Rendering Worlds with Two Triangles with raytracing on
-  the GPU in 4096 bytes* [Presentation] Slides available from:
+  the GPU in 4096 bytes* [Presentation] NVScene 2008. Slides available from:
   <http://www.iquilezles.org/www/material/nvscene2008/rwwtt.pdf> [Accessed:
   22nd September 2013]
+* Swoboda, M. (2012) *Advanced Procedural Rendering in DirectX 11*
+  [Presentation] Game Developers Conference 2012. Slides available from:
+  <http://directtovideo.files.wordpress.com/2012/03/gdc_2012_released.pdf>
+  [Accessed: 22nd September 2013]
+* Zorin, D. (2004) *Mesh data structures*. [Lecture] Interactive Graphics
+  course, Fall 2004. New York University. Slides available from:
+  <http://mrl.nyu.edu/~dzorin/ig04/lecture24/meshes.pdf> [Accessed: 23rd
+  September 2013]
 
 **Websites**:
 
-* Giesen, F. (2012) Half Edges Redux. *The ryg blog*. Weblog. [Online]
-  Available from: <http://fgiesen.wordpress.com/2012/04/03/half-edges-redux/>
+* Astle, D. (2006) OpenGL Frame Buffer Object 101. Available from:
+  <http://www.gamedev.net/page/resources/_/technical/opengl/opengl-frame-buffer-object-101-r2331>
   [Accessed: 23rd September 2013]
-* Swoboda, M. (2011) Numb res. *Direct to video*. Weblog. [Online] Available
-  from: <http://directtovideo.wordpress.com/2011/05/03/numb-res/> [Accessed:
+* Atkins, J. (2013) SDL_ttf documentation. Available from:
+  <http://www.libsdl.org/projects/SDL_ttf/docs/SDL_ttf.html> [Accessed: 23rd
+  September 2013]
+* Bock, A. (2011) SDL TTF: Fonts, and how to use them. Available
+  from: <http://www.sdltutorials.com/sdl-ttf> [Accessed: 23rd September 2013]
+* Boesch, F. (2010) Hard Constraints, Easy Solutions. *Codeflow*. Weblog.
+  Available from:
+  <http://codeflow.org/entries/2010/sep/01/hard-constraints-easy-solutions/>
+  [Accessed: 23th September 2013]
+* CFD Online (2012) Navier-Stokes equations. Available from:
+  <http://www.cfd-online.com/Wiki/Navier-Stokes_equations> [Accessed: 23rd
+  September 2013]
+* confuted (2004) Using Quaternion to Perform 3D rotations. Available
+  from: <http://www.cprogramming.com/tutorial/3d/quaternions.html> [Accessed:
   23rd September 2013]
 * Côté, A. S., Smith, W., and Lindan, P. J. (2001) The Basic Verlet Algorithm.
   *Democritus: A Molecular Dynamics tutorial*. CCLRC Daresbury Laboratory.
-  [Online] Available from:
+  Available from:
   <http://www.compsoc.man.ac.uk/~lucky/Democritus/Theory/verlet.html#verlet>
   [Accessed: 23rd September 2013]
-* Boesch, F. (2010) Hard Constraints, Easy Solutions. *Codeflow*. Weblog.
-  [Online] Available from:
-  <http://codeflow.org/entries/2010/sep/01/hard-constraints-easy-solutions/>
-  [Accessed: 23th September 2013]
-* McKesson, J. L. (2012) Learning Modern 3D Graphics Programming. [Online]
+* Giesen, F. (2012) Half-edge based mesh representations: practice. *The ryg
+  blog*. Weblog. Available from:
+  <http://fgiesen.wordpress.com/2012/03/24/half-edge-based-mesh-representations-practice/>
+  [Accessed: 23rd September 2013]
+* Giesen, F. (2012) Half Edges Redux. *The ryg blog*. Weblog.
+  Available from: <http://fgiesen.wordpress.com/2012/04/03/half-edges-redux/>
+  [Accessed: 23rd September 2013]
+* Hoetzlein, R. C. (2010) Surface Reconstruction of SPH Fluids. Weblog.
+  Available from:
+  <http://www.rchoetzlein.com/theory/2010/surface-reconstruction-of-sph-fluids/>
+  [Accessed: 23rd September 2013]
+* Kammerl, J. (2011) Spatial Partitioning and Search Operations with Octrees.
+  Available from: <http://pointclouds.org/documentation/tutorials/octree.php>
+  [Accessed: 23rd September 2013]
+* Khronos Group et al. (2013) OpenGL Core API Reference. Available
+  from: <http://www.opengl.org/wiki/Category:Core_API_Reference> [Accessed:
+  23rd September 2013]
+* mandarine (2013) pouët.net. Available from: <http://www.pouet.net> [Accessed:
+  3rd October 2013]
+* McKesson, J. L. (2012) Learning Modern 3D Graphics Programming.
   Available from: <http://www.arcsynthesis.org/gltut/> [Accessed 23rd September
   2013]
-* Stack Overflow. (2011) OpenGL - glm::perspective explanation. [Online]
+* navis (2010) 2007 and now. *Iconoclash*. Weblog. Available from:
+  <http://navis-asd.blogspot.co.uk/2010/04/2007-and-now.html> [Accessed: 23rd
+  September 2013]
+* OpenSceneGraph (2012) What is a scene graph? Available from:
+  <http://www.openscenegraph.org/index.php/documentation/knowledge-base/36-what-is-a-scene-graph> [Accessed: 23rd September 2013]
+* Stack Overflow. (2011) OpenGL - glm::perspective explanation.
   Available from:
   <http://stackoverflow.com/questions/8115352/glmperspective-explanation>
   [Accessed: 23rd September 2013]
-* Hoetzlein, R. C. (2010) Surface Reconstruction of SPH Fluids. Weblog.
-  [Online] Available from:
-  <http://www.rchoetzlein.com/theory/2010/surface-reconstruction-of-sph-fluids/>
-  [Accessed: 23rd September 2013]
-* Willemse, R. (2000) The Water Effect Explained. [Online] Available from:
+* Swoboda, M. (2011) Numb res. *Direct to video*. Weblog. Available
+  from: <http://directtovideo.wordpress.com/2011/05/03/numb-res/> [Accessed:
+  23rd September 2013]
+* Willemse, R. (2000) The Water Effect Explained. Available from:
   <http://www.gamedev.net/page/resources/_/technical/graphics-programming-and-theory/the-water-effect-explained-r915>
   [Accessed: 23rd September 2013]
-* Astle, D. (2006) OpenGL Frame Buffer Object 101. [Online] Available from:
-  <http://www.gamedev.net/page/resources/_/technical/opengl/opengl-frame-buffer-object-101-r2331>
-  [Accessed: 23rd September 2013]
-* Bock, A. (2011) SDL TTF: Fonts, and how to use them. [Online] Available
-  from: <http://www.sdltutorials.com/sdl-ttf> [Accessed: 23rd September 2013]
-* Atkins, J. (2013) SDL_ttf documentation. [Online] Available from:
-  <http://www.libsdl.org/projects/SDL_ttf/docs/SDL_ttf.html> [Accessed: 23rd
-  September 2013]
-* confuted (2004) Using Quaternion to Perform 3D rotations. [Online] Available
-  from: <http://www.cprogramming.com/tutorial/3d/quaternions.html> [Accessed:
-  23rd September 2013]
-* Khronos Group et al. (2013) OpenGL Core API Reference. [Online] Available
-  from: <http://www.opengl.org/wiki/Category:Core_API_Reference> [Accessed:
-  23rd September 2013]
 
 **Software and code**:
 
 * Falstad, P. (2009) *Ripple Tank* (Version 1.7e) [Code] Available from:
   <http://falstad.com/ripple/> [Accessed: 22nd September 2013]
-* Sub Protocol (2013) *verlet-js* [Code] Available from:
-  <https://github.com/subprotocol/verlet-js> [Accessed: 22nd September 2013]
 * G-Truc Creation (2013) *GLM* (Version 0.9.4.5) [Code] Available from
   <http://glm.g-truc.net/0.9.4/> [Accessed: 22nd September 2013]
-* Lantinga, S. et al. (2013) *SDL* (Version 1.2.15) [Code] Available from
-  <http://www.libsdl.org/download-1.2.php> [Accessed: 22nd September 2013]
 * Lantinga, S. (2013) *SDL_ttf* (Version 2.0.11) [Code] Available from
   <http://www.libsdl.org/projects/SDL_ttf/> [Accessed: 22nd September 2013]
+* Lantinga, S. et al. (2013) *SDL* (Version 1.2.15) [Code] Available from
+  <http://www.libsdl.org/download-1.2.php> [Accessed: 22nd September 2013]
+* Sub Protocol (2013) *verlet-js* [Code] Available from:
+  <https://github.com/subprotocol/verlet-js> [Accessed: 22nd September 2013]
 
 
 
@@ -156,7 +176,7 @@ I need to implement the algorithm to test whether it works correctly.
 
 **Resource**:
 * Boesch, F. (2010) Hard Constraints, Easy Solutions. *Codeflow*. Weblog.
-  [Online] Available from:
+  Available from:
   <http://codeflow.org/entries/2010/sep/01/hard-constraints-easy-solutions/>
   [Accessed: 23th September 2013]
 
@@ -209,7 +229,7 @@ which kinds of constraints can be used with the integration scheme.
 
 **Resource**:
 Jakobsen, T. (2001) Advanced Character Physics. *Game Developer's Conference
-2001* [Online] Available from:
+2001* Available from:
 <http://web.archive.org/web/20080410171619/http://www.teknikus.dk/tj/gdc2001.htm>
 [Accessed: 22/09/13]
 

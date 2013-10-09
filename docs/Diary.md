@@ -1,4 +1,4 @@
-Progress Log
+Diary
 ============
 
 24/12/12 *(~3 hours)*
@@ -16,7 +16,7 @@ about "OpenGL".
 1/1/13 *(~3 hours)*
 ------
 * I have been researching the way I can get 3D things to display on the screen.
-  I learnt about what OpenGL was, and how to use it. Mostly I used [this
+  I learnt about what OpenGL was, and how to use it. Mostly I used [McKesson's
   tutorial][arcsynthesis], which I found to be very useful and thorough.
 * I implemented a “player” program. This would be a program that sets
   everything up ready for the actual 3D demo to use, and provides a window for
@@ -39,7 +39,7 @@ about "OpenGL".
     * Task: get used to OpenGL by writing a program that draws a simple shape
       on the screen.
 
-* Pouet  
+* pouët.net  
   <http://www.pouet.net>
     * The biggest online resource for demos. Has lists of demos, groups and a
       (poorly moderated) forum.
@@ -53,14 +53,14 @@ about "OpenGL".
 ------
 * Now that the Christmas break is over, I wanted to start researching the
   techniques that I will use.
-* I was learning about mesh representations and operations, from [this blog
+* I was learning about mesh representations and operations, from [ryg's blog
   post][ryg halfedge-theory].
 * I started my research on fluid dynamics and simulation techniques.  
   I found out that there are three approaches I can take: solving Navier-Stokes
   (NS) equations directly, using Smoothed Particle Hydrodynamics (SPH), or
   Lattice Boltzmann (LBM).  
-  [This demo][smash numbres] uses SPH. (However, this demo was made to run on
-  machines far powerful than I have access to)  
+  [This demo, numb res][smash numbres], uses SPH. (However, this demo was made
+  to run on machines far powerful than I have access to)  
   Blender uses LBM. (However, Blender's fluid simulation is intended for
   non-realtime rendering)
 
@@ -127,42 +127,65 @@ about "OpenGL".
 * I successfully compiled and tested my program on Windows.
 * I started using git to keep track of older versions of my code and my
   documents.
-* I started implementing a mesh representation based on [this blog post][ryg
+* I started implementing a mesh representation based on [ryg's blog post][ryg
   halfedge-redux]. This will be used for "solid" (i.e. non-fluid) stuff, such
   as the landscape.
 
 **Sources used**:
 
 * "Half-edges redux"  
-  The ryg blog  
+  ryg -- The ryg blog  
   <http://fgiesen.wordpress.com/2012/04/03/half-edges-redux/>
-    * ryg is a democoder from the group farbrausch.
-    * Referenced from farbrausch homepage, from pouet.net.
+    * ryg is a well-known democoder from the group farbrausch. His blog post
+      should be trustworthy.
+    * This blog post is part of the series "Debris: opening the box", written
+      to explain the technical details behind the famous demo "Debris" --
+      <http://fgiesen.wordpress.com/2012/02/13/debris-opening-the-box/>.  
+      Link referenced from pouet.net.
     * Talked about polygon meshes, specifically the half edge representation of
       it, and how this particular representation is useful. This sounds much
       more relevant to me than signed distance fields.
     * Task: make this work in my code
 
+* "Mesh data structures"
+  Denis Zorin, New York University
+  <http://mrl.nyu.edu/~dzorin/ig04/lecture24/meshes.pdf>
+    * Explained the different types of mesh representation.
+    * I found this source to try to support and confirm the information I found
+      in the blog post above. I found information on a lot of different mesh
+      representations, and the lecturer agrees that the half-edge
+      representation has an advantage as it leads to the cleanest code (with
+      least "if" conditionals).
+
 14/1/13 *(~1 hour)*
 -------
 * I read further about Navier-Stokes equations. However, I still need to find a
-  source which explains the equations in a way that I can understand.
+  source which explains the equations in a way that I can understand, and which
+  is useful to me.
 * I wrote my rationale, and expanded my progress log with references.
 * I started my timeline plan.
 
 **Sources used**:
+
 * "Navier-Stokes equations"
-  Wikipedia
-  <https://en.wikipedia.org/wiki/Navier-stokes_equations>
-    * Phrases things in a mathematical way -- not very useful to me, as I only
-      want to assess the feasibility of calculating this on a computer.
-    * Questions raised: still the same question -- can I do this feasibly?
+  Computational Fluid Dynamics online wiki
+  <http://www.cfd-online.com/Wiki/Navier-Stokes_equations>
+    * I wanted to find out about what the Navier-Stokes equations calculated,
+      and how. More importantly I wanted to find out, if I implemented the
+      equation, whether it would run quickly enough on my computer.
+    * This website seems reliable. Although it is a wiki, giving it inherent
+      potential to have been edited in misleading ways, it is maintained by
+      "CFD online", an online centre for all computational fluid dynamics.
+    * The article phrases things in a mathematical way -- not very useful to
+      me, as I only want to assess the feasibility of calculating this on a
+      computer.
 
 15/1/13 *(~30 minutes)*
 -------
 * Found detailed explanation of Navier-Stokes in [a PDF][fluid rest of us].
 
 **Sources used**:
+
 * "Fluid Flow for the Rest of Us: Tutorial of the Marker and Cell Method in
   Computer Graphics"  
   David Cline, David Cardon, Parris K. Egbert
@@ -183,6 +206,19 @@ about "OpenGL".
 * Continued work on mesh representation. I am trying to implement the
   [vertex split operation][ryg halfedge-practice] using ryg's half-edge blog
   post.
+
+**Sources used**:
+
+* "Half-edge based mesh representations: practice"  
+  ryg -- the ryg blog
+  <http://fgiesen.wordpress.com/2012/03/24/half-edge-based-mesh-representations-practice/>
+    * Explained the vertex split operation, which is required to manipulate
+      meshes.
+    * The operation that is described in this blog post is also described
+      similarly in other sources (such as the "Mesh data structures" lecture
+      slides from NYU); however this is the most thorough description that I
+      can find -- other sources do not go into any great detail
+    * Tasks: write code that does this and see if it works
 
 20/1/13 *(~2 hours)*
 -------
@@ -217,7 +253,30 @@ about "OpenGL".
   memory, as best I can. From today onwards I will track the time I spend more
   closely.
 * I started looking at how to go about implementing a scene graph. I am using
-  information from [this OpenGL tutorial][arcsynthesis 17-scenegraph].
+  information from [McKesson's OpenGL tutorial][arcsynthesis 17-scenegraph].
+
+**Sources used**:
+
+
+* Learning Modern 3D Graphics Programming (chapter 17)  
+  Jason L. McKesson  
+  <http://www.arcsynthesis.org/gltut/Texturing/Tutorial%2017.html#d0e15853>
+    * Part of a source I have already previously used (and described).
+    * I learnt about how to implement scene graphs using trees.
+    * Tasks: digest this and see how it could fit in to my graphics engine.
+
+* "What is a scene graph?"
+  OpenSceneGraph
+  <http://www.openscenegraph.org/index.php/documentation/knowledge-base/36-what-is-a-scene-graph>
+    * Written by the author of a reputable and widely used scene graph library.
+      This information should be reliable.
+    * I wanted to find information about whether the code examples found in
+      McKesson's tutorial was accurate.
+    * I found out about scene graphs, but at an overview level. There were no
+      concrete examples nor details, apart from the very basics. However the
+      information that was present completely agreed with the tutorial.
+    * I did manage to find out more about why scene graphs were efficient and
+      popular.
 
 24/1/13 *(2 hours)*
 -------
@@ -234,8 +293,8 @@ about "OpenGL".
   which is time-consuming and prone to error.  
   I have needed to refer to the
   documentation on the OpenGL API a lot, which is used for rendering. Most of
-  the information I needed was found in [this tutorial][arcsynthesis] and [the
-  OpenGL wiki][opengl core-api].  
+  the information I needed was found in [McKesson's tutorial][arcsynthesis] and
+  [the OpenGL wiki][opengl core-api].  
   I managed to successfully draw the mesh
   primitives that I have so far, a 2D n-sided polygon, with `test_mesh`.
 * I sent out an email to ryg, the author of the half-edge mesh representation
@@ -245,6 +304,13 @@ about "OpenGL".
   a response, but if not I will look elsewhere for information.
 
 **Sources used**:
+
+* Learning Modern 3D Graphics Programming (Chapter 4)
+  Jason L. McKesson  
+  <http://www.arcsynthesis.org/gltut/Positioning/Tutorial%2004.html>
+    * I am using this to learn about how to use OpenGL to display static
+      polygons.
+
 * OpenGL core api
   OpenGL.org wiki
   <http://www.opengl.org/wiki/Category:Core_API_Reference>
@@ -252,8 +318,7 @@ about "OpenGL".
       the code that I have written based on the documentation found here seems
       to work, and the wiki is hosted and maintained by OpenGL.org, the
       official website for OpenGL.
-    * I used this site as a reference guide. All my programming-related
-      queries were resolved.
+    * I used this site as a reference guide.
 
 27/1/13 *(30 minutes)*
 -------
@@ -267,10 +332,34 @@ about "OpenGL".
 * I started looking at implementing vector and matrix operations, for
   transformations such as rotation and scaling.
 
+**Sources used**:
+
+* AQA FP4 textbook
+    * This is a reliable reference for implementing vector and matrix
+      operations.
+    * The operations that I am looking at implementing correspond to those that
+      I have been learning about in maths lessons.
+
 29/1/13 *(20 minutes)*
 -------
-* I read about using quaternions to represent 3D rotations through [this
-  tutorial][cprogramming quat].
+* I read about using quaternions to represent 3D rotations through [a
+  cprogramming.com tutorial][cprogramming quat].
+
+**Sources used**:
+
+* "Using Quaternion to Perform 3D rotations"
+  confuted, cprogramming.com
+  <http://www.cprogramming.com/tutorial/3d/quaternions.html>
+    * This is an overview of how to use quaternions to do 3D rotation. It has a
+      lot of maths, not all of which I completely understand yet. It says that
+      quaternions are like complex numbers, but with three different complex
+      units. This agrees with the other references on quaternions that I have
+      read about previously (on ryg's blog
+      <http://fgiesen.wordpress.com/2013/01/07/small-note-on-quaternion-distance-metrics/>
+      and on Wikipedia <https://en.wikipedia.org/wiki/Quaternion>).
+    * I am not sure that this would be the best source to implement code from,
+      however it is a good introduction.
+    * Tasks: find another source like this and write the code
 
 30/1/13 *(3 hours)*
 -------
@@ -299,6 +388,18 @@ about "OpenGL".
   initializer list>’ to ‘Mat2’`  
   Fixing the error was rather trivial, once I realised that the best thing to
   do was not to bother figuring out the error message!
+
+**Sources used**:
+
+* The GLM library
+  <http://glm.g-truc.net/>
+    * This is a C++ library that contains the code for many vector and matrix
+      operations.
+    * It has been referenced from McKesson's tutorial as a very good,
+      high-quality library.
+    * The code is openly available for me to examine. I have done this and it
+      has made a lot of things clearer about the syntax of code that I need to
+      write.
 
 31/1/13 *(~30 minutes)*
 -------
@@ -332,6 +433,37 @@ about "OpenGL".
   will have to seriously consider this month. If it does not show signs of
   plausibility soon, I may have to replace the water simulation idea.
 
+**Sources used**:
+
+* "2007 and now"
+  navis -- Iconoclash blog
+  <http://navis-asd.blogspot.co.uk/2010/04/2007-and-now.html>
+    * This source was written by navis, an influential democoder from the group
+      ASD, who wrote the demo "Lifeforce".
+    * I found this source linked through pouet.net.
+    * I wanted to find out about the making of such a large demo.
+    * In the blog post navis outlines the differences between developing a demo
+      back in 2007, compared to in 2010. He describes how in the past he worked
+      on a slow computer, which meant that he had to run the demo at a very low
+      resolution. However, his demo still looked amazing when run on a fast
+      enough computer at full resolution. This gives me hope that I could
+      develop a convincing physics simulation on my slow laptop, whilst running
+      the final program on a faster, more capable computer.
+
+* "numb res."  
+  Smash -- direct to video blog  
+  <http://directtovideo.wordpress.com/2011/05/03/numb-res/>
+
+* "Surface Reconstruction of SPH Fluids"
+  R. C. Hoetzlein
+  <http://www.rchoetzlein.com/theory/2010/surface-reconstruction-of-sph-fluids/>
+    * Written by the author of FLUIDS, a fast open-source fluid simulator
+    * States that it is not only hard to simulate fluids using particles, but
+      that it is subsequently very hard to turn those particles into a smooth
+      fluid surface that looks realistic. The blog talks about the
+      state-of-the-art in "reconstructing the surface" from a bunch of
+      particles; it turns out that this is very hard to do in real time.
+
 19/2/13 *(30 minutes)*
 -------
 * I am very concerned about the lack of progress over the past two weeks.  
@@ -350,8 +482,9 @@ about "OpenGL".
 * From the advice that we've been getting in the weekly extended project
   periods, it is becoming clear that I need to take more careful note of which
   sources I am using, and what I am gathering from each of them. In order to
-  achieve this I am going to aim to write a document about each technique that
-  I find from my sources, whether I use it or not in the final project.
+  achieve this I have gone back in my diary and written up the sources that
+  I have been using in some detail, and I will continue to do this, in addition
+  to writing in-depth evaluations for my most important sources.
 * On a more positive note, I have started to decide how fluid simulation is
   going to work in my demo.  
   I would like to simulate two things: a waterfall in the side of a cliff, and
@@ -373,10 +506,31 @@ about "OpenGL".
 22/2/13 *(10 minutes)*
 -------
 * I found an explanation of how to perform a wave simulation in a
-  two-dimensional grid [here][gamedev water-effect]. I also found [a Java
-  applet by Paul Falstad][falstad ripple] which simulates waves; the source
-  code is kindly provided so I am reading through to figure out how the
-  simulation is performed.
+  two-dimensional grid [at gamedev][gamedev water-effect]. I also found
+  [a Java applet by Paul Falstad][falstad ripple] which simulates waves.
+
+**Sources used**:
+
+* "The Water Effect Explained"
+  Roy Willemse
+  <http://www.gamedev.net/page/resources/_/technical/graphics-programming-and-theory/the-water-effect-explained-r915>
+    * This is a good introduction to wave simulation on a 2D surface, using
+      area sampling on a height map. It even goes into details about how to
+      perform the subsequent raytracing in order to get the diffraction effect
+      on a transparent liquid.
+
+* "Ripple tank"
+  Paul Falstad
+  <http://falstad.com/ripple/>
+    * This is a working Java simulation of waves inside a tank of water. The
+      source code is kindly provided so I am reading through to figure out how
+      the simulation is performed.
+    * The source is reliable because the final result clearly works.
+    * I am encouraged by the potential of this method, as I have run the Java
+      simulation on my laptop and it works reasonably fast. The graphics and
+      lighting are not 3D, however I can use the technique in the gamedev
+      article to get reasonably fast 3D effects.
+    * Task: try implementing the core wave simulation
 
 4/3/13 *(1 hour)*
 ------
@@ -394,7 +548,12 @@ about "OpenGL".
   ripple reaches the edge of the simulation it bounces back and continues
   rippling, whereas I would like it to "disappear" into infinity. The source
   that I am using to implement the wave simulation does not have this problem;
-  I need to figure out how to stop this.
+  I need to figure out how to stop this. (This does not happen in Falstad's
+  simulation, however the core code that I am using is almost the same as his
+  code?)
+* I sent out an email to Paul Falstad with some queries about the mathematical
+  basis of his simulation code (the concepts of which I am using), and asking
+  about the reflection issue.
 * I have been reading about using textures in OpenGL, so that I can see the
   results of my wave simulation. I have successfully written the texture code,
   and also wrote a scene called `test_wave` that tests all of this.  
@@ -412,8 +571,6 @@ about "OpenGL".
 30/3/13 *(1 hour)*
 -------
 * More work on wave simulation (100 fps attained).
-* I sent out an email to Paul Falstad with some queries about the mathematical
-  basis of his simulation code (the concepts of which I am using).
 
 31/3/13 *(1 hour)*
 -------
@@ -422,12 +579,37 @@ about "OpenGL".
 20/4/13
 -------
 * I've been reading lots of online papers on fluid simulation.
-* Researched cloth simulation using verlet integration.
-* Found implementation in JavaScript at [this website][subprotocol verlet].
+* Researched cloth simulation using verlet integration.  
+  Found implementation in JavaScript at [this website][subprotocol verlet].
+
+**Sources used**:
+
+* verlet-js
+  Sub Protocol
+  <http://subprotocol.com/verlet-js/>
+    * Learnt that a physics engine can be based on Verlet integration
+    * Has an implemention of Verlet integration in JavaScript. The examples
+      work very effectively.
+    * Questions: find out what can and can't be simulated using this physics
+      simulation method. How does it work?
 
 27/4/13
 -------
 * Looked at efficient collision detection with octrees.
+
+**Sources used**:
+
+* "Spatial Partitioning and Search Operations with Octrees"
+  Point Cloud Library
+  <http://pointclouds.org/documentation/tutorials/octree.php>
+    * This library is used a lot in graphics and data processing applications,
+      where high performance is needed.
+    * The article was based on coding using the PCL, which I am not interested
+      in doing. However, it introduced several concepts, such as
+      k-nearest-neighbour searching, which I will have to use for collision
+      detection between particles.
+    * Questions: is it worth implementing octrees or is naive collision testing
+      fast enough for my purposes?
 
 28/4/13
 -------
@@ -447,6 +629,19 @@ about "OpenGL".
 -------
 * I'm looking at rendering to a texture using an FBO. The documents that I am
   using is [this website][gamedev framebuffer101].
+
+**Sources used**:
+
+* "OpenGL Frame Buffer Object 101"
+  "Rob", gamedev.net
+  <http://www.gamedev.net/page/resources/_/technical/opengl/opengl-frame-buffer-object-101-r2331>
+    * This tutorial explains how to use Frame Buffer Objects.
+    * I don't necessarily trust online tutorials such as this, however the
+      information I found in it matches that which I found in the OpenGL API
+      reference. In addition it gives me additional information about exactly
+      what parameters I have to give OpenGL in order for the FBO to be
+      "complete".
+    * To do: implement in code
 
 30/4/13
 -------
@@ -470,12 +665,50 @@ about "OpenGL".
 31/5/13 *(3 hours)*
 -------
 * Worked on FBOs
+* Not much time for progress -- exams
 
 11/6/13 *(1 hour)*
 -------
-* Researched text rendering in OpenGL. Used a [tutorial][sdltutorials sdl-ttf]
-  and the [official SDL-ttf docs][sdl-ttf docs].
+* Researched text rendering in OpenGL. Used a
+  [SDL tutorial][sdltutorials sdl-ttf] and the
+  [official SDL-ttf docs][sdl-ttf docs].
 * Read paper by Valve on [smooth text rendering using SDFs][valve sdf-mag].
+
+**Sources used**:
+
+* "SDL_ttf docs"
+  <http://www.libsdl.org/projects/SDL_ttf/docs/SDL_ttf.html>
+    * The official documentation on the SDL_ttf project, which is a library
+      that allows me to render fonts to bitmaps.
+
+* "SDL TTF: Fonts, and how to use them"
+  Alexander Bock
+  <http://www.sdltutorials.com/sdl-ttf>
+    * This is a tutorial about using the SDL_ttf library. It covers the same
+      points as the official documentation, but in a more accessible way, and
+      with illustrations. I checked the code examples relevant to my project
+      against the official documentation, and they matched.
+
+* "What is state-of-the-art for text rendering in OpenGL as of version 4.1?"
+  Stack Overflow
+  <http://stackoverflow.com/questions/5262951/what-is-state-of-the-art-for-text-rendering-in-opengl-as-of-version-4-1/5278471#5278471>
+    * Stack Overflow is a programmer's question and answer website, that has a
+      very good community and reputation.
+    * The accepted answer has been "upvoted" 76 times, which means that quite a
+      few programmers have peer-reviewed the answer and approved of it. This
+      increases the amount of trust I have in the answer.
+    * I successfully found out about different ways I could render text using
+      OpenGL.
+
+* Improved Alpha-Tested Magnification for Vector Textures and Special Effects
+  Chris Green, Valve
+  <http://www.valvesoftware.com/publications/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf>
+    * This is a reliable source as it was written by a graphics coder at Valve,
+      a large games company. The paper itself has been referenced in many
+      places, including from the Stack Overflow answer mentioned above.
+    * I found out about a shader algorithm that could render high quality text
+      using very little processing power.
+
 
 12/6/13 *(1 hour)*
 -------
@@ -486,8 +719,20 @@ about "OpenGL".
 * Moved to using [GLM][glm] for vector and matrices. This is a well-tested
   library and is used in many projects already.
 * Found a demonstration of the Verlet integration scheme for simulating physics
-  [here][codeflow verlet].
+  [on a blog, codeflow][codeflow verlet].
 * Updated Timeline
+
+**Sources used**:
+
+* "Hard Constraints, Easy Solutions"
+  <http://codeflow.org/entries/2010/sep/01/hard-constraints-easy-solutions/>
+    * This is a JavaScript demonstration of Verlet integration. I wanted to
+      find a live demonstration of length constraints, to see the capabilities
+      of Verlet integration. This page provides this, and convinced me that
+      Verlet integration is the way to go.
+    * The code examples are not exactly clear -- I need to look these up
+      elsewhere.
+
 
 19/6/13 *(30 minutes)*
 -------
@@ -499,6 +744,29 @@ about "OpenGL".
 * Found a [web page][democritis verlet] as a reference for the Verlet
   algorithm.
 * Started work on Verlet integration physics engine.
+
+**Sources used**:
+
+* "The basic Verlet algorithm"
+  <http://www.compsoc.man.ac.uk/~lucky/Democritus/Theory/verlet.html#verlet>
+    * I hoped to find out about the mathematic theory behind the Verlet
+      algorithm so that I could better implement it.
+    * I found the equation that forms the fundamentals of it. This agrees with
+      the equation which was implemented in the codeflow JavaScript example.
+    * This source does not talk about constraints, which are needed along with
+      the Verlet integration in my physics engine.
+
+* Advanced Character Physics.
+  Thomas Jakobsen
+  <http://web.archive.org/web/20080410171619/http://www.teknikus.dk/tj/gdc2001.htm>
+    * Jakobsen was one of the first to use Verlet integration in a commercial
+      game. This source is considered to have caused a revolution in computer
+      physics simulations back in 2001 when it was published.
+    * The algorithm is introduced and agrees with the other two sources so
+      far. In addition he goes into great detail about different kinds of
+      constraints, like length constraints, collision constraints, etc. This is
+      very useful for me.
+    * Task: write small prototype and test
 
 28/6/13 *(3 hours)*
 -------
@@ -517,6 +785,17 @@ about "OpenGL".
   experiment can be found under `experiments/verletrag.html`.  
   ![Verlet integration on a ragdoll](https://raw.github.com/chengsun/ep/master/docs/images/300613_verletrag.jpg)
 * Started writing May & June end-of-month review.
+
+**Sources used**:
+
+* Graphics Gems
+  Andrew Glassner
+    * This is quite an old book, but still relatively useful, and well regarded
+      in computer graphics circles. It is often referred to, and in this case I
+      found this algorithm referenced in a Stack Overflow answer.
+    * Glassner gives how to find intersections in 3D space. I wanted to find
+      intersections in 2D space, but I found it quite easy to specialise the
+      algorithm for this purpose.
 
 23/7/13 *(4 hours)*
 -------
@@ -578,10 +857,32 @@ about "OpenGL".
   red book][opengl red matrix-stacks]. However I implemented it manually rather
   than using the OpenGL fixed functions.
 * Implemented the perspective transform using the matrix stacks. Now 3D objects
-  that are further away look smaller on the screen. I used [this question and
-  answer site][stackoverflow glm-perspective] to help me understand and
-  implement the transform.
+  that are further away look smaller on the screen. I used [the question and
+  answer site Stack Overflow][stackoverflow glm-perspective] to help me
+  understand and implement the transform.
 * Tried drawing face indices onto the grid in order to help me debug the code.
+
+**Sources used**:
+
+* "Manipulating the Matrix stacks"
+  OpenGL programming guide (red book)
+  <http://www.glprogramming.com/red/chapter03.html#name6>
+    * I wanted to find out what matrix stacks were.
+    * This source gave me a good explanation of how to use matrix stacks.
+      However, the code examples were confusing and didn't match up with
+      anything I had seen in OpenGL tutorials before. After some research it
+      turned out that the code examples were outdated and used deprecated
+      functionalities (immediate mode) from an old version of OpenGL. I am
+      going to ignore the code examples and just focus on the explanations.
+
+* "glm::perspective explanation"
+  Stack Overflow
+  <http://stackoverflow.com/questions/8115352/glmperspective-explanation>
+    * This answer explained what the perspective function in glm does, and what
+      the matrix constructed means. I wanted to use the function in order to
+      create perspective in my 3D scenes, but I was unsure about the parameter
+      meanings and the official documentation did not help. This answered my
+      questions.
 
 17/08/13 *(3 hours)*
 --------
@@ -623,10 +924,20 @@ about "OpenGL".
 --------
 * Continued bridge simulation demonstration.
 * Found out how to calculate angle between two vectors from
-  [here][stackoverflow angles].
+  [Stack Overflow][stackoverflow angles].
 * From this I worked out how to implement an angle constraint, to create
   inflexible materials such as "iron".
 *To do*: iron out the bugs and get some feedback.
+
+**Sources used**:
+
+* Signed angle between two vectors without a reference plane
+  Stack Overflow
+  <http://stackoverflow.com/questions/10133957/signed-angle-between-two-vectors-without-a-reference-plane/10145056#10145056>
+    * This source gave me the formula for working out the angle between two
+      vectors. I could not find this in my FP4 textbook. The "accepted" answer
+      on the site has some limitations which this answer avoids, by using atan2
+      rather than acos.
 
 14/09/13 *(5 hours)*
 --------
@@ -645,6 +956,16 @@ about "OpenGL".
 * Started implementing diffuse lighting, based on the cube experiment that I
   had written earlier.
 * Researched Blinn-Phong lighting.
+
+**Sources used**:
+
+* Blinn-Phong model
+  Jason McKesson
+  <http://www.arcsynthesis.org/gltut/Illumination/Tut11%20BlinnPhong%20Model.html>
+    * This source gives me how to implement the Blinn-Phong model using shader
+      code. It corresponds to the diffuse shading I used for my cube
+      demonstration earlier, but adds specular shading as well, adding to the
+      realism.
 
 27/09/13 *(4 hours)*
 --------

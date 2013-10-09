@@ -2,7 +2,7 @@
 
 * Front cover (TODO)
 * Contents (DOING)
-* Artefact report & commentary (TODO)
+* Artefact report & commentary (DOING)
 * Artefact evidence
     * Screenshots
         * `wave` - "3D wave simulation" C++/OpenGL demo (DOING)
@@ -17,17 +17,17 @@
 * Source evaluations (DOING)
 * Appendices
     * Initial research/inspiration (DONE)
-    * Research diary and notetaking (DOING)
     * Primary sources used
         * Facebook comments on `bridge` (DOING)
         * Facebook chat on `bridge` (PRINTED)
-        * Attempted email communications (TODO)
+        * Attempted email communications (DONE)
     * Rationale (PRINTED)
     * Timeline plan (PRINTED)
         * Revision prior to 29/1/13
         * Revision prior to 30/4/13
         * Final revision, since 17/6/13
-    * Progress log (DOING)
+    * Diary (DOING)
+    * Research notetaking (DOING)
     * Mid-project reviews
         * End of January (PRINTED)
         * End of February (PRINTED)
