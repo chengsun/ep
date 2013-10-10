@@ -1,2 +1,2 @@
 #!/bin/sh
-make SCENES=$1 -j4 install && cd build && ./player -d "lib${1}.so" 2>&1 | c++filt
+make SCENES=$1 ${*:2} -j4 install && cd build && ./player -d "lib${1}.so" 2>&1 | c++filt

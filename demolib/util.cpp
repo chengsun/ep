@@ -3,7 +3,9 @@
 #include <cstdlib>
 #include <cstdarg>
 #include <ctime>
+#ifndef WINDOWS
 #include <execinfo.h>
+#endif
 
 void dlib_log(const char *file, unsigned line, const char *format, ...)
 {
@@ -24,7 +26,9 @@ void dlib_log(const char *file, unsigned line, const char *format, ...)
 
 void dlib_stacktrace()
 {
+#ifndef WINDOWS
     void *array[10];
     size_t size = backtrace(array, 10);
     backtrace_symbols_fd(array, size, 2);
+#endif
 }

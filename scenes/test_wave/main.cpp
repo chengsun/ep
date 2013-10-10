@@ -124,12 +124,12 @@ void demo_init(unsigned, unsigned)
 
     programText = new ProgramTextSDF(1/*, {ProgramTexturedQuad::vs, ProgramTexturedQuad::fs}*/);
     programText->link();
-    font = new Font("/usr/share/fonts/TTF/FreeSans.ttf", 200);
+    font = new Font("/usr/share/fonts/TTF/FreeSans.ttf", 500);
     for (int i = 0; i < ntexts; ++i) {
         auto size = font->measure(texts[i]);
         LOG("using size %dx%d", size.x, size.y);
         SDL_Surface *surf = font->draw(texts[i]);
-        textTexs[i] = new TextureTextSDF(128, 32, surf, 90);
+        textTexs[i] = new TextureTextSDF(256, 64, surf, 90);
         surf = NULL;
         textTexs[i]->bind(0);
         textTexs[i]->allocate();
@@ -199,7 +199,7 @@ void demo_drawFrame()
     static float time = 0.f;
     //program->setUniform("uTransform", glm::rotate(glm::mat4(), time+=0.1f, glm::vec3(0.1f, 0.3f, 1.f)));
     program->setUniform("uTransform", glm::mat4());
-    program->setUniform("uTexScale", 0.7f);
+    program->setUniform("uTexScale", 0.75f);
     program->setUniform("shadeStyle", shadeStyle);
     program->setUniform("lightray", glm::vec3(cosf(time/100)*2.f-1.f, sinf(time/100)*2.f-1.f, 1.f));
     program->draw();

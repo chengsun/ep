@@ -47,6 +47,9 @@ bool demo_prepareFrame()
 
 void demo_drawFrame()
 {
+    glDisable(GL_ALPHA_TEST);
+    glDisable(GL_DEPTH_TEST);
+
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 

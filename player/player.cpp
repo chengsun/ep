@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
     SDL_WM_SetCaption("Demo player", "player");
 
     LOG("Initialising GL");
-    pl_setVideoMode(600, 480);
+    pl_setVideoMode(800, 600);
 
     GLenum err = glewInit();
     if (err != GLEW_OK) {

@@ -107,10 +107,14 @@ extern "C"
 inline void *dlib_malloc(size_t size, size_t alignment)
 {
     void *ptr;
+#ifndef WINDOWS
     int ret = posix_memalign(&ptr, alignment, size);
     ASSERTX(ret != EINVAL, "alignment invalid");
     ASSERTX(ret != ENOMEM, "insufficient memory");
     ASSERTX(ret == 0, "posix_memalign failed -- unknown reason");
+#else
+    ptr = malloc(size);
+#endif
     return ptr;
 }
 

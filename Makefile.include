@@ -64,7 +64,7 @@ CPPFLAGS += -I$(ROOTDIR)/include
 CPPFLAGS += `$(PKG_CONFIG) --cflags glew libpng` `$(SDL_CONFIG) --cflags`
 LDFLAGS += `$(PKG_CONFIG) --libs glew libpng` `$(SDL_CONFIG) --libs` -lSDL_ttf
 ifeq ($(is_windows),1)
-    LDFLAGS += -lopengl32 -lglu32
+    LDFLAGS += -lglew -lpng -lopengl32 -lglu32
 else
     LDFLAGS += -lGL -lGLU
 endif

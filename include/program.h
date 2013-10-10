@@ -2,8 +2,10 @@
 #define DEMOLIB_PROGRAM_H
 
 #include "mesh.h"
+#include <GL/glew.h>
 #include <GL/gl.h>
 #include <vector>
+#include <string>
 
 struct TextureBase
 {

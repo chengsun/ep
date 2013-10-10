@@ -49,6 +49,7 @@ void demo_drawFrame()
     program->setUniform("uTransform", D);
     program->setUniform("uTextParms.threshold", clamp((float) fabs(fmod(t/100.f,1.40f)-0.70f)+0.30f, 0.5f, 1.0f));
     program->setUniform("uTextParms.glowColor", glm::vec4(sin(t/100.f)/2+0.5, sin(t/100.f + 2*PI/3)/2+0.5, sin(t/100.f + 4*PI/3)/2+0.5, 1.f));
+    program->setUniform("uTextParms.glow", true);
     t += 1.f;
     program->draw();
     program->unuse();
