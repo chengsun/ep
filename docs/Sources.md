@@ -301,13 +301,8 @@ use them to represent transformations on groups of objects in 3D space.
 
 **Reliability**:
 
-This is an official guide written by the OpenGL Architecture 
-This is a primary source, written by a leading programmer himself about his own
-creation. I have found many online sources that refer to and cite this
-publication. This leads me to trust this source as relevant and reliable.  
-In addition I have tried the technique outlined in the paper in my "Verlet"
-experiments, and they have all been very successful.
-
+This is an official guide written by the OpenGL Architecture Revision Board.
+Because of its official status, the information should be reliable.
 
 **Cross-references**:
 
@@ -316,6 +311,59 @@ such as McKesson's OpenGL tutorial. I discovered that this is because the code
 in this source was written using a deprecated style called immediate mode.
 Modern OpenGL no longer uses this, so I ignored the code examples in this
 source and focused only on the concepts and mathematics.
+
+
+"arcsynthesis.org" OpenGL tutorial
+===
+
+**Date**:
+1/1/13, 23/1/13, 25/1/13, 18/9/13
+
+**Resource**:
+* McKesson, J. L. (2012) Learning Modern 3D Graphics Programming.
+  Available from: <http://www.arcsynthesis.org/gltut/> [Accessed 23rd September
+  2013]
+
+**Description**:
+
+This online tutorial teaches the basics of graphics programming. It uses OpenGL
+in its code examples, however it is not designed to be a tutorial on OpenGL
+specifically. It covers a wide variety of topics, including perspective
+transform, camera and world matrices, and lighting.
+
+
+**Objective**:
+
+To find out about how graphics hardware works, and how OpenGL interfaces with
+it.
+
+
+**Key points**:
+
+* I learnt about the structure and architecture of graphics hardware in modern
+  computers.
+* I learnt about concepts in OpenGL that would lead to efficient 3D rendering.
+* I learnt about lighting and fragment shading.
+
+
+**Reliability**:
+
+* This source has been cited by many places (e.g. Stack Overflow and the
+  gamedev forums) as one of the best up-to-date tutorials on graphics
+  programming.
+* I am slightly worried that I am overly dependent on this source, as it
+  contains so much useful and relevant information. In order to combat this, I
+  am checking and comparing all the information that I find in this source with
+  other sources.
+
+
+**Cross-references**:
+
+It broadly agrees with other sources, including the OpenGL code API and other
+gamedev.net tutorials on lighting. However in some places it takes a slightly
+different approach. As this source seems to be the most reliable and had the
+most explanations behind its approach, I used this as my primary source of
+information when there was a conflict.
 
 
 <!-- vim: set tw=79: -->
