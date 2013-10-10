@@ -13,20 +13,20 @@
     * Attached memory stick containing:
         * Windows and Linux executable files (TODO)
         * Videos of demos and experiments (TODO)
-* Bibliography (DOING)
-* Source evaluations (DOING)
+* Bibliography (PRINTED)
+* Source evaluations (DOING -- )
 * Appendices
-    * Initial research/inspiration (DONE)
+    * Initial research/inspiration (PRINTED)
     * Primary sources used
         * Facebook comments on `bridge` (DOING)
         * Facebook chat on `bridge` (PRINTED)
-        * Attempted email communications (DONE)
+        * Attempted email communications (PRINTED)
     * Rationale (PRINTED)
     * Timeline plan (PRINTED)
         * Revision prior to 29/1/13
         * Revision prior to 30/4/13
         * Final revision, since 17/6/13
-    * Diary (DOING)
+    * Diary (PRINTED -- CHECK)
     * Research notetaking (DOING)
     * Mid-project reviews
         * End of January (PRINTED)
@@ -34,7 +34,6 @@
         * End of April (PRINTED)
         * End of June (PRINTED)
         * End of August (DOING)
-        * Final evaluation (DOING)
     * Project Progression Record (DOING)
     * Verification of Topic and Title (DOING)
     * Old screenshots

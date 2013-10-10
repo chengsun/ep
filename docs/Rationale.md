@@ -28,12 +28,12 @@ comfort zone and in the process broaden my horizons.
 
 There is plenty of information related to the project that I have chosen, and
 my primary source of information will be the internet. The "demoscene"
-comprises of programmers who demonstrate their ability through visual demos
-similar to the one that I am attempting, but on a larger scale. Information on
-the techniques that are used in such demos is scattered across the internet in
-the form of blog posts, PDFs, and posts in discussion forums. Some of the
-techniques are presented at conferences, and I will make use of videos and
-slides from talks that are relevant. I will also be looking for books on this
-topic if I cannot find the information I need on the internet.
+is comprised of of programmers who demonstrate their ability through visual
+demos similar to the one that I am attempting, but on a larger scale.
+Information on the techniques that are used in such demos is scattered across
+the internet in the form of blog posts, PDFs, and posts in discussion forums.
+Some of the techniques are presented at conferences, and I will make use of
+videos and slides from talks that are relevant. I will also be looking for
+books on this topic if I cannot find the information I need on the internet.
 
 <!-- vim: set tw=79: -->
